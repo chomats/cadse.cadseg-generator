@@ -1,0 +1,18 @@
+
+import fede.workspace.domain.Item;
+import model.workspace.workspace.ItemTypeManager;
+import model.workspace.workspace.ManagerManager;
+
+public class CLASS
+ {
+ 	
+	
+/* (non-javadoc)
+    * @see IGenerator#generate(Object)
+    */
+	public String generate(Item model, Item[] itemsType)
+   	{
+     	return "";
+   	}
+   	
+ }

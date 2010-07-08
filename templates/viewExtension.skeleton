@@ -1,0 +1,19 @@
+
+
+import fr.imag.adele.cadse.cadseg.managers.view.model.ViewCategoryModel;
+import fr.imag.adele.cadse.cadseg.managers.view.model.ViewModel;
+import fr.imag.adele.cadse.cadseg.managers.view.model.ViewModels;
+
+public class CLASS
+ {
+
+
+/* (non-javadoc)
+    * @see IGenerator#generate(Object)
+    */
+	public String generate(ViewModels viewmodels)
+   	{
+     	return "";
+   	}
+
+ }

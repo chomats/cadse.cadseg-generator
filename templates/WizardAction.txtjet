@@ -1,0 +1,34 @@
+<%@ jet package="fr.imag.adele.cadse.cadseg.template" class="WizardActionTemplate" skeleton="ClassPackage.skeleton"%>
+
+package <%=packageName%>;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import fede.workspace.model.manager.properties.impl.AbstractItemActionController;
+import fede.workspace.tool.eclipse.IFieldDescription;
+
+public class <%=className%> extends AbstractItemActionController {
+
+	/**
+		@generated
+	*/
+	@Override
+	public void init(IFieldDescription fd) {
+		super.init(fd);
+	}
+	
+	/**
+		@generated
+	*/
+	@Override
+	public void doCancel(IProgressMonitor monitor) {
+		super.doCancel(monitor);
+	}
+	
+	/**
+		@generated
+	*/
+	@Override
+	public void doFinish(IProgressMonitor monitor) throws Exception {
+		super.doFinish(monitor);
+	}
+}

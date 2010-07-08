@@ -1,0 +1,11 @@
+<%@ jet package="fr.imag.adele.cadse.cadseg.template" class="EnumSkeltonTemplate" 
+skeleton="EnumType.skeleton" imports="java.util.List"%>
+package <%=packageName %>;
+
+/**
+	@generated
+*/
+public enum <%=className%>  {
+	<% for(Object v : values) { %>
+	<%=v.toString()%>,<%}%>
+}

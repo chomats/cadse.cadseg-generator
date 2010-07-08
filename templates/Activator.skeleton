@@ -1,0 +1,16 @@
+
+
+import fede.workspace.eclipse.composition.java.EclipsePluginContentManger;
+import fede.workspace.eclipse.composition.java.IPDETemplate;
+
+public class CLASS implements IPDETemplate
+ {
+/* (non-javadoc)
+    * @see IGenerator#generate(Object)
+    */
+	public String generate(EclipsePluginContentManger.PDEGenerateModel info)
+   	{
+     	return "";
+   	}
+   	
+ }

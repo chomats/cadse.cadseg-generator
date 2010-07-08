@@ -1,0 +1,85 @@
+<%@ jet package="fr.imag.adele.cadse.cadseg.template" class="EnumListOfValueAttribute"
+skeleton="AttributeSkelton.skeleton"
+imports="fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier
+ fede.workspace.eclipse.java.JavaIdentifier
+ fr.imag.adele.cadse.cadseg.managers.attributes.EnumManager
+fr.imag.adele.cadse.cadseg.managers.dataModel.EnumTypeManager org.eclipse.jdt.core.IType
+ fr.imag.adele.cadse.core.var.ContextVariableImpl
+ "%>
+
+<%	String upper_first_att_name = JavaIdentifier.javaIdentifierFromString(attribute.getName(),true, false, null);
+	String min_short_name = JavaIdentifier.javaIdentifierFromString(shortName,false, true, null);
+	String cstAttribute = GenerateJavaIdentifier.cstQualifiedAttribute(ContextVariableImpl.DEFAULT, attribute, null, null, null);
+
+	Item enumType = EnumManager.getEnumType(attribute);
+	IType javaenumtype = EnumTypeManager.getEnumQualifiedClass(ContextVariableImpl.DEFAULT,enumType);
+	String enumClass = javaenumtype.getElementName();
+
+
+	%>
+	/**
+		@generated
+	*/
+	@SuppressWarnings("unchecked")
+	public static final List<<%=enumClass%>> <%=GenerateJavaIdentifier.cstGetAttribute(ContextVariableImpl.DEFAULT, attribute)%>(Item <%=min_short_name %>) {
+		try {
+			List<<%=enumClass%>> list = <%=min_short_name%>.getAttribute(<%=cstAttribute%>_);
+
+			if (list == null)
+				return null;
+
+			return new ArrayList<<%=enumClass%>>(list);
+		} catch (Throwable t) {
+			return new ArrayList<<%=enumClass%>>();
+		}
+	}
+
+	/**
+		@generated
+	*/
+	@SuppressWarnings("unchecked")
+	public static final void <%=GenerateJavaIdentifier.cstSetAttribute(ContextVariableImpl.DEFAULT, attribute)%>(Item <%=min_short_name%>, List<<%=enumClass%>> valueList) {
+		try {
+			<%=min_short_name%>.setAttribute(<%=cstAttribute%>_, new ArrayList<<%=enumClass%>>(valueList));
+		} catch (Throwable t) {
+
+		}
+	}
+
+	/**
+		@generated
+	*/
+	@SuppressWarnings("unchecked")
+	public static final void add<%=upper_first_att_name %>Attribute(Item <%=min_short_name %>, <%=enumClass%> value) {
+		try {
+			List<<%=enumClass%>> list = <%=min_short_name%>.getAttribute(<%=cstAttribute%>_);
+			if (list == null) {
+				list = new ArrayList<<%=enumClass%>>();
+			}
+			list.add(value);
+			<%=min_short_name%>.setAttribute(<%=cstAttribute%>_, list);
+		} catch (Throwable t) {
+
+		}
+	}
+
+	/**
+		@generated
+	*/
+	@SuppressWarnings("unchecked")
+	public static final void remove<%=upper_first_att_name%>Attribute(Item <%=min_short_name %>, <%=enumClass%> value) {
+		try {
+
+			List<<%=enumClass%>> list = <%=min_short_name%>.getAttribute(<%=cstAttribute%>_);
+			if (list == null) {
+				return;
+			}
+			list.remove(value);
+			if (list.size() == 0)
+				<%=min_short_name%>.setAttribute(<%=cstAttribute%>_, null);
+			else
+				<%=min_short_name%>.setAttribute(<%=cstAttribute%>_, list);
+		} catch (Throwable t) {
+
+		}
+	}

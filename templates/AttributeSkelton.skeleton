@@ -1,0 +1,17 @@
+
+import fr.imag.adele.cadse.core.Item;
+import java.util.Set;
+
+public class CLASS
+ {
+
+
+/* (non-javadoc)
+    * @see IGenerator#generate(Object)
+    */
+	public String generate(String shortName, Item attribute, Set<String> imports)
+   	{
+     	return "";
+   	}
+
+ }

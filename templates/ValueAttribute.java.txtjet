@@ -1,0 +1,53 @@
+<%@ jet package="fr.imag.adele.cadse.cadseg.template" class="ValueAttribute"
+skeleton="AttributeSkelton.skeleton"
+ imports="fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier 
+ fede.workspace.eclipse.java.JavaIdentifier
+   fr.imag.adele.cadse.cadseg.managers.attributes.AttributeManager 
+   fr.imag.adele.cadse.core.ItemType
+   fr.imag.adele.cadse.core.CadseGCST 
+   fr.imag.adele.cadse.cadseg.managers.attributes.StringManager
+   fr.imag.adele.cadse.core.var.ContextVariableImpl
+   fr.imag.adele.cadse.cadseg.generator.GAttribute
+   "%>
+
+<%	String min_short_name = JavaIdentifier.javaIdentifierFromString(shortName,false,true, null);
+	String cstAttribute = GenerateJavaIdentifier.cstQualifiedAttribute(ContextVariableImpl.DEFAULT, attribute, null, null, null);
+	ItemType it = attribute.getType();
+	GAttribute manager = it.adapt(GAttribute.class);
+
+	 String typeJava = null;
+	 Class<?> cl = manager.getTypeJava(true);
+	 if (!cl.isPrimitive()) { imports.add(cl.getName()); }
+	 typeJava = cl.getSimpleName();
+
+	 String defaultValue = manager.getJavaTypeDefaultValue(attribute);
+
+	%>
+	/**
+		@generated
+	*/
+	public static final <%=typeJava%> <%=GenerateJavaIdentifier.cstGetAttribute(ContextVariableImpl.DEFAULT, attribute)%>(Item <%=min_short_name %>) {
+<%  if (it == CadseGCST.BOOLEAN) { %>
+		return <%=min_short_name%>.getAttributeWithDefaultValue(<%=cstAttribute%>_, <%=defaultValue%>);
+<% } else {%>
+		return <%=min_short_name%>.getAttributeWithDefaultValue(<%=cstAttribute%>_, <%=defaultValue%>);
+<% } %>
+	}
+
+	/**
+		@generated
+	*/
+	public static final void <%=GenerateJavaIdentifier.cstSetAttribute(ContextVariableImpl.DEFAULT, attribute)%>(Item <%=min_short_name %>, <%=typeJava%> value) {
+		try {
+<% String exp_to_string = manager.exp_to_string();
+	if (exp_to_string == null || exp_to_string.trim().equals("value")) {%>
+			<%=min_short_name%>.setAttribute(<%=cstAttribute%>_, value);
+<% } else { %>
+			Object setvalue = <%=exp_to_string%>;
+			<%=min_short_name%>.setAttribute(<%=cstAttribute%>_, setvalue);
+<%}%>
+		} catch (Throwable t) {
+
+		}
+	}
+

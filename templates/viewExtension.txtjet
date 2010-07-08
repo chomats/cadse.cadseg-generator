@@ -1,0 +1,25 @@
+<%@ jet package="fr.imag.adele.cadse.cadseg.template" class="ViewExtensionTemplate" nlString = "\"\\n\"" 
+	skeleton="viewExtension.skeleton"
+	imports =""
+	%>
+
+	<extension
+         point="org.eclipse.ui.views">
+<% for(ViewCategoryModel vc : viewmodels.categories) { %>
+      <category
+            name="<%=vc.name%>"
+            id="<%=vc.id%>">
+      </category> <%}%>
+<% for(ViewModel v : viewmodels.views) { %>
+      <view
+            name="<%=v.name%>"
+<%if (v.icon!=null) {%>
+            icon="<%=v.icon%>"
+<%}%>
+<%if (v.category!=null) {%>
+            category="<%=v.category%>"
+<%}%>
+            class="<%=v.qualifiedClassName%>"
+            id="<%=v.id%>"/>
+<%}%>
+   </extension>

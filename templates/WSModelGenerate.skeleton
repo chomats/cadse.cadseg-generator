@@ -1,0 +1,16 @@
+
+import fede.workspace.domain.Item;
+import model.workspace.workspace.WSModelGenerateModel;
+
+public class CLASS
+ {
+	
+/* (non-javadoc)
+    * @see IGenerator#generate(WSModelGenerateModel )
+    */
+	public String generate(WSModelGenerateModel cim)
+   	{
+     	return "";
+   	}
+   	
+ }

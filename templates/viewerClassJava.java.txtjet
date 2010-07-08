@@ -1,0 +1,245 @@
+<%@ jet package="fr.imag.adele.cadse.cadseg.template" class="ViewerSkeltonTemplate"
+imports="
+fr.imag.adele.cadse.cadseg.managers.view.model.ViewItemTypeModel
+fr.imag.adele.cadse.cadseg.managers.view.model.ViewLinkTypeModel
+fr.imag.adele.cadse.cadseg.managers.view.model.ViewModel
+fr.imag.adele.cadse.cadseg.util.Util
+ "%>
+ <%ViewModel cim = (ViewModel) argument;
+
+ %>
+package <%=cim.packageName %>;
+
+<%for(String i : cim.importsArray) { %>
+import <%=i%>;
+<%}%>
+
+/**
+	@generated
+*/
+class <%=cim.className%>UI extends AbstractCadseTreeViewUI {
+
+
+	/**
+		@generated
+	*/
+	public <%=cim.className%>UI(IViewSite site) {
+		super(site);
+		setRecomputeChildren(true);
+		init();
+	}
+
+	/**
+		@generated
+	*/
+	HashSet<ItemType> firstItemType = null;
+
+	/**
+		@generated
+	*/
+	HashSet<ItemType> refItemType = null;
+
+	/**
+		@generated
+	*/
+	HashSet<ItemType> allItemType = null;
+
+	/**
+		@generated
+	*/
+	HashSet<LinkType> agLinkType = null;
+
+	/**
+		@generated
+	*/
+	HashMap<LinkType, String> displayString = null;
+
+	/**
+		@generated
+	*/
+	HashSet<LinkType> createLinkType = null;
+
+	/**
+		@generated
+	*/
+	HashSet<LinkType> allLinkType = null;
+
+	/**
+		@generated
+	*/
+	private void init() {
+	<%for(ViewItemTypeModel citm : cim.getAllItems()) {%>
+		if (<%=citm.REF_cst%> == null) return;
+		<%
+		break;
+		}%>
+		allItemType = new HashSet<ItemType>();<%for(ViewItemTypeModel citm : cim.getAllItems()) {%>
+		if (<%=citm.REF_cst%> != null) {
+			allItemType.add(<%=citm.REF_cst%>);
+			allItemType.addAll(Arrays.asList(<%=citm.REF_cst%>.getSubTypes()));
+		}<%}%>
+
+		firstItemType = new HashSet<ItemType>();
+		<%for(ViewItemTypeModel citm : cim.getFirstItems()) {%>
+		if (<%=citm.REF_cst%> != null) {
+			firstItemType.add(<%=citm.REF_cst%>);
+			firstItemType.addAll(Arrays.asList(<%=citm.REF_cst%>.getSubTypes()));
+		}<%}%>
+
+		agLinkType = new HashSet<LinkType>();
+		<%for(ViewItemTypeModel vitm: cim.getAllItems())  {
+			for(ViewLinkTypeModel vltm: vitm.links) {
+				if (!vltm.aggregation) continue; %>
+		if (<%=vltm.REF_cst%> != null)
+			agLinkType.add(<%=vltm.REF_cst%>);
+<%}}%>
+
+		createLinkType = new HashSet<LinkType>();<%for(ViewItemTypeModel vitm: cim.getAllItems())  {
+			for(ViewLinkTypeModel vltm: vitm.links) {
+				if (!vltm.canCreateLink) continue; %>
+		if (<%=vltm.REF_cst%> != null)
+			createLinkType.add(<%=vltm.REF_cst%>);
+<%}}%>
+
+		allLinkType = new HashSet<LinkType>();<%for(ViewItemTypeModel vitm: cim.getAllItems())  {
+			for(ViewLinkTypeModel vltm: vitm.links) { %>
+		if (<%=vltm.REF_cst%> != null)
+			allLinkType.add(<%=vltm.REF_cst%>);
+<%}}%>
+
+		refItemType = new HashSet<ItemType>();<%for(ViewItemTypeModel vitm: cim.getAllItems())  {
+		if (!vitm.isRef) continue; %>
+		if (<%=vitm.REF_cst%> != null) {
+			refItemType.add(<%=vitm.REF_cst%>);
+			refItemType.addAll(Arrays.asList(<%=vitm.REF_cst%>.getSubTypes()));
+		}
+		<%}
+		boolean createMap = true;
+		for(ViewItemTypeModel vitm: cim.getAllItems())  {
+			for(ViewLinkTypeModel vltm: vitm.links)  {
+					if (vltm.displayCreate == null) continue;
+					if (createMap) {
+						createMap = false;
+					%>
+		displayString = new HashMap<LinkType, String>();
+					<%}
+					%>
+		if (<%=vltm.REF_cst%> != null)
+			displayString.put(<%=vltm.REF_cst%>, "<%=Util.addEscapes(vltm.displayCreate)%>");
+<%}}%>
+	}
+
+
+	/**
+		@generated
+	*/
+	@Override
+	public ItemType[] getFirstItemType(LogicalWorkspace model) {
+		if (firstItemType == null)
+			return new ItemType[0];
+		return (ItemType[]) firstItemType.toArray(new ItemType[firstItemType.size()]);
+	}
+
+	/**
+		@generated
+	*/
+	@Override
+	public boolean isAggregationLink(Link link) {
+		if (agLinkType == null) 
+			return false;
+		return agLinkType.contains(link.getLinkType());
+	}
+
+	/**
+		@generated
+	*/
+	@Override
+	public boolean isCreateLink(LinkType link) {
+		if (createLinkType == null)
+			return false;
+		return createLinkType.contains(link);
+	}
+
+	/**
+		@generated
+	*/
+	@Override
+	public boolean canCreateLinkFrom(Item parentitem, LinkType link) {
+		return isCreateLink(link);
+	}
+
+	/**
+		@generated
+	*/
+	@Override
+	public String getDislplayCreate(LinkType link) {
+		if (displayString == null) return null;
+
+		return displayString.get(link);
+	}
+
+
+	/**
+		@generated
+	*/
+	@Override
+	public boolean isFirstItemType(ItemType it, LogicalWorkspace cadseModel) {
+		if (firstItemType == null)
+			return false;
+		return firstItemType.contains(it);
+	}
+
+	/**
+		@generated
+	*/
+	@Override
+	public boolean isRefItemType(TypeDefinition it, LogicalWorkspace cadseModel) {
+		if (refItemType == null)
+			return false;
+		return refItemType.contains(it);
+	}
+
+
+	/**
+		@generated
+	*/
+	@Override
+	public boolean isItemType(TypeDefinition it, LogicalWorkspace cadseModel) {
+		if (allItemType == null)
+			return false;
+		return allItemType.contains(it);
+	}
+
+
+
+	/**
+		@generated
+	*/
+	@Override
+	protected boolean isLink(Link link) {
+		if (allLinkType == null)
+			return false;
+		return allLinkType.contains(link.getLinkType());
+	}
+	
+	@Override
+	protected void loadView() {
+		init();
+	}
+
+}
+
+/**
+	@generated
+*/
+public class <%=cim.className%> extends <%=cim.superClassName%> {
+
+	/**
+		@generated
+	*/
+	@Override
+	protected AbstractCadseTreeViewUI createUIController(IViewSite site) {
+		return new <%=cim.className%>UI(site);
+	}
+}
+

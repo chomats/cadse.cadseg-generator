@@ -1,0 +1,51 @@
+<%@ jet package="fr.imag.adele.cadse.cadseg.template" class="LinkAttributeMultiTemplate"
+skeleton="AttributeSkelton.skeleton"
+imports="fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier
+fede.workspace.eclipse.java.JavaIdentifier
+fr.imag.adele.cadse.cadseg.managers.attributes.LinkTypeManager
+fr.imag.adele.cadse.core.var.ContextVariableImpl
+"%>
+<%
+	String upper_linktype_name = JavaIdentifier.javaIdentifierFromString(attribute.getName(),true,false,null);
+	String cst_linktype = GenerateJavaIdentifier.cstQualifiedAttribute(ContextVariableImpl.DEFAULT, attribute, null, null, null);
+	//<!--int max = LinkTypeManager.getMax(attribute);
+	String min_short_name = JavaIdentifier.javaIdentifierFromString(shortName,false,true,null);
+
+	Item  dest = LinkTypeManager.getDestination(attribute);
+	Item source = LinkTypeManager.getSource(attribute);
+	%>
+	/**
+		get  links '<%=attribute.getName()%>' from '<%=(source== null?"unknown":source.getName())%>' to '<%=(dest== null?"unknown":dest.getName())%>'.
+        @generated
+    */
+    static public List<Link> <%=GenerateJavaIdentifier.cstGetAttribute(ContextVariableImpl.DEFAULT, attribute)%>Link(Item <%=min_short_name%>) {
+        return <%=min_short_name%>.getOutgoingLinks(<%=cst_linktype%>);
+    }
+
+    /**
+        @generated
+    */
+    static public Collection<Item> <%=GenerateJavaIdentifier.cstGetAttribute(ContextVariableImpl.DEFAULT, attribute)%>All(Item <%=min_short_name%>) {
+        return <%=min_short_name%>.getOutgoingItems(<%=cst_linktype%>, false);
+    }
+
+    /**
+        @generated
+    */
+    static public Collection<Item> <%=GenerateJavaIdentifier.cstGetAttribute(ContextVariableImpl.DEFAULT, attribute)%>(Item <%=min_short_name%>) {
+        return <%=min_short_name%>.getOutgoingItems(<%=cst_linktype%>,true);
+    }
+
+    /**
+        @generated
+    */
+    static public void add<%=upper_linktype_name%>(Item <%=min_short_name%>, Item value) throws CadseException {
+        <%=min_short_name%>.addOutgoingItem(<%=cst_linktype%>,value);
+    }
+
+    /**
+        @generated
+    */
+    static public void remove<%=upper_linktype_name%>(Item <%=min_short_name%>, Item value) throws CadseException {
+        <%=min_short_name%>.removeOutgoingItem(<%=cst_linktype%>,value);
+    }
