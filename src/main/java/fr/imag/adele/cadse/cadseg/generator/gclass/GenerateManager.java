@@ -19,21 +19,21 @@
 
 package fr.imag.adele.cadse.cadseg.generator.gclass;
 
-import java.util.Set;
+import org.eclipse.jdt.core.ICompilationUnit;
 
-import org.eclipse.jdt.core.IType;
-
-import fr.imag.adele.cadse.cadseg.ParseTemplate;
-import fr.imag.adele.cadse.cadseg.exp.ParseException;
-import fr.imag.adele.cadse.cadseg.exp.TokenMgrError;
-import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
-import fr.imag.adele.cadse.cadseg.generator.action.GAManagerFile;
+import fr.imag.adele.cadse.as.generator.GGenFile;
+import fr.imag.adele.cadse.as.generator.GGenerator;
+import fr.imag.adele.cadse.as.generator.GIterPart;
+import fr.imag.adele.cadse.as.generator.GToken;
+import fr.imag.adele.cadse.as.generator.GenClassState;
+import fr.imag.adele.cadse.as.generator.GenState;
+import fr.imag.adele.cadse.as.generator.GenerateClass;
+import fr.imag.adele.cadse.cadseg.managers.content.ManagerJavaFileContentManager;
 import fr.imag.adele.cadse.cadseg.managers.content.ManagerManager;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.ItemTypeManager;
 import fr.imag.adele.cadse.core.GenContext;
-import fr.imag.adele.cadse.core.GenStringBuilder;
 import fr.imag.adele.cadse.core.Item;
-import fr.imag.adele.cadse.core.var.ContextVariable;
+import fr.imag.adele.cadse.core.ItemType;
 
 /**
  * The Class GenerateManager.
@@ -71,121 +71,129 @@ import fr.imag.adele.cadse.core.var.ContextVariable;
 // <%=cim.attributes_str%>
 // <%=cim.methods_str%>
 // }
+
 public class GenerateManager extends GenerateClass {
+	
+	public static final GToken MANAGER = new GToken("manager");
+	
+	static public class ManagerIter extends GIterPart {
 
-	/** The cim. */
-	GAManagerFile.GenerateModel	cim;
-
-	/**
-	 * Instantiates a new generate manager.
-	 * 
-	 * @param cxt
-	 *            the cxt
-	 * @param cim
-	 *            the cim
-	 * @param type
-	 *            the type
-	 */
-	public GenerateManager(ContextVariable cxt, GAManagerFile.GenerateModel cim, IType type) {
-		super(cxt, true, cim.packageName, cim.className, cim.superClassName, (String) null, type, cim.overwriteClass);
-		this.cim = cim;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.workspace.workspace.generate.GenerateClass#generateMethods(fr.imag.adele.cadse.core.GenStringBuilder,
-	 *      java.util.Set, fr.imag.adele.cadse.core.GenContext)
-	 */
-	@Override
-	protected void generateMethods(GenStringBuilder sb, Set<String> imports, GenContext context) {
-		imports.add("fr.imag.adele.cadse.core.ItemType");
-		cim.cm.generateParts(sb, "manager", "constructors", imports, context);
-		internalGenerateMethod(sb, context, imports);
-		cim.cm.generateParts(sb, "manager", "methods", imports, context);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.workspace.workspace.generate.GenerateClass#generateAttributes(fr.imag.adele.cadse.core.GenStringBuilder,
-	 *      java.util.Set, fr.imag.adele.cadse.core.GenContext)
-	 */
-	@Override
-	protected void generateAttributes(GenStringBuilder sb, Set<String> imports, GenContext context) {
-		super.generateAttributes(sb, imports, context);
-		GenerateJavaIdentifier.addImportCST(cxt, ItemTypeManager.getCadseDefinition(cim.itemtype), imports);
-		cim.cm.generateParts(sb, "manager", "inner-class", imports, context);
-		cim.cm.generateParts(sb, "manager", "cstes", imports, context);
-		cim.cm.generateParts(sb, "manager", "attributes", imports, context);
-
-	}
-
-	/**
-	 * Internal generate method.
-	 * 
-	 * @param sb
-	 *            the sb
-	 * @param context
-	 *            the context
-	 * @param imports
-	 *            the imports
-	 */
-	private void internalGenerateMethod(GenStringBuilder sb, GenContext context, Set<String> imports) {
-		Item manager = cim.manager;
-		String uniqueNameTemplate = ManagerManager.getUniqueNameTemplate(manager);
-		if (uniqueNameTemplate != null && uniqueNameTemplate.length() != 0) {
-			imports.add("fr.imag.adele.cadse.core.LinkType");
-			imports.add("fr.imag.adele.cadse.core.Item");
-			sb.newline();
-			sb.newline().append("/**");
-			sb.newline().append("	@generated");
-			sb.newline().append("*/");
-			sb.newline().append("@Override");
-			sb.newline().append("public String computeQualifiedName(Item item, String name, Item parent, LinkType lt) {");
-			sb.begin();
-			Item itemtype = cim.itemtype;
-			ParseTemplate pt = new ParseTemplate(itemtype, uniqueNameTemplate, "name");
-			try {
-				pt.main();
-				pt.build(sb, imports, true, getPackageName());
-			} catch (ParseException e) {
-				sb.newline().append("//").append(e.getMessage());
-			} catch (TokenMgrError e) {
-				sb.newline().append("//").append(e.getMessage());
-			}
-			sb.end();
-			sb.newline().append("}");
-		}
-
-		String displayTemplate = ManagerManager.getDisplayNameTemplateAttribute(manager);
-		if (displayTemplate != null && displayTemplate.length() != 0) {
-			sb.newline();
-			imports.add("fr.imag.adele.cadse.core.Item");
-			sb.newline().append("/**");
-			sb.newline().append("	@generated");
-			sb.newline().append("*/");
-			sb.newline().append("@Override");
-			sb.newline().append("public String getDisplayName(Item item) {");
-			sb.begin();
-			Item itemtype = cim.itemtype;
-			ParseTemplate pt = new ParseTemplate(itemtype, displayTemplate, null);
-			try {
-				pt.main();
-				pt.build("item", "sb", sb, imports, null, true, getPackageName());
-			} catch (ParseException e) {
-				sb.newline().append("//").append(e.getMessage());
-			} catch (TokenMgrError e) {
-				sb.newline().append("//").append(e.getMessage());
-			}
-			sb.end();
-			sb.newline().append("}");
+		@Override
+		public void beginAll(Item currentItem, GGenFile gf, GToken kind,
+				GenContext context, GGenerator gGenerator) {
+			super.beginAll(currentItem, gf, kind, context, gGenerator);
+			Item itemtype = ManagerManager.getItemType(currentItem);
+			if (itemtype != null)
+				stack.add(itemtype);
 		}
 	}
 
-	@Override
-	protected Item getCadseDefinition() {
-		return cim.getCadseDefinition();
+	/**
+	 * The Class GenerateModel.
+	 */
+	static public class GenManagerState extends GenClassState {
+
+		/** The super class name. */
+		public String superClassName;
+
+		/** The item name. */
+		public String itemName;
+
+		/** The itemtype. */
+		public Item itemtype;
+
+		/** The manager. */
+		public Item manager;
+
+		/** The cm. */
+		public ManagerJavaFileContentManager cm;
+
+		public boolean overwriteClass;
+
+		public Item getCadseDefinition() {
+			return ItemTypeManager.getCadseDefinition(itemtype);
+		}
 	}
+	
+	public GenerateManager() {
+		super(MANAGER);
+	}
+	
+
+	@Override
+	protected void init(GenState state, Item manager, GGenerator g, GenContext cxt) {
+		GenManagerState cm = (GenManagerState) state;
+		ManagerJavaFileContentManager jf = (ManagerJavaFileContentManager) g.getJavaFileContentManager(null, manager);
+		Item cadseDefinition = ManagerManager._getCadseDefinition(manager);
+		if (jf.getPartParent() == null) {
+			// reconnect content...
+			jf.setParentContent(cadseDefinition.getContentItem());
+		}
+		ICompilationUnit cu = jf.getCompilationUnit(cxt);
+		if (cu == null) {
+//			Activator.getDefault().log(
+//					new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+//							"Cannot find cu of " + getFile(cxt) + " for "
+//									+ getOwnerItem().getQualifiedName()));
+			return;
+
+		}
+		cm.itemtype = ManagerManager.getItemType(manager);
+		if (cm.itemtype == null) {
+			return;
+		}
+		cm.manager = manager;
+		cm.itemName = cm.itemtype.getName();
+		cm.fClassName = jf.getClassName(cxt);
+		cm._packageName = jf.getPackageName(cxt);
+		cm.type = cu.getType(cm.fClassName);
+
+		ItemType superItem = (ItemType) ItemTypeManager
+				.getSuperType(cm.itemtype);
+		if (superItem != null) {
+			cm.superClassName = ItemTypeManager.getManagerClass(superItem, cxt,
+					null);
+			cm.overwriteClass = true;
+		} else if (ItemTypeManager.isIsMetaItemTypeAttribute(cm.itemtype)) {
+			cm.superClassName = "fr.imag.adele.cadse.cadseg.managers.dataModel.ItemTypeManager";
+			cm.overwriteClass = false;
+		} else {
+			cm.superClassName = "fr.imag.adele.cadse.core.DefaultItemManager";
+			cm.overwriteClass = true;
+		}
+		cm.cm = (ManagerJavaFileContentManager) jf;
+	}
+	
+	@Override
+	protected GenState createState() {
+		return new GenManagerState();
+	}
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see fr.imag.adele.cadse.core.IGenerateContent#generate(fr.imag.adele.
+//	 * cadse.core.var.ContextVariable)
+//	 */
+//	public void generate(JavaFileContentManager jf, ContextVariable cxt) {
+//		Item manager = jf.getOwnerItem();
+//
+//		
+//
+//
+//		
+//		// ((IGenerateContent)
+//		// _getCadseDefinition(manager).getContentItem()).generate(cxt);
+//
+//		String path = jf.getPath(cxt);
+//		try {
+//			EclipsePluginContentManger.generateJava(MelusineProjectManager
+//					.getProject(cadseDefinition).getFile(new Path(path)),
+//					getContent(), View.getDefaultMonitor());
+//
+//		} catch (CoreException e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
 
 }

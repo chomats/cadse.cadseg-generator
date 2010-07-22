@@ -1,10 +1,9 @@
-package fr.imag.adele.cadse.cadseg.generator;
+package fr.imag.adele.cadse.cadseg.generator.attribute;
 
 import java.util.Set;
 
 import org.eclipse.jdt.core.IType;
 
-import fr.imag.adele.cadse.as.generator.GeneratorPart;
 import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
 import fr.imag.adele.cadse.cadseg.managers.attributes.AttributeManager;
 import fr.imag.adele.cadse.core.CadseException;

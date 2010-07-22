@@ -2,7 +2,10 @@ package fr.imag.adele.cadse.cadseg.generator.content;
 
 import java.util.Set;
 
-import fr.imag.adele.cadse.cadseg.generator.GGenerator;
+import fr.imag.adele.cadse.as.generator.GGenFile;
+import fr.imag.adele.cadse.as.generator.GGenerator;
+import fr.imag.adele.cadse.as.generator.GResult;
+import fr.imag.adele.cadse.as.generator.GToken;
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.GenStringBuilder;
@@ -26,17 +29,13 @@ import fr.imag.adele.cadse.core.content.ContentItem;
 			return new StringAttributeType[] { CadseGCST.PROJECT_CONTENT_MODEL_at_PROJECT_NAME_ };
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see model.workspace.workspace.managers.content.ContentModelManager.MyContentItem#generate(fr.imag.adele.cadse.core.GenStringBuilder,
-		 *      java.lang.String, java.lang.String, java.util.Set,
-		 *      fr.imag.adele.cadse.core.GenContext)
-		 */
+		
 		@Override
-		public void generate(GGenerator g, Item owner, GenStringBuilder sb, String type, String kind, Set<String> imports, GenContext context) {
-			super.generate(g, owner, sb, type, kind, imports, context);
-			imports.add("fede.workspace.eclipse.content.ProjectContentManager");
+		public GResult generatePartFile(Item owner, GGenFile gf, GToken kind,
+			GenContext context, GGenerator gGenerator) {
+			GResult r = super.generatePartFile(owner, gf, kind, context, gGenerator);
+			gf.addImports("fede.workspace.eclipse.content.ProjectContentManager");
+			return r;
 		}
 
 		/*

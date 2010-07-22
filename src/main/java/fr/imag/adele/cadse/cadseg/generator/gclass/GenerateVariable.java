@@ -3,6 +3,9 @@ package fr.imag.adele.cadse.cadseg.generator.gclass;
 import java.util.Set;
 
 import fede.workspace.eclipse.java.JavaIdentifier;
+import fr.imag.adele.cadse.as.generator.GGenFile;
+import fr.imag.adele.cadse.as.generator.GResult;
+import fr.imag.adele.cadse.as.generator.GenState;
 import fr.imag.adele.cadse.cadseg.ParseTemplate;
 import fr.imag.adele.cadse.cadseg.exp.ParseException;
 import fr.imag.adele.cadse.cadseg.exp.TokenMgrError;
@@ -38,10 +41,10 @@ public class GenerateVariable {
 	 * @param imports
 	 *            the imports
 	 */
-	public static void generateClassVariable(Item item, String variableClassName, String value, GenStringBuilder sb,
-			Set<String> imports) {
-		imports.add("fr.imag.adele.cadse.core.var.ContextVariable");
-		imports.add("fr.imag.adele.cadse.core.impl.var.VariableImpl");
+	public static void generateClassVariable(Item item, String variableClassName, String value, GResult sb,
+			GGenFile gf, GenState state) {
+		state.addImports("fr.imag.adele.cadse.core.var.ContextVariable");
+		state.addImports("fr.imag.adele.cadse.core.impl.var.VariableImpl");
 
 		sb.newline().appendGeneratedTag();
 		sb.newline().append("static final class ").append(variableClassName).append(" extends VariableImpl {");
@@ -58,7 +61,7 @@ public class GenerateVariable {
 		ParseTemplate pt = new ParseTemplate(itemtype, value, null);
 		try {
 			pt.main();
-			pt.build("itemCurrent", "sb", sb, imports, null, true, true, null);
+			pt.build("itemCurrent", "sb", sb, state.getImports(), null, true, true, null);
 		} catch (ParseException e) {
 		} catch (TokenMgrError e) {
 		}

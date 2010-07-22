@@ -1,4 +1,4 @@
-package fr.imag.adele.cadse.cadseg.generator;
+package fr.imag.adele.cadse.cadseg.generator.attribute;
 
 import java.net.URL;
 

@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,19 +37,28 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 
 import fede.workspace.eclipse.java.manager.JavaFileContentManager;
 import fede.workspace.tool.eclipse.MappingManager;
+import fr.imag.adele.cadse.as.generator.GGenFile;
+import fr.imag.adele.cadse.as.generator.GGenerator;
+import fr.imag.adele.cadse.as.generator.GToken;
 import fr.imag.adele.cadse.cadseg.IAttributeGenerator;
 import fr.imag.adele.cadse.cadseg.ItemShortNameComparator;
 import fr.imag.adele.cadse.cadseg.ext.actions.ActionExtItemTypeExt;
 import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
-import fr.imag.adele.cadse.cadseg.generator.GAttribute;
+import fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute;
 import fr.imag.adele.cadse.cadseg.managers.CadseDefinitionManager;
 import fr.imag.adele.cadse.cadseg.managers.actions.MenuAbstractManager;
 import fr.imag.adele.cadse.cadseg.managers.actions.MenuManager;
@@ -63,6 +73,7 @@ import fr.imag.adele.cadse.cadseg.managers.dataModel.ItemTypeManager;
 import fr.imag.adele.cadse.core.CadseException;
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.CadseRuntime;
+import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.cadse.core.ItemType;
 import fr.imag.adele.cadse.core.LinkType;
@@ -105,13 +116,36 @@ import fr.imag.adele.fede.workspace.as.initmodel.jaxb.ValueTypeType;
  * 
  * @author <a href="mailto:stephane.chomat@imag.fr">Stephane Chomat</a>
  */
-public class GenerateCadseDefinitionModel {
+public class GenerateCadseDefinitionModel extends GGenFile {
 
 	static Map<ItemType, IAttributeGenerator>		generators		= new HashMap<ItemType, IAttributeGenerator>();
 
 	static List<GenerateCadseDefinitionModelExt>	generatorsExt	= new ArrayList<GenerateCadseDefinitionModelExt>();
 
 	static int intID =0;
+	
+	public GenerateCadseDefinitionModel() {
+		_key = new GToken("cadse.xml");
+	}
+	
+	@Override
+	public String generate(GGenerator g, Item currentItem, GenContext cxt) {
+		CCadse cadse = GenerateCadseDefinitionModel.generateCADSE(currentItem);
+		StringWriter writer = new StringWriter();
+
+		try {
+			JAXBContext jc = JAXBContext.newInstance("fr.imag.adele.fede.workspace.as.initmodel.jaxb", this.getClass()
+					.getClassLoader());
+			Marshaller m = jc.createMarshaller();
+			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			m.marshal(cadse, writer);
+			return writer.toString();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	/**
 	 * Generate cadse.
 	 * 

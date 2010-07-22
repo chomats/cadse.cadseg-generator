@@ -19,15 +19,19 @@
 
 package fr.imag.adele.cadse.cadseg.generator.gclass;
 
-import java.util.Set;
-
 import fede.workspace.eclipse.java.manager.JavaFileContentManager;
+import fr.imag.adele.cadse.as.generator.GCst;
+import fr.imag.adele.cadse.as.generator.GGenFile;
+import fr.imag.adele.cadse.as.generator.GGenerator;
+import fr.imag.adele.cadse.as.generator.GResult;
+import fr.imag.adele.cadse.as.generator.GToken;
+import fr.imag.adele.cadse.as.generator.GenClassState;
+import fr.imag.adele.cadse.as.generator.GenState;
+import fr.imag.adele.cadse.as.generator.GenerateClass;
 import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.GenContext;
-import fr.imag.adele.cadse.core.GenStringBuilder;
 import fr.imag.adele.cadse.core.Item;
-import fr.imag.adele.cadse.core.var.ContextVariable;
 
 /**
  * The Class GenerateExtItemType.
@@ -37,49 +41,40 @@ import fr.imag.adele.cadse.core.var.ContextVariable;
 
 public class GenerateExtItemType extends GenerateClass {
 
-	/** The cim. */
-	JavaFileContentManager	cim;
-
-	/**
-	 * Instantiates a new generate ext item type.
-	 * 
-	 * @param cxt
-	 *            the cxt
-	 * @param cim
-	 *            the cim
-	 */
-	public GenerateExtItemType(ContextVariable cxt, JavaFileContentManager cim) {
-		super(cxt, true, cim.getPackageName(cxt), cim.getClassName(cxt), null, (String) null, cim.getJavaType(cxt),
-				false);
-		this.cim = cim;
+	public static final GToken EXT_MANAGER = new GToken("ext-manager");
+	
+	public GenerateExtItemType() {
+		super(EXT_MANAGER);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.workspace.workspace.generate.GenerateClass#generateMethods(fr.imag.adele.cadse.core.GenStringBuilder,
-	 *      java.util.Set, fr.imag.adele.cadse.core.GenContext)
-	 */
+	
 	@Override
-	protected void generateMethods(GenStringBuilder sb, Set<String> imports, GenContext context) {
-		// imports.add("fr.imag.adele.cadse.core.ItemType");
-		// cim.generateParts(sb, "manager", "constructors", imports, context);
-		cim.generateParts(sb, "manager", "methods", imports, context);
+	protected void init(GenState state, Item currentItem, GGenerator g,
+			GenContext cxt) {
+		super.init(state, currentItem, g, cxt);
+		GenClassState gcs = (GenClassState) state;
+		JavaFileContentManager cim = g.getJavaFileContentManager(EXT_MANAGER , currentItem);
+		gcs._packageName = cim.getPackageName(cxt);
+		gcs.isClass = true;
+		gcs.type = cim.getJavaType(cxt);
+		gcs.fClassName = cim.getClassName(cxt);
+		gcs.fCanOverwriteEtendsClass = false;
+		
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.workspace.workspace.generate.GenerateClass#generateAttributes(fr.imag.adele.cadse.core.GenStringBuilder,
-	 *      java.util.Set, fr.imag.adele.cadse.core.GenContext)
-	 */
+	
 	@Override
-	protected void generateAttributes(GenStringBuilder sb, Set<String> imports, GenContext context) {
-		cim.generateParts(sb, "manager", "inner-class", imports, context);
-		cim.generateParts(sb, "manager", "cstes", imports, context);
-		cim.generateParts(sb, "manager", "attributes", imports, context);
-		Item cadsedef = cim.getOwnerItem().getPartParent(CadseGCST.CADSE_DEFINITION);
-		GenerateJavaIdentifier.addImportCST(cxt, cadsedef, imports);
-
+	public boolean match(GToken kind) {
+		return kind.abs() == GCst.t_import || super.match(kind);
+	}
+	
+	@Override
+	public void generatePartFile(GResult g, Item currentItem, GGenFile gf, GToken kind,
+			GenContext context, GGenerator gGenerator, GenState state) {
+		if (kind.equals(GCst.t_import)) {
+			Item cadsedef = currentItem.getPartParent(CadseGCST.CADSE_DEFINITION);
+			g.appendLines(GenerateJavaIdentifier.getImportCST(context, cadsedef));
+		}
+		super.generatePartFile(g, currentItem, gf, kind, context, gGenerator,state);
 	}
 }
+
+	

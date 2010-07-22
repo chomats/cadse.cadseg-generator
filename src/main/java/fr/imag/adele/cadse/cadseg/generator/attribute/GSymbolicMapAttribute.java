@@ -1,4 +1,4 @@
-package fr.imag.adele.cadse.cadseg.generator;
+package fr.imag.adele.cadse.cadseg.generator.attribute;
 
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.ItemType;

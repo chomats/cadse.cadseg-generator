@@ -8,8 +8,13 @@ import org.eclipse.pde.internal.core.plugin.WorkspacePluginModel;
 import fede.workspace.eclipse.composition.java.IPDEContributor;
 import fede.workspace.eclipse.java.JavaIdentifier;
 import fede.workspace.eclipse.java.manager.JavaFileContentManager;
+import fr.imag.adele.cadse.as.generator.GGenFile;
+import fr.imag.adele.cadse.as.generator.GGenPartFile;
+import fr.imag.adele.cadse.as.generator.GGenerator;
+import fr.imag.adele.cadse.as.generator.GResult;
+import fr.imag.adele.cadse.as.generator.GToken;
+import fr.imag.adele.cadse.as.generator.GenState;
 import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
-import fr.imag.adele.cadse.cadseg.generator.GGenerator;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateVariable;
 import fr.imag.adele.cadse.cadseg.managers.build.CompositeItemTypeManager;
 import fr.imag.adele.cadse.cadseg.managers.content.ContentItemTypeManager;
@@ -17,7 +22,6 @@ import fr.imag.adele.cadse.cadseg.managers.content.ManagerManager;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.ItemTypeManager;
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.GenContext;
-import fr.imag.adele.cadse.core.GenStringBuilder;
 import fr.imag.adele.cadse.core.IGenerateContent;
 import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.cadse.core.ItemType;
@@ -30,57 +34,29 @@ import fr.imag.adele.cadse.objectadapter.ObjectAdapter;
 /**
  * The Class MyContentItem.
  */
-public class GContentType extends ObjectAdapter<GContentType> implements IGenerateContent, IPDEContributor {
+public class GContentType extends GGenPartFile implements IPDEContributor {
 
-	private static final String INNER_CLASS = "inner-class";
-	public static final String METHODS = "methods";
-	private static final String CREATECONTENT_ARGS = "createcontent-args";
-	private static final String CREATECONTENT_INIT = "createcontent-init";
+	public static final GToken INNER_CLASS = new GToken("inner-class");
+	public static final GToken METHODS = new GToken("methods");
+	public static final GToken CREATECONTENT_ARGS = new GToken("createcontent-args");
+	public static final GToken CREATECONTENT_INIT = new GToken("createcontent-init");
 
-	/**
-	 * 
-	 */
-	//private final ContentItemTypeManager contentItemTypeManager;
-
-	
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see fr.imag.adele.cadse.core.IGenerateContent#generate(fr.imag.adele.cadse.core.var.ContextVariable)
-	 */
-	public void generate(ContextVariable cxt) {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see fr.imag.adele.cadse.core.IGenerateContent#getGenerateModel()
-	 */
-	public GenerateModel getGenerateModel() {
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see fr.imag.adele.cadse.core.ContentManager#generate(fr.imag.adele.cadse.core.GenStringBuilder,
-	 *      java.lang.String, java.lang.String, java.util.Set,
-	 *      fr.imag.adele.cadse.core.GenContext)
-	 */
-	public void generate(GGenerator g, Item owner, GenStringBuilder sb, String type, String kind, Set<String> imports, GenContext context) {
+	@Override
+	public void generatePartFile(GResult r, Item owner, GGenFile gf,
+			GToken kind, GenContext context, GGenerator gGenerator,
+			GenState state) {
 		ItemType it = owner.getType();
 		Class<?> defaultQualifiedClassName = this.getRuntimeClassName();
 		String defaultClassName = defaultQualifiedClassName.getSimpleName();
 
-		if (INNER_CLASS.equals(kind)) {
+		
+		if (INNER_CLASS == kind) {
 			Item manager = owner.getPartParent();
 
 			Item itemtype = ManagerManager.getItemType(manager);
-			generateAllClassVariables(owner, sb, imports);
+			generateAllClassVariables(owner, r, gf, state);
 
-			g.generateParts(owner, sb, type, kind, imports, null);
-			generateComposersParts(owner, sb, type, kind, imports, null);
+			generateComposersParts(owner, r, gf, kind, null, gGenerator, state);
 
 			boolean extendsClass = mustBeExtended() | ContentItemTypeManager.isExtendsClass(owner);
 			if (extendsClass) {
@@ -89,86 +65,87 @@ public class GContentType extends ObjectAdapter<GContentType> implements IGenera
 
 				extendsClassName = findSuperClassName(owner, context, extendsClassName, itemtype);
 				defaultClassName = GenerateJavaIdentifier.getContentClassName(context, itemtype);
-				sb.newline();
-				sb.newline().append("/**");
-				sb.newline().append("	@generated");
-				sb.newline().append("*/");
-				sb.newline().append("public class ").append(defaultClassName).append(" extends ").append(
+				r.newline();
+				r.newline().append("/**");
+				r.newline().append("	@generated");
+				r.newline().append("*/");
+				r.newline().append("public class ").append(defaultClassName).append(" extends ").append(
 						extendsClassName).append(" {");
-				sb.begin();
-				sb.newline();
-				sb.newline().append("/**");
-				sb.newline().append("	@generated");
-				sb.newline().append("*/");
-				sb.newline().append("public ").append(defaultClassName).append("(");
-				generateConstructorParameter(sb);
-				sb.decrementLength();
-				sb.append(") throws CadseException {");
-				sb.newline().append("	super(");
-				generateConstrustorArguments(sb);
-				sb.decrementLength();
-				sb.append(");");
-				sb.newline().append("}");
-				sb.end();
-				sb.newline();
-				sb.newline().append("}");
-				sb.newline();
-				imports.add("fr.imag.adele.cadse.core.CadseException");
+				r.begin();
+				r.newline();
+				r.newline().append("/**");
+				r.newline().append("	@generated");
+				r.newline().append("*/");
+				r.newline().append("public ").append(defaultClassName).append("(");
+				generateConstructorParameter(r);
+				r.decrementLength();
+				r.append(") throws CadseException {");
+				r.newline().append("	super(");
+				generateConstrustorArguments(r);
+				r.decrementLength();
+				r.append(");");
+				r.newline().append("}");
+				r.end();
+				r.newline();
+				r.newline().append("}");
+				r.newline();
+				state.addImports("fr.imag.adele.cadse.core.CadseException");
 			}
 		}
 		if (METHODS.equals(kind)) {
-			boolean extendsClass = mustBeExtended() | ContentItemTypeManager.isExtendsClass(owner);
-			
-			Item manager = owner.getPartParent();
-			Item itemtype = ManagerManager.getItemType(manager);
-
-			String className = (extendsClass ? GenerateJavaIdentifier.getContentClassName(context, itemtype) : defaultClassName);
-			String itemVar = JavaIdentifier.javaIdentifierFromString(itemtype.getName(), false, true, null);
-			sb.newline();
-			sb.newline().append("/**");
-			sb.newline().append("	@generated");
-			sb.newline().append("*/");
-			sb.newline().append("@Override");
-			sb.newline().append("public ContentItem createContentItem(UUID id, Item owerItem ").append(
-					") throws CadseException {");
-			/* 1 */sb.begin();
-			GenContext newcontext = new GenContext(context);
-			newcontext.setAttribute("itemVar", itemVar);
-			g.generateParts(owner, sb, type, CREATECONTENT_INIT, imports, newcontext);
-			generateCallInit(sb, imports, newcontext);
-			sb.newline().append(className).append(" cm = new ").append(className).append("(");
-			/* 2 */sb.begin();
-			sb.newline().append("id,");
-			g.generateParts(owner, sb, type, CREATECONTENT_ARGS, imports, newcontext);
-			/* 3 */sb.begin();
-			generateCallArguments(owner, sb, imports, newcontext);
-			sb.decrementLength();
-			/* 3 */sb.end();
-
-			sb.newline().append(");");
-			/* 2 */sb.end();
-			sb.newline().append("owerItem.setComposers(");
-			/* 2 */sb.begin();
-			generateComposersParts(owner, sb, type, "composers", imports, newcontext);
-			sb.decrementLength();
-			/* 2 */sb.end();
-			sb.newline().append(");");
-			sb.newline().append("owerItem.setExporters(");
-			/* 2 */sb.begin();
-			generateExportersParts(owner, sb, type, "exporters", imports, newcontext);
-			sb.decrementLength();
-			/* 2 */sb.end();
-			sb.newline().append(");");
-			sb.newline().append("return cm;");
-			/* 1 */sb.end();
-			sb.newline().append("}").newline();
-			imports.add("fr.imag.adele.cadse.core.content.ContentItem");
-			imports.add("java.util.UUID");
-			imports.add("fr.imag.adele.cadse.core.Item");
-			imports.add("fr.imag.adele.cadse.core.var.Variable");
-			imports.add("fr.imag.adele.cadse.core.var.ContextVariable");
-			imports.add("fr.imag.adele.cadse.core.CadseException");
-			imports.add(defaultQualifiedClassName.getCanonicalName());
+//			boolean extendsClass = mustBeExtended() | ContentItemTypeManager.isExtendsClass(owner);
+//			
+//			Item manager = owner.getPartParent();
+//			Item itemtype = ManagerManager.getItemType(manager);
+//
+//			String className = (extendsClass ? GenerateJavaIdentifier.getContentClassName(context, itemtype) : defaultClassName);
+//			String itemVar = JavaIdentifier.javaIdentifierFromString(itemtype.getName(), false, true, null);
+//			r.newline();
+//			r.newline().append("/**");
+//			r.newline().append("	@generated");
+//			r.newline().append("*/");
+//			r.newline().append("@Override");
+//			r.newline().append("public ContentItem createContentItem(UUID id, Item owerItem ").append(
+//					") throws CadseException {");
+//			/* 1 */r.begin();
+//			GenContext newcontext = new GenContext(context);
+//			newcontext.setAttribute("itemVar", itemVar);
+//			
+//			r.appendToken(CREATECONTENT_INIT, newcontext);
+//			generateCallInit(r, gf, newcontext);
+//			r.newline().append(className).append(" cm = new ").append(className).append("(");
+//			/* 2 */r.begin();
+//			r.newline().append("id,");
+//			g.generateParts(owner, r, type, CREATECONTENT_ARGS, gf, newcontext);
+//			/* 3 */r.begin();
+//			generateCallArguments(owner, r, gf, newcontext);
+//			r.decrementLength();
+//			/* 3 */r.end();
+//
+//			r.newline().append(");");
+//			/* 2 */r.end();
+//			r.newline().append("owerItem.setComposers(");
+//			/* 2 */r.begin();
+//			generateComposersParts(owner, r, type, "composers", gf, newcontext);
+//			r.decrementLength();
+//			/* 2 */r.end();
+//			r.newline().append(");");
+//			r.newline().append("owerItem.setExporters(");
+//			/* 2 */r.begin();
+//			generateExportersParts(owner, r, type, "exporters", imports, newcontext);
+//			r.decrementLength();
+//			/* 2 */r.end();
+//			r.newline().append(");");
+//			r.newline().append("return cm;");
+//			/* 1 */r.end();
+//			r.newline().append("}").newline();
+			state.addImports("fr.imag.adele.cadse.core.content.ContentItem");
+			state.addImports("java.util.UUID");
+			state.addImports("fr.imag.adele.cadse.core.Item");
+			state.addImports("fr.imag.adele.cadse.core.var.Variable");
+			state.addImports("fr.imag.adele.cadse.core.var.ContextVariable");
+			state.addImports("fr.imag.adele.cadse.core.CadseException");
+			state.addImports(defaultQualifiedClassName.getCanonicalName());
 
 		}
 	}
@@ -220,12 +197,13 @@ public class GContentType extends ObjectAdapter<GContentType> implements IGenera
 	/**
 	 * Generate all class variables.
 	 * 
-	 * @param sb
-	 *            the sb
-	 * @param imports
+	 * @param r
+	 *            the r
+	 * @param gf
 	 *            the imports
+	 * @param state 
 	 */
-	protected void generateAllClassVariables(Item owner, GenStringBuilder sb, Set<String> imports) {
+	protected void generateAllClassVariables(Item owner, GResult r, GGenFile gf, GenState state) {
 		StringAttributeType[] kinds = getResourceKindsName();
 
 		if (kinds == null) {
@@ -240,7 +218,7 @@ public class GContentType extends ObjectAdapter<GContentType> implements IGenera
 					continue;
 				}
 				GenerateVariable.generateClassVariable(owner,
-						GenerateVariable.getClassVariable(strKinds.getName(), true), value, sb, imports);
+						GenerateVariable.getClassVariable(strKinds.getName(), true), value, r, gf, state);
 			}
 		}
 	}
@@ -261,47 +239,15 @@ public class GContentType extends ObjectAdapter<GContentType> implements IGenera
 	/**
 	 * Generate call init.
 	 * 
-	 * @param sb
-	 *            the sb
+	 * @param r
+	 *            the r
 	 * @param imports
 	 *            the imports
 	 * @param newcontext
 	 *            the newcontext
 	 */
-	protected void generateCallInit(GenStringBuilder sb, Set<String> imports, GenContext newcontext) {
+	protected void generateCallInit(GResult r, GGenFile gf, GenContext newcontext) {
 
-	}
-
-	/**
-	 * Generate exporters parts.
-	 * 
-	 * @param item
-	 *            the item
-	 * @param sb
-	 *            the sb
-	 * @param type
-	 *            the type
-	 * @param kind
-	 *            the kind
-	 * @param imports
-	 *            the imports
-	 * @param context
-	 *            the context
-	 */
-	public void generateExportersParts(Item item, GenStringBuilder sb, String type, String kind,
-			Set<String> imports, GenContext context) {
-		Item mapping = item.getPartParent();
-		for (Link l : mapping.getOutgoingLinks()) {
-			if (l.getLinkType().isPart() && l.isLinkResolved()) {
-				ContentItem cm = l.getResolvedDestination().getContentItem();
-				if (!l.getLinkType().getName().equals(ContentItemTypeManager.EXPORTERS_LINK)) {
-					continue;
-				}
-				if (cm != null) {
-					cm.generate(sb, type, kind, imports, context);
-				}
-			}
-		}
 	}
 
 	/**
@@ -309,8 +255,8 @@ public class GContentType extends ObjectAdapter<GContentType> implements IGenera
 	 * 
 	 * @param item
 	 *            the item
-	 * @param sb
-	 *            the sb
+	 * @param r
+	 *            the r
 	 * @param type
 	 *            the type
 	 * @param kind
@@ -319,38 +265,28 @@ public class GContentType extends ObjectAdapter<GContentType> implements IGenera
 	 *            the imports
 	 * @param context
 	 *            the context
+	 * @param state 
 	 */
-	public void generateComposersParts(Item item, GenStringBuilder sb, String type, String kind,
-			Set<String> imports, GenContext context) {
+	public void generateComposersParts(Item item, GResult r, GGenFile	gf, GToken kind, GenContext context, GGenerator g, GenState state) {
 		Item managerItem = item.getPartParent();
 		Item itemtype = ManagerManager.getItemType(managerItem);
 		Item compositeItem = CompositeItemTypeManager.getCompositeItemFromItemType(itemtype);
 		if (compositeItem != null) {
-			for (Link l : compositeItem.getOutgoingLinks()) {
-				if (l.getLinkType().isPart() && l.isLinkResolved()) {
-					ContentItem cm = l.getResolvedDestination().getContentItem();
-					if (l.getLinkType() != CadseGCST.COMPOSITE_ITEM_TYPE_lt_COMPOSERS) {
-						continue;
-					}
-					if (cm != null) {
-						cm.generate(sb, type, kind, imports, context);
-					}
-				}
-			}
+			r.append(g.generate(CadseGCST.COMPOSITE_ITEM_TYPE_lt_COMPOSERS, compositeItem, gf, kind, context, state));
 		}
 	}
 
 	/**
 	 * Generate call arguments.
 	 * 
-	 * @param sb
-	 *            the sb
+	 * @param r
+	 *            the r
 	 * @param imports
 	 *            the imports
 	 * @param context
 	 *            the context
 	 */
-	protected void generateCallArguments(Item owner, GenStringBuilder sb, Set<String> imports, GenContext context) {
+	protected void generateCallArguments(Item owner, GResult r, GGenFile gf, GenContext context, GenState state) {
 		StringAttributeType[] kinds = getResourceKindsName();
 		if (kinds == null) {
 			return;
@@ -360,10 +296,10 @@ public class GContentType extends ObjectAdapter<GContentType> implements IGenera
 				String value = owner.getAttribute(strKinds);
 				value = getDefaultValue(strKinds, value);
 				if (value == null || value.length() == 0) {
-					sb.append(" ").append("NullVariable.INSTANCE,");
-					imports.add("fr.imag.adele.cadse.core.impl.var.NullVariable");
+					r.append(" ").append("NullVariable.INSTANCE,");
+					state.addImports("fr.imag.adele.cadse.core.impl.var.NullVariable");
 				} else {
-					sb.append(" ").append(GenerateVariable.getClassVariable(strKinds.getName(), true)).append(".INSTANCE,");
+					r.append(" ").append(GenerateVariable.getClassVariable(strKinds.getName(), true)).append(".INSTANCE,");
 				}
 			}
 		}
@@ -372,18 +308,18 @@ public class GContentType extends ObjectAdapter<GContentType> implements IGenera
 	/**
 	 * Generate construstor arguments.
 	 * 
-	 * @param sb
-	 *            the sb
+	 * @param r
+	 *            the r
 	 */
-	protected void generateConstrustorArguments(GenStringBuilder sb) {
-		sb.append("id,");
+	protected void generateConstrustorArguments(GResult r) {
+		r.append("id,");
 		StringAttributeType[] kinds = getResourceKindsName();
 		if (kinds == null) {
 			return;
 		} else {
 			for (int i = 0; i < kinds.length; i++) {
 				StringAttributeType strKinds = kinds[i];
-				sb.append(" ").append(GenerateVariable.getClassVariable(strKinds.getName(), false)).append(",");
+				r.append(" ").append(GenerateVariable.getClassVariable(strKinds.getName(), false)).append(",");
 			}
 		}
 	}
@@ -391,12 +327,12 @@ public class GContentType extends ObjectAdapter<GContentType> implements IGenera
 	/**
 	 * Generate constructor parameter.
 	 * 
-	 * @param sb
-	 *            the sb
+	 * @param r
+	 *            the r
 	 */
-	protected void generateConstructorParameter(GenStringBuilder sb) {
+	protected void generateConstructorParameter(GResult r) {
 		
-		sb.append("UUID id,");
+		r.append("UUID id,");
 		StringAttributeType[] kinds = getResourceKindsName();
 
 		if (kinds == null) {
@@ -404,7 +340,7 @@ public class GContentType extends ObjectAdapter<GContentType> implements IGenera
 		} else {
 			for (int i = 0; i < kinds.length; i++) {
 				StringAttributeType strKinds = kinds[i];
-				sb.append(" Variable ").append(GenerateVariable.getClassVariable(strKinds.getName(), false)).append(",");
+				r.append(" Variable ").append(GenerateVariable.getClassVariable(strKinds.getName(), false)).append(",");
 			}
 		}
 	}
@@ -448,10 +384,7 @@ public class GContentType extends ObjectAdapter<GContentType> implements IGenera
 	public void computeExtenstion(IPluginBase pluginBase, WorkspacePluginModel workspacePluginModel) {
 	}
 
-	@Override
-	public Class<GContentType> getClassAdapt() {
-		return GContentType.class;
-	}
+	
 
 	public boolean hasParentContent() {
 		return false;

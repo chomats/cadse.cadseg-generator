@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.jdt.core.IType;
 
+import fr.imag.adele.cadse.as.generator.GenerateClass;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.PageManager;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.PageManager.PageContentManager;
 import fr.imag.adele.cadse.cadseg.managers.ui.FieldGenerateInfo;

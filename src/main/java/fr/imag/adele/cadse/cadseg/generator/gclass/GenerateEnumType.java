@@ -1,0 +1,35 @@
+package fr.imag.adele.cadse.cadseg.generator.gclass;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.imag.adele.cadse.as.generator.GGenFile;
+import fr.imag.adele.cadse.as.generator.GGenerator;
+import fr.imag.adele.cadse.as.generator.GToken;
+import fr.imag.adele.cadse.cadseg.managers.dataModel.EnumTypeManager;
+import fr.imag.adele.cadse.cadseg.template.EnumSkeltonTemplate;
+import fr.imag.adele.cadse.core.CadseGCST;
+import fr.imag.adele.cadse.core.GenContext;
+import fr.imag.adele.cadse.core.Item;
+
+public class GenerateEnumType extends GGenFile {
+
+	public GenerateEnumType() {
+		_key = new GToken("enum-type");
+	}
+	
+	@Override
+	public String generate(GGenerator g, Item enumType, GenContext cxt) {
+		EnumTypeManager etm = (EnumTypeManager) enumType.getType().getItemManager();
+		String packageName = etm.getPackage(cxt, enumType);
+		String className = etm.getClassname(cxt, enumType);
+		List<String> values = enumType.getAttribute(CadseGCST.ENUM_TYPE_at_VALUES_);
+		if (values == null) {
+			values = new ArrayList<String>();
+		}
+		EnumSkeltonTemplate temp = new EnumSkeltonTemplate();
+		String content = temp.generate(packageName, className, values);
+		
+		return content;
+	}
+}
