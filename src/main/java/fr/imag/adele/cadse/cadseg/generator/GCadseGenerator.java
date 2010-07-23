@@ -1,5 +1,10 @@
 package fr.imag.adele.cadse.cadseg.generator;
 
+import java.util.UUID;
+
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Provides;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
@@ -11,6 +16,8 @@ import fr.imag.adele.cadse.as.generator.GRefer;
 import fr.imag.adele.cadse.as.generator.GReferIncomingLink;
 import fr.imag.adele.cadse.as.generator.GReferPart;
 import fr.imag.adele.cadse.as.generator.GToken;
+import fr.imag.adele.cadse.as.generator.IGenerator;
+import fr.imag.adele.cadse.as.generator.IRuntimeGenerator;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GManagerSpecialMethod;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateCadseDefinitionModel;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateJavaFileCST;
@@ -28,8 +35,14 @@ import fr.imag.adele.cadse.core.ItemType;
 import fr.imag.adele.cadse.core.transaction.delta.ImmutableItemDelta;
 import fr.imag.adele.cadse.core.var.ContextVariable;
 
+@Component(name = "fr.imag.adele.cadse.cadseGenerator", immediate = true, architecture = true)
+@Provides(specifications = { IGenerator.class })
+@Instantiate(name="fr.imag.adele.cadse.cadseGenerator.instance")
 public class GCadseGenerator extends GGenerator {
 	
+	public static final UUID ID = UUID.fromString("39F384F7-9635-49BF-B61C-75390AA2DD47");
+
+
 	static private final class ItemTypeSubTypeRefer extends GRefer {
 		public Item[] refers(Item currentItem, ImmutableItemDelta itemDelta) {
 				if (itemDelta.hasModifiedAttribute(CadseGCST.ITEM_TYPE_at_MANAGER_CLASS_) ||
@@ -83,11 +96,12 @@ public class GCadseGenerator extends GGenerator {
 	}
 	
 	public GCadseGenerator() {
-		init();
+		super(ID);
 	}
 	
-	protected void init() {
-		super.init();
+	
+	@Override
+	public void load(IRuntimeGenerator runtimeGenerator) {
 		MANAGER.setGenerator(this);
 		CST.setGenerator(this);
 		CADSE_DEFINITION_MODEL.setGenerator(this);
@@ -126,5 +140,10 @@ public class GCadseGenerator extends GGenerator {
 		CadseGCST.ATTRIBUTE.addAdapter(GEN_ATTRIBUTE_METHOD);
 		CadseGCST.ENUM.addAdapter(GEN_ENUM_METHODS);
 		CadseGCST.LINK_TYPE.addAdapter(GEN_LINK_TYPE_METHOD);
+	}
+	
+	@Override
+	public UUID[] getRequireCadse() {
+		return new UUID[] { CadseGCST._CADSE_ID };
 	}
 }
