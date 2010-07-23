@@ -47,7 +47,7 @@ import fr.imag.adele.cadse.core.var.ContextVariable;
  * 
  * @author <a href="mailto:stephane.chomat@imag.fr">Stephane Chomat</a>
  */
-public class GenerateJavaFileCST extends GenerateClass {
+public class GenerateJavaFileCST extends GenerateClass<GenClassState> {
 
 	public static GToken cstToken = new GToken("cadse-cst");
 
@@ -56,7 +56,7 @@ public class GenerateJavaFileCST extends GenerateClass {
 	}
 
 	@Override
-	protected void init(GenState state, Item cadseDefinition, GGenerator g,
+	protected void init(GenClassState state, Item cadseDefinition, GGenerator g,
 			GenContext cxt) {
 		super.init(state, cadseDefinition, g, cxt);
 		GenClassState gcs = (GenClassState) state;

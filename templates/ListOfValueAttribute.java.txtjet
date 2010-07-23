@@ -4,7 +4,7 @@ imports="fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier fede.workspa
 fr.imag.adele.cadse.core.ItemType
 fr.imag.adele.cadse.core.var.ContextVariableImpl
 fr.imag.adele.cadse.cadseg.managers.attributes.AttributeManager
-fr.imag.adele.cadse.cadseg.generator.GAttribute
+fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute
 "%>
 
 <%	String upper_first_att_name = JavaIdentifier.javaIdentifierFromString(attribute.getName(),true, false, null);

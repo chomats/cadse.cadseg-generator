@@ -9,7 +9,6 @@ import fr.imag.adele.cadse.as.generator.GenState;
 import fr.imag.adele.cadse.cadseg.ParseTemplate;
 import fr.imag.adele.cadse.cadseg.exp.ParseException;
 import fr.imag.adele.cadse.cadseg.exp.TokenMgrError;
-import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateManager.GenManagerState;
 import fr.imag.adele.cadse.cadseg.managers.content.ManagerManager;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
@@ -26,7 +25,7 @@ public class GManagerSpecialMethod extends GGenPartFile {
 			GToken kind, GenContext context, GGenerator gGenerator,
 			GenState state) {
 		
-		GenerateManager.GenManagerState cim = (GenManagerState) state;
+		GenManagerState cim = (GenManagerState) state;
 		String uniqueNameTemplate = ManagerManager
 				.getUniqueNameTemplate(manager);
 		if (uniqueNameTemplate != null && uniqueNameTemplate.length() != 0) {

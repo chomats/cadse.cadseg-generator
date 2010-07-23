@@ -23,9 +23,18 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.IType;
 
+import fr.imag.adele.cadse.as.generator.GCst;
+import fr.imag.adele.cadse.as.generator.GGenFile;
+import fr.imag.adele.cadse.as.generator.GGenerator;
+import fr.imag.adele.cadse.as.generator.GResult;
+import fr.imag.adele.cadse.as.generator.GToken;
+import fr.imag.adele.cadse.as.generator.GenClassState;
+import fr.imag.adele.cadse.as.generator.GenState;
 import fr.imag.adele.cadse.as.generator.GenerateClass;
+import fr.imag.adele.cadse.cadseg.managers.CadseDefinitionManager;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.PageManager;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.PageManager.PageContentManager;
 import fr.imag.adele.cadse.cadseg.managers.ui.FieldGenerateInfo;
@@ -42,7 +51,16 @@ import fr.imag.adele.cadse.core.var.ContextVariable;
  * 
  * @author <a href="mailto:stephane.chomat@imag.fr">Stephane Chomat</a>
  */
-public class GeneratePageClass2 extends GenerateClass {
+public class GeneratePageClass2 extends GenerateClass<PageState> {
+	public static final GToken PAGE_CLASS = new GToken("page");
+
+
+
+
+	public GeneratePageClass2() {
+		super(PAGE_CLASS);
+	}
+
 	static public Pattern					p_to_heritage		= Pattern
 																		.compile(
 																				"(protected\\s+void\\s+registerListener\\(\\)\\s*\\{)"
@@ -59,49 +77,44 @@ public class GeneratePageClass2 extends GenerateClass {
 
 	static public String					r_to_not_heritage	= "$1\n\t\t// $2";
 
-	/** The id. */
-	String									id;
+	
 
-	/** The page. */
-	Item									page;
 
-	/** The add internal short name. */
-//	private boolean							addInternalShortName;
+//	/**
+//	 * Instantiates a new generate page class.
+//	 * 
+//	 * @param cxt
+//	 *            the cxt
+//	 * @param packageName
+//	 *            the package name
+//	 * @param className
+//	 *            the class name
+//	 * @param extendedClassName
+//	 *            the extended class name
+//	 * @param type
+//	 *            the type
+//	 * @param supercm
+//	 * @param superPage
+//	 */
+//	private GeneratePageClass2(ContextVariable cxt, String packageName, String className, String extendedClassName,
+//			IType type, Item superPage, PageContentManager supercm) {
+//		super(cxt, true, packageName, className, extendedClassName, (String) null, type, false);
+//		this.superPage = superPage;
+//		this.supercm = supercm;
+//	}
+	
+	@Override
+	protected void init(PageState state, Item page, GGenerator g,
+			GenContext cxt) {
+		super.init(state, page, g, cxt);
+		
+		GeneratePageClass2 ret;
+		
+		state.fExtendedPackageName = "fr.imag.adele.cadse.core.impl.ui";
+		state.fExtendedClassName = "PageImpl";
 
-	/** The add internal attribute. */
-	//private boolean							addInternalAttribute;
+		Item cadseDefinition = PageManager.getCadseDefinition(page);
 
-	/** The fields. */
-	private Collection<FieldGenerateInfo>	fields;
-
-	private Item							superPage;
-
-	private PageContentManager				supercm;
-
-	private boolean							heritage;
-
-	private int								cas;
-
-	/**
-	 * Generate.
-	 * 
-	 * @param cxt
-	 *            the cxt
-	 * @param cm
-	 *            the cm
-	 * @param page
-	 *            the page
-	 */
-	public static void generate(ContextVariable cxt, PageContentManager cm, Item page) {
-//		GeneratePageClass2 ret;
-//		String cn = cm.getClassName(cxt);
-//		String pn = cm.getPackageName(cxt);
-//
-//		String super_pn = "fr.imag.adele.cadse.core.impl.ui";
-//		String super_cn = "PageImpl";
-//
-//		Item cadseDefinition = PageManager.getCadseDefinition(page);
-//
 //		Item superPage = PageManager.getSuperPage(page);
 //		PageContentManager supercm = null;
 //		if (superPage != null) {
@@ -113,57 +126,30 @@ public class GeneratePageClass2 extends GenerateClass {
 //				superPage = null;
 //			}
 //		}
-//
-//		IFile f = CadseDefinitionManager.getJavaFile(cadseDefinition, "page", pn, cn);
-//		IType javatype = CadseDefinitionManager.getJavaType(cadseDefinition, f, cn);
-//
-//		ret = new GeneratePageClass2(cxt, pn, cn, super_pn + "." + super_cn, javatype, superPage, supercm);
-//		ret.id = page.getName();
-//		ret.page = page;
-//		///ret.addInternalShortName = PageManager.addInternalShortName(page);
-//	///	ret.addInternalAttribute = PageManager.addInternalAttribute(page);
-//
-//		ret.fields = PageManager.getFieldGenerateInfos(cxt, page, ret.imports, superPage);
-//		ret.heritage = superPage != null;
-//		ret.cas = PageManager.isModificationPage(page) ? ConfigurablePageFactory.PAGE_PROPERTY_ITEM
-//				: ConfigurablePageFactory.PAGE_CREATION_ITEM;
-//
-//		String content = ret.getContent();
-//		try {
-//			EclipsePluginContentManger.generateJava(f, content, new Pattern[] { ret.heritage ? p_to_heritage
-//					: p_to_not_heritage }, new String[] { ret.heritage ? r_to_heritage : r_to_not_heritage }, View
-//					.getDefaultMonitor());
-//		} catch (Throwable e) {
-//			e.printStackTrace();
-//		}
 
+		IFile f = CadseDefinitionManager.getJavaFile(cadseDefinition, "page", state.getPackageName(), state.getClassName());
+		state.type = CadseDefinitionManager.getJavaType(cadseDefinition, f, state.getClassName());
+		state.isClass = true;
+		
+		state.id = page.getName();
+		state.page = page;
+		///ret.addInternalShortName = PageManager.addInternalShortName(page);
+	///	ret.addInternalAttribute = PageManager.addInternalAttribute(page);
+
+		//state.fields = PageManager.getFieldGenerateInfos(cxt, page, state.getImports(), superPage);
+		//state.heritage = superPage != null;
+		state.cas = PageManager.isModificationPage(page) ? ConfigurablePageFactory.PAGE_PROPERTY_ITEM
+				: ConfigurablePageFactory.PAGE_CREATION_ITEM;
+
+		
 	}
-
-	/**
-	 * Instantiates a new generate page class.
-	 * 
-	 * @param cxt
-	 *            the cxt
-	 * @param packageName
-	 *            the package name
-	 * @param className
-	 *            the class name
-	 * @param extendedClassName
-	 *            the extended class name
-	 * @param type
-	 *            the type
-	 * @param supercm
-	 * @param superPage
-	 */
-	private GeneratePageClass2(ContextVariable cxt, String packageName, String className, String extendedClassName,
-			IType type, Item superPage, PageContentManager supercm) {
-		super(cxt, true, packageName, className, extendedClassName, (String) null, type, false);
-		this.superPage = superPage;
-		this.supercm = supercm;
-	}
-
+	
 	@Override
-	protected void generateAttributes(GenStringBuilder sb, Set<String> imports, GenContext context) {
+	protected PageState createState() {
+		return new PageState();
+	}
+
+	protected void generateAttributes(GenStringBuilder sb, Set<String> imports, GenContext context, PageState state) {
 		imports.add("fr.imag.adele.cadse.core.IItemNode");
 		imports.add("fr.imag.adele.cadse.core.Item");
 		imports.add("fr.imag.adele.cadse.core.ItemType");
@@ -174,12 +160,9 @@ public class GeneratePageClass2 extends GenerateClass {
 		imports.add("fr.imag.adele.cadse.core.impl.ui.PageImpl");
 		imports.add("fr.imag.adele.cadse.core.ui.IActionPage");
 
-		for (FieldGenerateInfo info : fields) {
-			ContentItemImpl.generate(info.field, sb, "page", "inner-class", imports, context);
-		}
-
-		if (!heritage) {
-			if (cas == ConfigurablePageFactory.PAGE_CREATION_ITEM) {
+		
+		if (!state.heritage) {
+			if (state.cas == ConfigurablePageFactory.PAGE_CREATION_ITEM) {
 
 				sb.newline().appendGeneratedTag();
 				sb.newline().append("public Item parent;");
@@ -188,13 +171,13 @@ public class GeneratePageClass2 extends GenerateClass {
 				sb.newline().appendGeneratedTag();
 				sb.newline().append("public LinkType lt;");
 				// , ,
-			} else if (cas == ConfigurablePageFactory.PAGE_PROPERTY_ITEM) {
+			} else if (state.cas == ConfigurablePageFactory.PAGE_PROPERTY_ITEM) {
 				sb.newline().appendGeneratedTag();
 				sb.newline().append("public Item item;");
 			}
 		}
 		// declaration des champ : un par field graphique.
-		for (FieldGenerateInfo info : fields) {
+		for (FieldGenerateInfo info : state.fields) {
 			if (info.superField != null) {
 				continue;
 			}
@@ -209,25 +192,24 @@ public class GeneratePageClass2 extends GenerateClass {
 	 * @see model.workspace.workspace.generate.GenerateClass#generateConstructor(fr.imag.adele.cadse.core.GenStringBuilder,
 	 *      java.util.Set, fr.imag.adele.cadse.core.GenContext)
 	 */
-	@Override
-	protected void generateConstructor(GenStringBuilder sb, Set<String> imports, GenContext context) {
+	protected void generateConstructor(GenStringBuilder sb, Set<String> imports, GenContext context, PageState state) {
 		// declaration du constructeur
 		sb.newline().appendGeneratedTag();
-		sb.newline().append("protected ").append(getClassName());
+		sb.newline().append("protected ").append(state.getClassName());
 		sb.append(" (String id, String label, String title, String description, boolean isPageComplete, int hspan) {");
 		sb.newline().append("	super(id,label, title, description, isPageComplete, hspan);");
 		sb.newline().append("}");
 
 		sb.newline().appendGeneratedTag();
-		sb.newline().append("public ").append(getClassName()).append(" (");
-		if (cas == ConfigurablePageFactory.PAGE_CREATION_ITEM) {
+		sb.newline().append("public ").append(state.getClassName()).append(" (");
+		if (state.cas == ConfigurablePageFactory.PAGE_CREATION_ITEM) {
 			sb.append("Item parent, ItemType it, LinkType lt");
-		} else if (cas == ConfigurablePageFactory.PAGE_PROPERTY_ITEM) {
+		} else if (state.cas == ConfigurablePageFactory.PAGE_PROPERTY_ITEM) {
 			sb.append("Item item");
 		}
 		sb.append(") {");
 		sb.begin();
-		generateConstructPage(sb, imports, context);
+		generateConstructPage(sb, imports, context, state);
 		sb.end();
 		sb.newline().append("}");
 	}
@@ -238,13 +220,12 @@ public class GeneratePageClass2 extends GenerateClass {
 	 * @see model.workspace.workspace.generate.GenerateClass#generateMethods(fr.imag.adele.cadse.core.GenStringBuilder,
 	 *      java.util.Set, fr.imag.adele.cadse.core.GenContext)
 	 */
-	@Override
-	protected void generateMethods(GenStringBuilder sb, Set<String> imports, GenContext context) {
+	protected void generateMethods(GenStringBuilder sb, Set<String> imports, GenContext context, PageState state) {
 
 		// method registerListener
 		sb.newline();
 		sb.newline().append("protected void registerListener() {");
-		if (heritage) {
+		if (state.heritage) {
 			sb.newline().append("  super.registerListener();");
 		}
 		sb.newline().append("// add init and register");
@@ -253,12 +234,11 @@ public class GeneratePageClass2 extends GenerateClass {
 		// methods des champs
 
 		
-		for (FieldGenerateInfo info : fields) {
+		for (FieldGenerateInfo info : state.fields) {
 			if (info.superField != null) {
 				continue;
 			}
 			FieldManager.generateMethod(info, sb, imports);
-			ContentItemImpl.generate(info.field, sb, "page", "methods", imports, context);
 		}
 	}
 
@@ -272,18 +252,18 @@ public class GeneratePageClass2 extends GenerateClass {
 	 * @param context
 	 *            the context
 	 */
-	private void generateConstructPage(GenStringBuilder sb, Set<String> imports, GenContext context) {
+	private void generateConstructPage(GenStringBuilder sb, Set<String> imports, GenContext context, PageState state) {
 
 		// call le super
-		String key = PageManager.getKey(page);
-		String title = PageManager.getTitle(page);
-		String description = PageManager.getDesciption(page);
+		String key = PageManager.getKey(state.page);
+		String title = PageManager.getTitle(state.page);
+		String description = PageManager.getDesciption(state.page);
 		String label = title;
 		String isComplete = "false";
 
 		if (description == null || description.equals("\"\"")) {
 			description = "";
-			PageManager.setDescriptionAttribute(page, "");
+			PageManager.setDescriptionAttribute(state.page, "");
 		}
 
 		sb.newline().append("super(");
@@ -296,18 +276,18 @@ public class GeneratePageClass2 extends GenerateClass {
 		sb.newline().append(-1).append(");");
 		sb.end();
 
-		if (cas == ConfigurablePageFactory.PAGE_CREATION_ITEM) {
+		if (state.cas == ConfigurablePageFactory.PAGE_CREATION_ITEM) {
 
 			sb.newline().append("this.parent = parent;");
 			sb.newline().append("this.it = it;");
 			sb.newline().append("this.lt = lt;");
 			// , ,
-		} else if (cas == ConfigurablePageFactory.PAGE_PROPERTY_ITEM) {
+		} else if (state.cas == ConfigurablePageFactory.PAGE_PROPERTY_ITEM) {
 			sb.newline().append("this.item =  item;");
 		}
 
 		/* initialise les fields */
-		for (FieldGenerateInfo info : fields) {
+		for (FieldGenerateInfo info : state.fields) {
 			sb.newline().append("this.").append(info.fieldName).append("=").append(" ").append(info.methodName).append(
 					"();");
 			boolean isReadOnly = FieldManager.isEditableAttribute(info.field);
@@ -322,7 +302,7 @@ public class GeneratePageClass2 extends GenerateClass {
 		sb.newline().append("addLast(");
 		sb.begin();
 		// init field
-		for (FieldGenerateInfo info : fields) {
+		for (FieldGenerateInfo info : state.fields) {
 			sb.newline().append(" this.").append(info.fieldName).append(",");
 		}
 		sb.decrementLength();
@@ -352,5 +332,25 @@ public class GeneratePageClass2 extends GenerateClass {
 //		} else {
 //			sb.newline().append("setActionPage(null);");
 //		}
+	}
+	
+	@Override
+	public boolean match(GToken kind) {
+		return kind.abs() == GCst.t_constructor || 
+			kind.abs() == GCst.t_method || 
+			kind.abs() == GCst.t_field || super.match(kind);
+	}
+	
+	@Override
+	public void generatePartFile(GResult g, Item currentItem, GGenFile gf,
+			GToken kind, GenContext context, GGenerator gGenerator,
+			GenState state) {
+		super.generatePartFile(g, currentItem, gf, kind, context, gGenerator, state);
+		if (kind.abs() == GCst.t_constructor)
+			generateConstructor(g, state.getImports(), context, (PageState) state);
+		else if (kind.abs() == GCst.t_method)
+			generateMethods(g, state.getImports(), context, (PageState) state);
+		else if (kind.abs() == GCst.t_field)
+			generateAttributes(g, state.getImports(), context, (PageState) state);
 	}
 }

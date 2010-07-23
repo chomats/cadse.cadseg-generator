@@ -10,7 +10,7 @@ import fr.imag.adele.cadse.core.ItemType;
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.cadseg.managers.attributes.StringManager;
 import fr.imag.adele.cadse.core.var.ContextVariableImpl;
-import fr.imag.adele.cadse.cadseg.generator.GAttribute;
+import fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute;
 
 public class ValueAttribute
  {

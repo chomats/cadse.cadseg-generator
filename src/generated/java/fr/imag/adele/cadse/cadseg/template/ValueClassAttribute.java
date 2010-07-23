@@ -7,7 +7,7 @@ import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
 import fr.imag.adele.cadse.core.ItemType;
 import fr.imag.adele.cadse.core.var.ContextVariableImpl;
 import fr.imag.adele.cadse.cadseg.managers.attributes.AttributeManager;
-import fr.imag.adele.cadse.cadseg.generator.GAttribute;
+import fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute;
 
 public class ValueClassAttribute
  {

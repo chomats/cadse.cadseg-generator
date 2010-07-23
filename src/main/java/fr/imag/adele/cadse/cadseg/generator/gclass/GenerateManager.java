@@ -25,7 +25,6 @@ import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GIterPart;
 import fr.imag.adele.cadse.as.generator.GToken;
-import fr.imag.adele.cadse.as.generator.GenClassState;
 import fr.imag.adele.cadse.as.generator.GenState;
 import fr.imag.adele.cadse.as.generator.GenerateClass;
 import fr.imag.adele.cadse.cadseg.managers.content.ManagerJavaFileContentManager;
@@ -72,7 +71,7 @@ import fr.imag.adele.cadse.core.ItemType;
 // <%=cim.methods_str%>
 // }
 
-public class GenerateManager extends GenerateClass {
+public class GenerateManager extends GenerateClass<GenManagerState> {
 	
 	public static final GToken MANAGER = new GToken("manager");
 	
@@ -88,40 +87,13 @@ public class GenerateManager extends GenerateClass {
 		}
 	}
 
-	/**
-	 * The Class GenerateModel.
-	 */
-	static public class GenManagerState extends GenClassState {
-
-		/** The super class name. */
-		public String superClassName;
-
-		/** The item name. */
-		public String itemName;
-
-		/** The itemtype. */
-		public Item itemtype;
-
-		/** The manager. */
-		public Item manager;
-
-		/** The cm. */
-		public ManagerJavaFileContentManager cm;
-
-		public boolean overwriteClass;
-
-		public Item getCadseDefinition() {
-			return ItemTypeManager.getCadseDefinition(itemtype);
-		}
-	}
-	
 	public GenerateManager() {
 		super(MANAGER);
 	}
 	
 
 	@Override
-	protected void init(GenState state, Item manager, GGenerator g, GenContext cxt) {
+	protected void init(GenManagerState state, Item manager, GGenerator g, GenContext cxt) {
 		GenManagerState cm = (GenManagerState) state;
 		ManagerJavaFileContentManager jf = (ManagerJavaFileContentManager) g.getJavaFileContentManager(null, manager);
 		Item cadseDefinition = ManagerManager._getCadseDefinition(manager);
@@ -165,7 +137,7 @@ public class GenerateManager extends GenerateClass {
 	}
 	
 	@Override
-	protected GenState createState() {
+	protected GenManagerState createState() {
 		return new GenManagerState();
 	}
 //	/*

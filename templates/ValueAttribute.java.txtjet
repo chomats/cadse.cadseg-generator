@@ -7,7 +7,7 @@ skeleton="AttributeSkelton.skeleton"
    fr.imag.adele.cadse.core.CadseGCST 
    fr.imag.adele.cadse.cadseg.managers.attributes.StringManager
    fr.imag.adele.cadse.core.var.ContextVariableImpl
-   fr.imag.adele.cadse.cadseg.generator.GAttribute
+   fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute
    "%>
 
 <%	String min_short_name = JavaIdentifier.javaIdentifierFromString(shortName,false,true, null);

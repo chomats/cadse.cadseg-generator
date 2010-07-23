@@ -22,7 +22,11 @@ package fr.imag.adele.cadse.cadseg.generator.gclass;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IType;
+import org.w3c.dom.CDATASection;
 
+import fr.imag.adele.cadse.as.generator.GGenerator;
+import fr.imag.adele.cadse.as.generator.GToken;
+import fr.imag.adele.cadse.as.generator.GenState;
 import fr.imag.adele.cadse.as.generator.GenerateClass;
 import fr.imag.adele.cadse.cadseg.ParseTemplate;
 import fr.imag.adele.cadse.cadseg.exp.ParseException;
@@ -37,17 +41,18 @@ import fr.imag.adele.cadse.core.var.ContextVariable;
  * 
  * @author <a href="mailto:stephane.chomat@imag.fr">Stephane Chomat</a>
  */
-public class GenerateCreationDialogController extends GenerateClass {
+public class GenerateCreationDialogController extends GenerateClass<GenCDState> {
 
-	/** The automatic. */
-	private boolean	fAutomatic;
+	private static GToken CD_Token = new GToken("cd");
 
-	/** The generate short name. */
-	private String	fGenerateShortName;
+	public GenerateCreationDialogController() {
+		super(CD_Token );
+	}
 
-	/** The item type. */
-	private Item	fItemType;
-
+	@Override
+	protected GenCDState createState() {
+		return new GenCDState();
+	}
 	/**
 	 * Instantiates a new creation dialog controller.
 	 * 
@@ -68,13 +73,22 @@ public class GenerateCreationDialogController extends GenerateClass {
 	 * @param cn
 	 *            the cn
 	 */
-	public GenerateCreationDialogController(ContextVariable cxt, boolean automatic, String generateShorName,
-			Item dialog, Item itemtype, IType javatype, String pn, String cn) {
-		super(cxt, true, pn, cn, "fr.imag.adele.cadse.core.impl.ui.CreationAction", (String) null, javatype, false);
-		fAutomatic = automatic;
-		fGenerateShortName = generateShorName;
-		fItemType = itemtype;
+	
+	@Override
+	protected void init(GenCDState state, Item currentItem, GGenerator g,
+			GenContext cxt) {
+		super.init(state, currentItem, g, cxt);
+		GenCDState cdstate = (GenCDState) state;
+		cdstate._packageName = "";
+		cdstate.fClassName = "";
+		cdstate.fExtendedClassName = "CreationAction";
+		cdstate.fExtendedPackageName = "fr.imag.adele.cadse.core.impl.ui";
+		cdstate.isClass = true;
+//		cdstate.fAutomatic = automatic;
+//		cdstate.fGenerateShortName = generateShorName;
+//		cdstate.fItemType = itemtype;
 	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -82,16 +96,15 @@ public class GenerateCreationDialogController extends GenerateClass {
 	 * @see model.workspace.workspace.generate.GenerateClass#generateConstructor(fr.imag.adele.cadse.core.GenStringBuilder,
 	 *      java.util.Set, fr.imag.adele.cadse.core.GenContext)
 	 */
-	@Override
-	protected void generateConstructor(GenStringBuilder sb, Set<String> imports, GenContext context) {
+	protected void generateConstructor(GenStringBuilder sb, Set<String> imports, GenContext context, GenCDState state) {
 		sb.newline().appendGeneratedTag();
-		sb.newline().append("public ").append(getClassName()).append(
+		sb.newline().append("public ").append(state.getClassName()).append(
 				"(Item parent, ItemType type, LinkType lt, final String defaultName) {");
 		sb.newline().append("	super(parent, type, lt, defaultName);");
 		sb.newline().append("}");
 
 		sb.newline().appendGeneratedTag();
-		sb.newline().append("public ").append(getClassName()).append("(Item parent, ItemType type, LinkType lt) {");
+		sb.newline().append("public ").append(state.getClassName()).append("(Item parent, ItemType type, LinkType lt) {");
 		sb.newline().append("	super(parent, type, lt);");
 		sb.newline().append("}");
 	}
@@ -102,10 +115,9 @@ public class GenerateCreationDialogController extends GenerateClass {
 	 * @see model.workspace.workspace.generate.GenerateClass#generateMethods(fr.imag.adele.cadse.core.GenStringBuilder,
 	 *      java.util.Set, fr.imag.adele.cadse.core.GenContext)
 	 */
-	@Override
-	protected void generateMethods(GenStringBuilder sb, Set<String> imports, GenContext context) {
+	protected void generateMethods(GenStringBuilder sb, Set<String> imports, GenContext context, GenCDState state) {
 		imports.add("fr.imag.adele.cadse.core.*");
-		if (fAutomatic) {
+		if (state.fAutomatic) {
 			sb.newline();
 			sb.length();
 			// if (!(fGenerateShortName == null || fGenerateShortName.length()
@@ -115,7 +127,7 @@ public class GenerateCreationDialogController extends GenerateClass {
 			sb.newline().appendGeneratedTag();
 			sb.newline().append("@Override");
 			sb.newline().append("protected String getFinishAutomaticShortName() {");
-			if (fGenerateShortName == null || fGenerateShortName.length() == 0) {
+			if (state.fGenerateShortName == null || state.fGenerateShortName.length() == 0) {
 				sb.newline().append("// remove generated tag");
 				sb.newline().append("// begin-user-code");
 				sb.newline().append("	// TODO ");
@@ -123,10 +135,10 @@ public class GenerateCreationDialogController extends GenerateClass {
 				sb.newline().append("// end-user-code");
 
 			} else {
-				ParseTemplate pt = new ParseTemplate(fItemType, fGenerateShortName, null);
+				ParseTemplate pt = new ParseTemplate(state.fItemType, state.fGenerateShortName, null);
 				try {
 					pt.main();
-					pt.build("getItem()", "sb", sb, imports, null, true, getPackageName());
+					pt.build("getItem()", "sb", sb, imports, null, true, state.getPackageName());
 				} catch (ParseException e) {
 					sb.newline().append("//").append(e.getMessage());
 				} catch (TokenMgrError e) {

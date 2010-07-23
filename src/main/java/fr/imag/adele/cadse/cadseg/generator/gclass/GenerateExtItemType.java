@@ -39,7 +39,7 @@ import fr.imag.adele.cadse.core.Item;
  * @author chomats
  */
 
-public class GenerateExtItemType extends GenerateClass {
+public class GenerateExtItemType extends GenerateClass<GenClassState> {
 
 	public static final GToken EXT_MANAGER = new GToken("ext-manager");
 	
@@ -48,7 +48,7 @@ public class GenerateExtItemType extends GenerateClass {
 	}
 	
 	@Override
-	protected void init(GenState state, Item currentItem, GGenerator g,
+	protected void init(GenClassState state, Item currentItem, GGenerator g,
 			GenContext cxt) {
 		super.init(state, currentItem, g, cxt);
 		GenClassState gcs = (GenClassState) state;
