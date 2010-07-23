@@ -1,4 +1,4 @@
-<%@ jet package="fr.imag.adele.cadse.cadseg.template" class="PageActionTemplate" skeleton="ClassPackage.skeleton"%>
+<%@ jet package="fr.imag.adele.cadse.cadseg.generator.template" class="PageActionTemplate" skeleton="ClassPackage.skeleton"%>
 
 package <%=packageName%>;
 

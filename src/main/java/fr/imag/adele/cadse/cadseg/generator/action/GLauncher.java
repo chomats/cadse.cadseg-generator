@@ -9,7 +9,7 @@ import fede.workspace.tool.eclipse.MappingManager;
 import fr.imag.adele.cadse.as.generator.GAction;
 import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.cadseg.generator.GCadseGenerator;
-import fr.imag.adele.cadse.cadseg.template.LaunchApplicationTemplate;
+import fr.imag.adele.cadse.cadseg.generator.template.LaunchApplicationTemplate;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.fede.workspace.si.view.View;

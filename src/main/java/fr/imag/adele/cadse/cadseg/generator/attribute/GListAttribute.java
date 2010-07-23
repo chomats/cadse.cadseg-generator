@@ -3,7 +3,6 @@ package fr.imag.adele.cadse.cadseg.generator.attribute;
 import java.util.List;
 import java.util.Set;
 
-import fr.imag.adele.cadse.cadseg.managers.attributes.AttributeManager;
 import fr.imag.adele.cadse.core.CadseException;
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.GenStringBuilder;

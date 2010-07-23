@@ -4,7 +4,6 @@ import java.util.Set;
 
 import org.eclipse.pde.core.plugin.IPluginBase;
 import org.eclipse.pde.internal.core.plugin.WorkspacePluginModel;
-import org.eclipse.swt.internal.theme.Theme;
 
 import fede.workspace.eclipse.composition.java.IPDEContributor;
 import fr.imag.adele.cadse.core.Item;

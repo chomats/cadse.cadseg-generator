@@ -1,7 +1,5 @@
 package fr.imag.adele.cadse.cadseg.generator.gclass;
 
-import java.util.Set;
-
 import fede.workspace.eclipse.java.JavaIdentifier;
 import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GResult;
@@ -10,7 +8,6 @@ import fr.imag.adele.cadse.cadseg.ParseTemplate;
 import fr.imag.adele.cadse.cadseg.exp.ParseException;
 import fr.imag.adele.cadse.cadseg.exp.TokenMgrError;
 import fr.imag.adele.cadse.cadseg.managers.content.ManagerManager;
-import fr.imag.adele.cadse.core.GenStringBuilder;
 import fr.imag.adele.cadse.core.Item;
 
 public class GenerateVariable {

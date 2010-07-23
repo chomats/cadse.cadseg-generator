@@ -25,7 +25,6 @@ import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GIterPart;
 import fr.imag.adele.cadse.as.generator.GToken;
-import fr.imag.adele.cadse.as.generator.GenState;
 import fr.imag.adele.cadse.as.generator.GenerateClass;
 import fr.imag.adele.cadse.cadseg.managers.content.ManagerJavaFileContentManager;
 import fr.imag.adele.cadse.cadseg.managers.content.ManagerManager;

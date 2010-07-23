@@ -8,11 +8,11 @@ import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GResult;
 import fr.imag.adele.cadse.as.generator.GToken;
 import fr.imag.adele.cadse.as.generator.GenState;
+import fr.imag.adele.cadse.cadseg.generator.template.EnumListOfValueAttribute;
+import fr.imag.adele.cadse.cadseg.generator.template.EnumValueAttribute;
 import fr.imag.adele.cadse.cadseg.managers.attributes.AttributeManager;
 import fr.imag.adele.cadse.cadseg.managers.attributes.EnumManager;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.EnumTypeManager;
-import fr.imag.adele.cadse.cadseg.template.EnumListOfValueAttribute;
-import fr.imag.adele.cadse.cadseg.template.EnumValueAttribute;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 

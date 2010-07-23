@@ -21,12 +21,8 @@ package fr.imag.adele.cadse.cadseg.generator.gclass;
 
 import java.util.Set;
 
-import org.eclipse.jdt.core.IType;
-import org.w3c.dom.CDATASection;
-
 import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GToken;
-import fr.imag.adele.cadse.as.generator.GenState;
 import fr.imag.adele.cadse.as.generator.GenerateClass;
 import fr.imag.adele.cadse.cadseg.ParseTemplate;
 import fr.imag.adele.cadse.cadseg.exp.ParseException;
@@ -34,7 +30,6 @@ import fr.imag.adele.cadse.cadseg.exp.TokenMgrError;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.GenStringBuilder;
 import fr.imag.adele.cadse.core.Item;
-import fr.imag.adele.cadse.core.var.ContextVariable;
 
 /**
  * The Class CreationDialogController.

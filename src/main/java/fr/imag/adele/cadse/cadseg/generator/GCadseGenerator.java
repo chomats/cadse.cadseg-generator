@@ -33,7 +33,6 @@ import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.cadse.core.ItemType;
 import fr.imag.adele.cadse.core.transaction.delta.ImmutableItemDelta;
-import fr.imag.adele.cadse.core.var.ContextVariable;
 
 @Component(name = "fr.imag.adele.cadse.cadseGenerator", immediate = true, architecture = true)
 @Provides(specifications = { IGenerator.class })

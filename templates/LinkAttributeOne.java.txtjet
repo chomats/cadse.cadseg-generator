@@ -1,4 +1,4 @@
-<%@ jet package="fr.imag.adele.cadse.cadseg.template"
+<%@ jet package="fr.imag.adele.cadse.cadseg.generator.template"
 class="LinkAttributeOneTemplate"
 skeleton="AttributeSkelton.skeleton"
 imports="fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier fede.workspace.eclipse.java.JavaIdentifier

@@ -1,4 +1,4 @@
-<%@ jet package="fr.imag.adele.cadse.cadseg.template" class="LaunchApplicationTemplate"
+<%@ jet package="fr.imag.adele.cadse.cadseg.generator.template" class="LaunchApplicationTemplate"
 	nlString = "\"\\n\"" skeleton="Item.skeleton"
 	imports=""
 %><?xml version="1.0" encoding="UTF-8"?>

@@ -1,4 +1,4 @@
-<%@ jet package="fr.imag.adele.cadse.cadseg.template" class="ViewerSkeltonTemplate"
+<%@ jet package="fr.imag.adele.cadse.cadseg.generator.template" class="ViewerSkeltonTemplate"
 imports="
 fr.imag.adele.cadse.cadseg.managers.view.model.ViewItemTypeModel
 fr.imag.adele.cadse.cadseg.managers.view.model.ViewLinkTypeModel

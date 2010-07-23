@@ -2,10 +2,6 @@ package fr.imag.adele.cadse.cadseg.generator.content;
 
 import java.util.Set;
 
-import fr.imag.adele.cadse.core.CadseGCST;
-import fr.imag.adele.cadse.core.GenContext;
-import fr.imag.adele.cadse.core.GenStringBuilder;
-import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.cadse.core.content.ContentItem;
 
 /**

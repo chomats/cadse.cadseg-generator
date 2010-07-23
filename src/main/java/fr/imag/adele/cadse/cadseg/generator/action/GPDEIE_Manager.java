@@ -8,7 +8,6 @@ import org.eclipse.pde.internal.core.plugin.WorkspacePluginModel;
 import fr.imag.adele.cadse.cadseg.managers.content.ManagerManager;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.ItemTypeManager;
 import fr.imag.adele.cadse.core.Item;
-import fr.imag.adele.cadse.core.var.ContextVariableImpl;
 
 public class GPDEIE_Manager extends GPDEImporExport {
 	/*

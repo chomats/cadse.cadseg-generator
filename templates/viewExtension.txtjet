@@ -1,4 +1,4 @@
-<%@ jet package="fr.imag.adele.cadse.cadseg.template" class="ViewExtensionTemplate" nlString = "\"\\n\"" 
+<%@ jet package="fr.imag.adele.cadse.cadseg.generator.template" class="ViewExtensionTemplate" nlString = "\"\\n\"" 
 	skeleton="viewExtension.skeleton"
 	imports =""
 	%>

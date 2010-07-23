@@ -19,32 +19,26 @@
 
 package fr.imag.adele.cadse.cadseg.generator.gclass;
 
-import java.util.Collection;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jdt.core.IType;
 
 import fr.imag.adele.cadse.as.generator.GCst;
 import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GResult;
 import fr.imag.adele.cadse.as.generator.GToken;
-import fr.imag.adele.cadse.as.generator.GenClassState;
 import fr.imag.adele.cadse.as.generator.GenState;
 import fr.imag.adele.cadse.as.generator.GenerateClass;
 import fr.imag.adele.cadse.cadseg.managers.CadseDefinitionManager;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.PageManager;
-import fr.imag.adele.cadse.cadseg.managers.dataModel.PageManager.PageContentManager;
 import fr.imag.adele.cadse.cadseg.managers.ui.FieldGenerateInfo;
 import fr.imag.adele.cadse.cadseg.managers.ui.FieldManager;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.GenStringBuilder;
 import fr.imag.adele.cadse.core.Item;
-import fr.imag.adele.cadse.core.impl.ContentItemImpl;
 import fr.imag.adele.cadse.core.impl.ui.ConfigurablePageFactory;
-import fr.imag.adele.cadse.core.var.ContextVariable;
 
 /**
  * The Class GeneratePageClass.

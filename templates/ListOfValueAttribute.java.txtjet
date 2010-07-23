@@ -1,4 +1,4 @@
-<%@ jet package="fr.imag.adele.cadse.cadseg.template" class="ListOfValueAttribute"
+<%@ jet package="fr.imag.adele.cadse.cadseg.generator.template" class="ListOfValueAttribute"
 skeleton="AttributeSkelton.skeleton"
 imports="fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier fede.workspace.eclipse.java.JavaIdentifier
 fr.imag.adele.cadse.core.ItemType

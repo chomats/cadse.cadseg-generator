@@ -1,4 +1,4 @@
-package fr.imag.adele.cadse.cadseg.template;
+package fr.imag.adele.cadse.cadseg.generator.template;
 
 import fr.imag.adele.cadse.cadseg.managers.view.model.ViewItemTypeModel;
 import fr.imag.adele.cadse.cadseg.managers.view.model.ViewLinkTypeModel;

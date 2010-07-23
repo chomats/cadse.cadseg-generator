@@ -1,7 +1,7 @@
 
 
 
-package fr.imag.adele.cadse.cadseg.template;
+package fr.imag.adele.cadse.cadseg.generator.template;
 
 public class PageActionTemplate
  {

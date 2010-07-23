@@ -1,4 +1,4 @@
-<%@ jet package="fr.imag.adele.cadse.cadseg.template" class="ActivatorTemplate" skeleton="Activator.skeleton"%>
+<%@ jet package="fr.imag.adele.cadse.cadseg.generator.template" class="ActivatorTemplate" skeleton="Activator.skeleton"%>
 package <%=info.packageName%>;
 
 import org.eclipse.core.runtime.IStatus;
