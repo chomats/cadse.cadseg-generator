@@ -11,14 +11,4 @@ public class GSymbolicMapAttribute extends GAttribute {
 		return CadseGCST.SYMBOLIC_BIT_MAP;
 	}
 
-	@Override
-	public Class<?> getTypeJava(boolean primitive) {
-		return Integer.class;
-	}
-
-	@Override
-	public Class<? extends IAttributeType<?>> getAttributeDefinitionTypeJava() {
-		return fr.imag.adele.cadse.core.attribute.SymbolicBitMapAttributeType.class;
-	}
-
 }

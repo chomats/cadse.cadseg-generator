@@ -404,7 +404,7 @@ public class GenerateCadseDefinitionModel extends GGenFile<GenState> {
 						continue;
 					}
 
-					InitModelLoadAndWrite cadseRootManager = (InitModelLoadAndWrite) cadseRootItemType.getItemManager();
+					InitModelLoadAndWrite cadseRootManager = cadseRootItemType.adapt(InitModelLoadAndWrite.class);
 					cvt = factory.createCValuesType();
 					// attribute name
 					cvt.setKey(attribute.getName());
@@ -433,11 +433,11 @@ public class GenerateCadseDefinitionModel extends GGenFile<GenState> {
 						InitModelLoadAndWrite cadseListRootManager = (InitModelLoadAndWrite) cadseRootList
 								.getItemManager();
 						ListAttributeType lAttribute = new ListAttributeType(null, ((AttributeType) attribute).getFlag(), attribute.getName(), 0, -1, (IAttributeType) attribute);
-						cadseListRootManager.writeAttributeDefinition(factory, cxt, manager, cvt, lAttribute);
+						cadseListRootManager.writeAttributeDefinition(factory, cxt, cvt, lAttribute);
 					}
 					else {
 						cvt.setValue(AttributeManager.getDefaultValueAttribute(attribute));
-						cadseRootManager.writeAttributeDefinition(factory, cxt, manager, cvt, attribute);
+						cadseRootManager.writeAttributeDefinition(factory, cxt, cvt, attribute);
 					}
 					continue;
 				}

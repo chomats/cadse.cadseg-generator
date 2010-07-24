@@ -13,14 +13,4 @@ public class GUUIDAttribute extends GAttribute {
 	public ItemType getCadseRootType() {
 		return CadseGCST.UUID;
 	}
-
-	@Override
-	public Class<?> getTypeJava(boolean primitive) {
-		return UUID.class;
-	}
-
-	@Override
-	public Class<? extends IAttributeType<?>> getAttributeDefinitionTypeJava() {
-		return UUIDAttributeType.class;
-	}
 }

@@ -1,20 +1,11 @@
 package fr.imag.adele.cadse.cadseg.generator.attribute;
 
 import fr.imag.adele.cadse.cadseg.managers.attributes.StringManager;
-import fr.imag.adele.cadse.core.CadseException;
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.cadse.core.ItemType;
-import fr.imag.adele.cadse.core.LogicalWorkspace;
-import fr.imag.adele.cadse.core.TypeDefinition;
 import fr.imag.adele.cadse.core.attribute.IAttributeType;
 import fr.imag.adele.cadse.core.attribute.StringAttributeType;
-import fr.imag.adele.cadse.core.var.ContextVariable;
-import fr.imag.adele.fede.workspace.as.initmodel.IAttributeCadsegForGenerate;
-import fr.imag.adele.fede.workspace.as.initmodel.IInitModel;
-import fr.imag.adele.fede.workspace.as.initmodel.jaxb.CValuesType;
-import fr.imag.adele.fede.workspace.as.initmodel.jaxb.ObjectFactory;
-import fr.imag.adele.fede.workspace.as.initmodel.jaxb.ValueTypeType;
 
 public class GStringAttribute extends GAttribute {
 
@@ -26,16 +17,6 @@ public class GStringAttribute extends GAttribute {
 	@Override
 	public int getCadseRootFlag(Item attribute) {
 		return super.getCadseRootFlag(attribute) | (StringManager.isNotEmptyAttribute(attribute) ? StringAttributeType.NOT_EMPTY : 0);
-	}
-
-	@Override
-	public Class<? extends IAttributeType<?>> getAttributeDefinitionTypeJava() {
-		return StringAttributeType.class;
-	}
-
-	@Override
-	public Class<?> getTypeJava(boolean primitive) {
-		return String.class;
 	}
 
 	@Override
@@ -65,18 +46,4 @@ public class GStringAttribute extends GAttribute {
 	
 
 
-	@Override
-	public IAttributeType<?> loadAttributeDefinition(IInitModel initModel, LogicalWorkspace theWorkspaceLogique,
-			TypeDefinition parent, CValuesType type, String cadseName) throws CadseException {
-		StringAttributeType ret = new fr.imag.adele.cadse.core.impl.attribute.StringAttributeType(initModel.getUUID(type.getId()), initModel.getFlag(type),
-				type.getKey(), type.getValue());
-		return ret;
-	}
-
-	@Override
-	public void writeAttributeDefinition(ObjectFactory factory, ContextVariable cxt,
-			IAttributeCadsegForGenerate cadsegManager, CValuesType cvt, Item attribute) {
-		cvt.setType(ValueTypeType.STRING);
-		super.writeAttributeDefinition(factory, cxt, cadsegManager, cvt, attribute);
-	}
 }

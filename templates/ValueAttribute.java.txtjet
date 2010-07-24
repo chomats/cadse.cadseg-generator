@@ -7,20 +7,22 @@ skeleton="AttributeSkelton.skeleton"
    fr.imag.adele.cadse.core.CadseGCST 
    fr.imag.adele.cadse.cadseg.managers.attributes.StringManager
    fr.imag.adele.cadse.core.var.ContextVariableImpl
+   fr.imag.adele.fede.workspace.as.initmodel.InitModelLoadAndWrite
    fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute
    "%>
 
 <%	String min_short_name = JavaIdentifier.javaIdentifierFromString(shortName,false,true, null);
 	String cstAttribute = GenerateJavaIdentifier.cstQualifiedAttribute(ContextVariableImpl.DEFAULT, attribute, null, null, null);
 	ItemType it = attribute.getType();
-	GAttribute manager = it.adapt(GAttribute.class);
+	InitModelLoadAndWrite manager = it.adapt(InitModelLoadAndWrite.class);
+	GAttribute gAttribute = it.adapt(GAttribute.class);
 
 	 String typeJava = null;
 	 Class<?> cl = manager.getTypeJava(true);
 	 if (!cl.isPrimitive()) { imports.add(cl.getName()); }
 	 typeJava = cl.getSimpleName();
 
-	 String defaultValue = manager.getJavaTypeDefaultValue(attribute);
+	 String defaultValue = gAttribute.getJavaTypeDefaultValue(attribute);
 
 	%>
 	/**
@@ -39,7 +41,7 @@ skeleton="AttributeSkelton.skeleton"
 	*/
 	public static final void <%=GenerateJavaIdentifier.cstSetAttribute(ContextVariableImpl.DEFAULT, attribute)%>(Item <%=min_short_name %>, <%=typeJava%> value) {
 		try {
-<% String exp_to_string = manager.exp_to_string();
+<% String exp_to_string = gAttribute.exp_to_string();
 	if (exp_to_string == null || exp_to_string.trim().equals("value")) {%>
 			<%=min_short_name%>.setAttribute(<%=cstAttribute%>_, value);
 <% } else { %>

@@ -11,8 +11,5 @@ public class GLTAttribute extends GAttribute{
 		return CadseGCST.LINK_TYPE;
 	}
 
-	@Override
-	public Class<? extends IAttributeType<?>> getAttributeDefinitionTypeJava() {
-		return null;
-	}
+	
 }

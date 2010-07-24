@@ -4,7 +4,7 @@ skeleton="AttributeSkelton.skeleton"
     fr.imag.adele.cadse.core.ItemType
    fr.imag.adele.cadse.core.var.ContextVariableImpl
    fr.imag.adele.cadse.cadseg.managers.attributes.AttributeManager
-   fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute
+   fr.imag.adele.fede.workspace.as.initmodel.InitModelLoadAndWrite
    "%>
 
 <%
@@ -13,8 +13,8 @@ skeleton="AttributeSkelton.skeleton"
 	String cstType = GenerateJavaIdentifier.cstQualifiedAttributeItemType(ContextVariableImpl.DEFAULT, itemType, null, imports);
 	ItemType it = attribute.getType();
 
-	 String typeJava = null;
-	 GAttribute manager = it.adapt(GAttribute.class);
+	String typeJava = null;
+	InitModelLoadAndWrite manager = it.adapt(InitModelLoadAndWrite.class);
 
      typeJava = manager.getTypeJava(true).getSimpleName();
 	 if (typeJava == null) typeJava = "Object";

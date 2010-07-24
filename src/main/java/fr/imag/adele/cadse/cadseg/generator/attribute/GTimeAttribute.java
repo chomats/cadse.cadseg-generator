@@ -10,10 +10,4 @@ public class GTimeAttribute extends GAttribute {
 	public ItemType getCadseRootType() {
 		return CadseGCST.TIME;
 	}
-
-	@Override
-	public Class<?> getAttributeDefinitionTypeJava() {
-		return TimeAttributeType.class;
-	}
-
 }

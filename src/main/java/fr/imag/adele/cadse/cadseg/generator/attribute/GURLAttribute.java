@@ -13,14 +13,4 @@ public class GURLAttribute extends GAttribute {
 	public ItemType getCadseRootType() {
 		return CadseGCST.URL;
 	}
-
-	@Override
-	public Class<?> getTypeJava(boolean primitive) {
-		return URL.class;
-	}
-
-	@Override
-	public Class<? extends IAttributeType<?>> getAttributeDefinitionTypeJava() {
-		return URLAttributeType.class;
-	}
 }

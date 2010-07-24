@@ -10,6 +10,7 @@ import fr.imag.adele.cadse.core.ItemType;
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.cadseg.managers.attributes.StringManager;
 import fr.imag.adele.cadse.core.var.ContextVariableImpl;
+import fr.imag.adele.fede.workspace.as.initmodel.InitModelLoadAndWrite;
 import fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute;
 
 public class ValueAttribute
@@ -63,14 +64,15 @@ public class ValueAttribute
     	String min_short_name = JavaIdentifier.javaIdentifierFromString(shortName,false,true, null);
 	String cstAttribute = GenerateJavaIdentifier.cstQualifiedAttribute(ContextVariableImpl.DEFAULT, attribute, null, null, null);
 	ItemType it = attribute.getType();
-	GAttribute manager = it.adapt(GAttribute.class);
+	InitModelLoadAndWrite manager = it.adapt(InitModelLoadAndWrite.class);
+	GAttribute gAttribute = it.adapt(GAttribute.class);
 
 	 String typeJava = null;
 	 Class<?> cl = manager.getTypeJava(true);
 	 if (!cl.isPrimitive()) { imports.add(cl.getName()); }
 	 typeJava = cl.getSimpleName();
 
-	 String defaultValue = manager.getJavaTypeDefaultValue(attribute);
+	 String defaultValue = gAttribute.getJavaTypeDefaultValue(attribute);
 
 	
     stringBuffer.append(TEXT_2);
@@ -104,7 +106,7 @@ public class ValueAttribute
     stringBuffer.append(TEXT_16);
     stringBuffer.append(typeJava);
     stringBuffer.append(TEXT_17);
-     String exp_to_string = manager.exp_to_string();
+     String exp_to_string = gAttribute.exp_to_string();
 	if (exp_to_string == null || exp_to_string.trim().equals("value")) {
     stringBuffer.append(TEXT_18);
     stringBuffer.append(min_short_name);

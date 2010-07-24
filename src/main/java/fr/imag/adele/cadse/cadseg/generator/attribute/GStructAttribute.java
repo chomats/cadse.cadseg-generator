@@ -10,8 +10,4 @@ public class GStructAttribute extends GAttribute {
 		return CadseGCST.STRUCT;
 	}
 
-	@Override
-	public Class<? extends IAttributeType<?>> getAttributeDefinitionTypeJava() {
-		return null;
-	}
 }

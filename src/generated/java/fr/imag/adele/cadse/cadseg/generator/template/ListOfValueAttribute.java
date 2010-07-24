@@ -8,7 +8,7 @@ import fede.workspace.eclipse.java.JavaIdentifier;
 import fr.imag.adele.cadse.core.ItemType;
 import fr.imag.adele.cadse.core.var.ContextVariableImpl;
 import fr.imag.adele.cadse.cadseg.managers.attributes.AttributeManager;
-import fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute;
+import fr.imag.adele.fede.workspace.as.initmodel.InitModelLoadAndWrite;
 
 public class ListOfValueAttribute
  {
@@ -74,7 +74,7 @@ public class ListOfValueAttribute
 	String cstAttribute = GenerateJavaIdentifier.cstQualifiedAttribute(ContextVariableImpl.DEFAULT, attribute, null, null, null);
 
 	ItemType it = attribute.getType();
-	GAttribute manager = it.adapt(GAttribute.class);
+	InitModelLoadAndWrite manager = it.adapt(InitModelLoadAndWrite.class);
 
 	 String typeJava = null;
 	  Class<?> cl = manager.getTypeJava(false);

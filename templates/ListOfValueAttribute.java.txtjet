@@ -4,7 +4,7 @@ imports="fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier fede.workspa
 fr.imag.adele.cadse.core.ItemType
 fr.imag.adele.cadse.core.var.ContextVariableImpl
 fr.imag.adele.cadse.cadseg.managers.attributes.AttributeManager
-fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute
+fr.imag.adele.fede.workspace.as.initmodel.InitModelLoadAndWrite
 "%>
 
 <%	String upper_first_att_name = JavaIdentifier.javaIdentifierFromString(attribute.getName(),true, false, null);
@@ -12,7 +12,7 @@ fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute
 	String cstAttribute = GenerateJavaIdentifier.cstQualifiedAttribute(ContextVariableImpl.DEFAULT, attribute, null, null, null);
 
 	ItemType it = attribute.getType();
-	GAttribute manager = it.adapt(GAttribute.class);
+	InitModelLoadAndWrite manager = it.adapt(InitModelLoadAndWrite.class);
 
 	 String typeJava = null;
 	  Class<?> cl = manager.getTypeJava(false);

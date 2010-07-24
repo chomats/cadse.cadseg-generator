@@ -7,7 +7,7 @@ import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
 import fr.imag.adele.cadse.core.ItemType;
 import fr.imag.adele.cadse.core.var.ContextVariableImpl;
 import fr.imag.adele.cadse.cadseg.managers.attributes.AttributeManager;
-import fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute;
+import fr.imag.adele.fede.workspace.as.initmodel.InitModelLoadAndWrite;
 
 public class ValueClassAttribute
  {
@@ -44,8 +44,8 @@ public class ValueClassAttribute
 	String cstType = GenerateJavaIdentifier.cstQualifiedAttributeItemType(ContextVariableImpl.DEFAULT, itemType, null, imports);
 	ItemType it = attribute.getType();
 
-	 String typeJava = null;
-	 GAttribute manager = it.adapt(GAttribute.class);
+	String typeJava = null;
+	InitModelLoadAndWrite manager = it.adapt(InitModelLoadAndWrite.class);
 
      typeJava = manager.getTypeJava(true).getSimpleName();
 	 if (typeJava == null) typeJava = "Object";
