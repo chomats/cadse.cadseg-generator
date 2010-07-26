@@ -21,6 +21,7 @@ package fr.imag.adele.cadse.cadseg.generator.gclass;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 
+import fede.workspace.eclipse.java.JavaIdentifier;
 import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GIterPart;
@@ -132,6 +133,11 @@ public class GenerateManager extends GenerateClass<GenManagerState> {
 			cm.superClassName = "fr.imag.adele.cadse.core.DefaultItemManager";
 			cm.overwriteClass = true;
 		}
+		if (cm.superClassName != null) {
+			String[] packageAndName = JavaIdentifier.getPackageAndClassName(cm.superClassName);
+			cm.fExtendedPackageName = packageAndName[0];
+			cm.fExtendedClassName = packageAndName[1];
+		}	
 		cm.cm = (ManagerJavaFileContentManager) jf;
 	}
 	
@@ -139,32 +145,5 @@ public class GenerateManager extends GenerateClass<GenManagerState> {
 	protected GenManagerState createState() {
 		return new GenManagerState();
 	}
-//	/*
-//	 * (non-Javadoc)
-//	 * 
-//	 * @see fr.imag.adele.cadse.core.IGenerateContent#generate(fr.imag.adele.
-//	 * cadse.core.var.ContextVariable)
-//	 */
-//	public void generate(JavaFileContentManager jf, ContextVariable cxt) {
-//		Item manager = jf.getOwnerItem();
-//
-//		
-//
-//
-//		
-//		// ((IGenerateContent)
-//		// _getCadseDefinition(manager).getContentItem()).generate(cxt);
-//
-//		String path = jf.getPath(cxt);
-//		try {
-//			EclipsePluginContentManger.generateJava(MelusineProjectManager
-//					.getProject(cadseDefinition).getFile(new Path(path)),
-//					getContent(), View.getDefaultMonitor());
-//
-//		} catch (CoreException e) {
-//			e.printStackTrace();
-//		}
-//
-//	}
 
 }

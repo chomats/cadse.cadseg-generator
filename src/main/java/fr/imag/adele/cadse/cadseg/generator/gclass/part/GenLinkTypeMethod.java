@@ -34,6 +34,5 @@ public class GenLinkTypeMethod extends GGenPartFile {
 		state.getImports().add("fr.imag.adele.cadse.core.Item");
 		state.getImports().add("fr.imag.adele.cadse.core.Link");
 		state.getImports().add("fr.imag.adele.cadse.core.CadseException");
-
 	}
 }

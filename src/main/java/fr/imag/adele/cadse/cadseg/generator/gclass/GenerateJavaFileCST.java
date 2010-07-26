@@ -80,7 +80,7 @@ public class GenerateJavaFileCST extends GenerateClass<GenClassState> {
 		imports.add("fr.imag.adele.cadse.core.LinkType");
 
 		for (Item itemType : itemTypes) {
-			sb.appendGeneratedTag();
+			sb.newline().appendGeneratedTag();
 			sb.newline().append("public static ");
 			if (itemType.getType()== CadseGCST.EXT_ITEM_TYPE) {
 				sb.append("ExtendedType ");;
@@ -112,7 +112,7 @@ public class GenerateJavaFileCST extends GenerateClass<GenClassState> {
 				continue;
 			}
 
-			sb.appendGeneratedTag();
+			sb.newline().appendGeneratedTag();
 			if (AttributeManager.isLinkAttribute(attribute)) {
 				sb.newline().append("public static LinkType ").append(
 						GenerateJavaIdentifier.cstAttribute(cxt, attribute, absItemType)).append(";");

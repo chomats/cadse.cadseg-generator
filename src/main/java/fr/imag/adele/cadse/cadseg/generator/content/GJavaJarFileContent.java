@@ -1,6 +1,5 @@
 package fr.imag.adele.cadse.cadseg.generator.content;
 
-import java.util.Set;
 
 import fr.imag.adele.cadse.core.content.ContentItem;
 
@@ -9,18 +8,6 @@ import fr.imag.adele.cadse.core.content.ContentItem;
  */
 public class GJavaJarFileContent extends GContentResource {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.workspace.workspace.managers.content.ContentModelManager.MyContentItem#computeImportsPackage(java.util.Set)
-	 */
-	@Override
-	public void computeImportsPackage(Set<String> imports) {
-		super.computeImportsPackage(imports);
-		imports.add("org.eclipse.ui.model");
-		imports.add("org.eclipse.jdt.core");
-	}
-	
 	/*
 	 * (non-Javadoc)
 	 * 

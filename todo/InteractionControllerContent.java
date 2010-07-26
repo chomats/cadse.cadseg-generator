@@ -71,15 +71,6 @@ public class InteractionControllerContent extends SubFileContentManager implemen
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see fede.workspace.eclipse.composition.java.IPDEContributor#computeExtenstion(org.eclipse.pde.core.plugin.IPluginBase,
-	 *      org.eclipse.pde.internal.core.plugin.WorkspacePluginModel)
-	 */
-	public void computeExtenstion(IPluginBase pluginBase, WorkspacePluginModel workspacePluginModel) {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see fr.imag.adele.cadse.core.ContentManager#generate(fr.imag.adele.cadse.core.GenStringBuilder,
 	 *      java.lang.String, java.lang.String, java.util.Set,
 	 *      fr.imag.adele.cadse.core.GenContext)

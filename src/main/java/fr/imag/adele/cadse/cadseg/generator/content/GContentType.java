@@ -1,11 +1,9 @@
 package fr.imag.adele.cadse.cadseg.generator.content;
 
-import java.util.Set;
 
 import org.eclipse.pde.core.plugin.IPluginBase;
 import org.eclipse.pde.internal.core.plugin.WorkspacePluginModel;
 
-import fede.workspace.eclipse.composition.java.IPDEContributor;
 import fede.workspace.eclipse.java.manager.JavaFileContentManager;
 import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenPartFile;
@@ -30,8 +28,8 @@ import fr.imag.adele.cadse.core.var.ContextVariable;
 /**
  * The Class MyContentItem.
  */
-public class GContentType extends GGenPartFile implements IPDEContributor {
-
+public class GContentType extends GGenPartFile  {
+	
 	public static final GToken INNER_CLASS = new GToken("inner-class");
 	public static final GToken METHODS = new GToken("methods");
 	public static final GToken CREATECONTENT_ARGS = new GToken("createcontent-args");
@@ -340,47 +338,6 @@ public class GContentType extends GGenPartFile implements IPDEContributor {
 			}
 		}
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see fede.workspace.eclipse.composition.java.IPDEContributor#computeExportsPackage(java.util.Set)
-	 */
-	public void computeExportsPackage(Set<String> exports) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see fede.workspace.eclipse.composition.java.IPDEContributor#computeImportsPackage(java.util.Set)
-	 */
-	public void computeImportsPackage(Set<String> imports) {
-		Class<?> className = getRuntimeClassName();
-		if (className != null) {
-			String packageName = className.getPackage().getName();
-			imports.add(packageName);
-		}
-		imports.add("fr.imag.adele.cadse.core");
-		imports.add("org.eclipse.ltk.core.refactoring");
-		imports.add("fr.imag.adele.cadse.core.build");
-		imports.add("fr.imag.adele.cadse.core.var");
-		imports.add("fr.imag.adele.cadse.core.impl.var");
-		imports.add("fr.imag.adele.cadse.core.impl");
-		imports.add("fr.imag.adele.cadse.core.content");
-		imports.add("fr.imag.adele.cadse.util");
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see fede.workspace.eclipse.composition.java.IPDEContributor#computeExtenstion(org.eclipse.pde.core.plugin.IPluginBase,
-	 *      org.eclipse.pde.internal.core.plugin.WorkspacePluginModel)
-	 */
-	public void computeExtenstion(IPluginBase pluginBase, WorkspacePluginModel workspacePluginModel) {
-	}
-
-	
 
 	public boolean hasParentContent() {
 		return false;

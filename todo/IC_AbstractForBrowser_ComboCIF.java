@@ -287,25 +287,7 @@ public class ModelControllerContent extends SubFileContentManager implements IPD
 	protected void generateConstructorParameter(GenStringBuilder sb) {
 		ModelControllerManager.this.generateConstructorParameter(getOwnerItem(), sb);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see fede.workspace.eclipse.composition.java.IPDEContributor#computeExportsPackage(java.util.Set)
-	 */
-	public void computeExportsPackage(Set<String> exports) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see fede.workspace.eclipse.composition.java.IPDEContributor#computeExtenstion(org.eclipse.pde.core.plugin.IPluginBase,
-	 *      org.eclipse.pde.internal.core.plugin.WorkspacePluginModel)
-	 */
-	public void computeExtenstion(IPluginBase pluginBase, WorkspacePluginModel workspacePluginModel) {
-	}
+	
 
 	/*
 	 * (non-Javadoc)
@@ -903,15 +885,6 @@ public class DisplayContent extends SubFileContentManager implements IPDEContrib
 		sb.append("String key, String label, EPosLabel poslabel, "
 				+ "IModelController mc, IInteractionController ic,");
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see fede.workspace.eclipse.composition.java.IPDEContributor#computeExtenstion(org.eclipse.pde.core.plugin.IPluginBase,
-	 *      org.eclipse.pde.internal.core.plugin.WorkspacePluginModel)
-	 */
-	public void computeExtenstion(IPluginBase pluginBase, WorkspacePluginModel workspacePluginModel) {
-	}
 }
 
 /**
@@ -1412,16 +1385,6 @@ public class ComposerContent extends SubFileContentManager implements IGenerateC
 			imports.add("fede.workspace.eclipse.composition");
 		}
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see fede.workspace.eclipse.composition.java.IPDEContributor#computeExtenstion(org.eclipse.pde.core.plugin.IPluginBase,
-	 *      org.eclipse.pde.internal.core.plugin.WorkspacePluginModel)
-	 */
-	public void computeExtenstion(IPluginBase pluginBase, WorkspacePluginModel workspacePluginModel) {
-	}
-
 }
 /**
  * The Class ContentManager.
@@ -1706,17 +1669,7 @@ public class ExporterContent extends SubFileContentManager implements
 		imports.add("fr.imag.adele.cadse.core.content");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * fede.workspace.eclipse.composition.java.IPDEContributor#computeExtenstion
-	 * (org.eclipse.pde.core.plugin.IPluginBase,
-	 * org.eclipse.pde.internal.core.plugin.WorkspacePluginModel)
-	 */
-	public void computeExtenstion(IPluginBase pluginBase,
-			WorkspacePluginModel workspacePluginModel) {
-	}
+	
 
 }
 /**
@@ -1885,14 +1838,7 @@ public class InteractionControllerContent extends SubFileContentManager implemen
 		imports.add(packageName);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see fede.workspace.eclipse.composition.java.IPDEContributor#computeExtenstion(org.eclipse.pde.core.plugin.IPluginBase,
-	 *      org.eclipse.pde.internal.core.plugin.WorkspacePluginModel)
-	 */
-	public void computeExtenstion(IPluginBase pluginBase, WorkspacePluginModel workspacePluginModel) {
-	}
+	
 
 	/*
 	 * (non-Javadoc)

@@ -38,5 +38,7 @@ public class GenAttributeMethod extends GGenPartFile {
 		((AttributeManager) currentItem.getType().getItemManager())
 				.addJavaImport(state.getImports());
 	}
+	
+	
 
 }

@@ -11,18 +11,36 @@ import org.eclipse.core.runtime.Path;
 
 import fede.workspace.eclipse.content.ProjectContentManager;
 import fr.imag.adele.cadse.as.generator.GCst;
+import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
+import fr.imag.adele.cadse.as.generator.GLinkIterator;
 import fr.imag.adele.cadse.as.generator.GRefer;
 import fr.imag.adele.cadse.as.generator.GReferIncomingLink;
 import fr.imag.adele.cadse.as.generator.GReferPart;
 import fr.imag.adele.cadse.as.generator.GToken;
+import fr.imag.adele.cadse.as.generator.GenState;
 import fr.imag.adele.cadse.as.generator.IGenerator;
 import fr.imag.adele.cadse.as.generator.IRuntimeGenerator;
+import fr.imag.adele.cadse.cadseg.contents.CadseDefinitionContent;
+import fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute;
+import fr.imag.adele.cadse.cadseg.generator.attribute.GBoolAttribute;
+import fr.imag.adele.cadse.cadseg.generator.attribute.GDateAttribute;
+import fr.imag.adele.cadse.cadseg.generator.attribute.GDoubleAttribute;
+import fr.imag.adele.cadse.cadseg.generator.attribute.GEnumAttribute;
+import fr.imag.adele.cadse.cadseg.generator.attribute.GIntegerAttribute;
+import fr.imag.adele.cadse.cadseg.generator.attribute.GLTAttribute;
+import fr.imag.adele.cadse.cadseg.generator.attribute.GListAttribute;
+import fr.imag.adele.cadse.cadseg.generator.attribute.GLongAttribute;
+import fr.imag.adele.cadse.cadseg.generator.attribute.GStringAttribute;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GManagerSpecialMethod;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateCadseDefinitionModel;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateJavaFileCST;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateManager;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateView;
+import fr.imag.adele.cadse.cadseg.generator.gclass.part.GPDEEI_Attribute;
+import fr.imag.adele.cadse.cadseg.generator.gclass.part.GPDEIE_Manager;
+import fr.imag.adele.cadse.cadseg.generator.gclass.part.GPDEIE_View;
+import fr.imag.adele.cadse.cadseg.generator.gclass.part.GPDE_EI_CadseDefinition;
 import fr.imag.adele.cadse.cadseg.generator.gclass.part.GenAttributeMethod;
 import fr.imag.adele.cadse.cadseg.generator.gclass.part.GenEnumMethods;
 import fr.imag.adele.cadse.cadseg.generator.gclass.part.GenLinkTypeMethod;
@@ -33,6 +51,7 @@ import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.cadse.core.ItemType;
 import fr.imag.adele.cadse.core.transaction.delta.ImmutableItemDelta;
+import fr.imag.adele.cadse.core.var.ContextVariableImpl;
 
 @Component(name = "fr.imag.adele.cadse.cadseGenerator", immediate = true, architecture = true)
 @Provides(specifications = { IGenerator.class })
@@ -68,6 +87,7 @@ public class GCadseGenerator extends GGenerator {
 	public static final GenAttributeMethod GEN_ATTRIBUTE_METHOD = new GenAttributeMethod();
 	public static final GenEnumMethods GEN_ENUM_METHODS = new GenEnumMethods().override(GEN_ATTRIBUTE_METHOD);
 	public static final GenLinkTypeMethod GEN_LINK_TYPE_METHOD = new GenLinkTypeMethod().override(GEN_ATTRIBUTE_METHOD);
+	
 	
 	
 	GRefer itemTypeSubType = new ItemTypeSubTypeRefer();
@@ -111,7 +131,7 @@ public class GCadseGenerator extends GGenerator {
 		CST.addParticipant(LICENSE_PART);
 		VIEW.addParticipant(LICENSE_PART);
 		
-		CadseGCST.ITEM_TYPE.addAdapter(new GenerateManager.ManagerIter());
+		CadseGCST.MANAGER.addAdapter(new GenerateManager.ManagerIter());
 		CadseGCST.MANAGER.addAdapter(MANAGER);
 		
 		//refer
@@ -130,15 +150,52 @@ public class GCadseGenerator extends GGenerator {
 		new GReferPart(CadseGCST.EXT_ITEM_TYPE, CadseGCST.CADSE_DEFINITION);
 		new GReferPart(CadseGCST.ATTRIBUTE, CadseGCST.CADSE_DEFINITION);
 		new GReferIncomingLink(CadseGCST.ATTRIBUTE, CadseGCST.FIELD_lt_ATTRIBUTE);
+		new GReferIncomingLink(CadseGCST.ITEM_TYPE, CadseGCST.MANAGER_lt_ITEM_TYPE);
 
 		
 		CadseGCST.CADSE_DEFINITION.addAdapter(CST);
 		CadseGCST.CADSE_DEFINITION.addAdapter(CADSE_DEFINITION_MODEL);
+		CadseGCST.CADSE_DEFINITION.addAdapter(new GGenFile<GenState>() {
+		
+			@Override
+			public String generate(GGenerator g, Item currentItem,
+					GenContext cxt) {
+				CadseDefinitionContent cdc = (CadseDefinitionContent) currentItem.getContentItem();
+				cdc.generate(cdc.getGenerateModel(), ContextVariableImpl.DEFAULT);
+				return null;
+			}
+		});
+		
 		CadseGCST.VIEW.addAdapter(VIEW);
 		
 		CadseGCST.ATTRIBUTE.addAdapter(GEN_ATTRIBUTE_METHOD);
+		GEN_ATTRIBUTE_METHOD.matchedToken(MANAGER.relatif(GCst.t_method));
 		CadseGCST.ENUM.addAdapter(GEN_ENUM_METHODS);
+		GEN_ENUM_METHODS.matchedToken(MANAGER.relatif(GCst.t_method));
 		CadseGCST.LINK_TYPE.addAdapter(GEN_LINK_TYPE_METHOD);
+		GEN_LINK_TYPE_METHOD.matchedToken(MANAGER.relatif(GCst.t_method));
+		
+		// GAttribute adapter
+		
+		CadseGCST.ATTRIBUTE.addAdapter(new GAttribute());
+		CadseGCST.BOOLEAN.addAdapter(new GBoolAttribute());
+		CadseGCST.DATE.addAdapter(new GDateAttribute());
+		CadseGCST.DOUBLE.addAdapter(new GDoubleAttribute());
+		CadseGCST.ENUM.addAdapter(new GEnumAttribute());
+		CadseGCST.INTEGER.addAdapter(new GIntegerAttribute());
+		CadseGCST.LIST.addAdapter(new GListAttribute());
+		CadseGCST.LONG.addAdapter(new GLongAttribute());
+		CadseGCST.LINK_TYPE.addAdapter(new GLTAttribute());
+		CadseGCST.STRING.addAdapter(new GStringAttribute());
+		
+		// Import/export package 
+		CadseGCST.MANAGER.addAdapter(new GPDEIE_Manager());
+		CadseGCST.VIEW.addAdapter(new GPDEIE_View());
+		CadseGCST.ATTRIBUTE.addAdapter(new GPDEEI_Attribute());
+		CadseGCST.CADSE_DEFINITION.addAdapter(new GPDE_EI_CadseDefinition());
+		
+		
+		
 	}
 	
 	@Override

@@ -1,6 +1,5 @@
 package fr.imag.adele.cadse.cadseg.generator.content;
 
-import java.util.Set;
 
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.attribute.StringAttributeType;
@@ -31,21 +30,7 @@ import fr.imag.adele.cadse.core.content.ContentItem;
 //			return r;
 //		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see model.workspace.workspace.managers.content.ContentModelManager.MyContentItem#computeImportsPackage(java.util.Set)
-		 */
-		@Override
-		public void computeImportsPackage(Set<String> imports) {
-			super.computeImportsPackage(imports);
-			imports.add("fede.workspace.eclipse.composition");
-			imports.add("org.eclipse.ui.model");
-			imports.add("fede.workspace.eclipse.content");
-
-		}
-		
-		/*
+	/*
 		 * (non-Javadoc)
 		 * 
 		 * @see model.workspace.workspace.managers.content.ContentModelManager#mustBeExtended()
