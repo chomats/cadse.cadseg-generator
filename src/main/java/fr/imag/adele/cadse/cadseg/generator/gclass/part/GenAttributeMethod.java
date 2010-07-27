@@ -6,9 +6,11 @@ import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GResult;
 import fr.imag.adele.cadse.as.generator.GToken;
 import fr.imag.adele.cadse.as.generator.GenState;
+import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
 import fr.imag.adele.cadse.cadseg.generator.template.ListOfValueAttribute;
 import fr.imag.adele.cadse.cadseg.generator.template.ValueAttribute;
 import fr.imag.adele.cadse.cadseg.managers.attributes.AttributeManager;
+import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 
@@ -22,6 +24,8 @@ public class GenAttributeMethod extends GGenPartFile {
 			GToken kind, GenContext context, GGenerator gGenerator,
 			GenState state) {
 
+		Item cadseDefinition = currentItem.getPartParent(CadseGCST.CADSE_DEFINITION);
+		GenerateJavaIdentifier.addImportCST(context, cadseDefinition, state.getImports());
 		Item source = currentItem;
 		if (AttributeManager.isIsListAttribute(source)) {
 			ListOfValueAttribute temp = new ListOfValueAttribute();

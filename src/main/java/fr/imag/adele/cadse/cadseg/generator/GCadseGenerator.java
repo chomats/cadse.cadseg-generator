@@ -13,7 +13,6 @@ import fede.workspace.eclipse.content.ProjectContentManager;
 import fr.imag.adele.cadse.as.generator.GCst;
 import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
-import fr.imag.adele.cadse.as.generator.GLinkIterator;
 import fr.imag.adele.cadse.as.generator.GRefer;
 import fr.imag.adele.cadse.as.generator.GReferIncomingLink;
 import fr.imag.adele.cadse.as.generator.GReferPart;
@@ -60,6 +59,16 @@ public class GCadseGenerator extends GGenerator {
 	
 	public static final UUID ID = UUID.fromString("39F384F7-9635-49BF-B61C-75390AA2DD47");
 
+
+	private final class GenerateManifestAndPlugin extends GGenFile<GenState> {
+		@Override
+		public String generate(GGenerator g, Item currentItem,
+				GenContext cxt) {
+			CadseDefinitionContent cdc = (CadseDefinitionContent) currentItem.getContentItem();
+			cdc.generate(cdc.getGenerateModel(), ContextVariableImpl.DEFAULT);
+			return null;
+		}
+	}
 
 	static private final class ItemTypeSubTypeRefer extends GRefer {
 		public Item[] refers(Item currentItem, ImmutableItemDelta itemDelta) {
@@ -155,16 +164,9 @@ public class GCadseGenerator extends GGenerator {
 		
 		CadseGCST.CADSE_DEFINITION.addAdapter(CST);
 		CadseGCST.CADSE_DEFINITION.addAdapter(CADSE_DEFINITION_MODEL);
-		CadseGCST.CADSE_DEFINITION.addAdapter(new GGenFile<GenState>() {
-		
-			@Override
-			public String generate(GGenerator g, Item currentItem,
-					GenContext cxt) {
-				CadseDefinitionContent cdc = (CadseDefinitionContent) currentItem.getContentItem();
-				cdc.generate(cdc.getGenerateModel(), ContextVariableImpl.DEFAULT);
-				return null;
-			}
-		});
+		GenerateManifestAndPlugin genMFandPlugin = new GenerateManifestAndPlugin();
+		genMFandPlugin.setGenerator(this);
+		CadseGCST.CADSE_DEFINITION.addAdapter(genMFandPlugin);
 		
 		CadseGCST.VIEW.addAdapter(VIEW);
 		

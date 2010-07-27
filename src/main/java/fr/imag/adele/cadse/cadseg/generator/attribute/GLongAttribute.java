@@ -3,7 +3,6 @@ package fr.imag.adele.cadse.cadseg.generator.attribute;
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.cadse.core.ItemType;
-import fr.imag.adele.cadse.core.attribute.LongAttributeType;
 
 public class GLongAttribute extends GAttribute {
 

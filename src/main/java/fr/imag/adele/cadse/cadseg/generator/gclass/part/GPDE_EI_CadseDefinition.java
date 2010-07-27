@@ -31,12 +31,22 @@ public class GPDE_EI_CadseDefinition extends IPDEContributor {
 	 */
 	public void computeExportsPackage(Item item, Set<String> exports) {
 		exports.add(getDefaultPackage(item));
-		Item[] dm = ItemTypeManager.getAllAllItemType(item, null, false);
-		for (int i = 0; i < dm.length; i++) {
-			ContentItem o = dm[i].getContentItem();
-			if (o instanceof JavaFileContentManager)
-				exports.add(((JavaFileContentManager)o).getPackageName(ContextVariableImpl.DEFAULT));
+		Item[] typeDefs = ItemTypeManager.getAllAllItemType(item, null, false);
+		for (int i = 0; i < typeDefs.length; i++) {
+			if (!addExport(typeDefs[i], exports))
+				addExport(ItemTypeManager.getManager(typeDefs[i]), exports);
 		}
+	}
+	
+	protected boolean addExport(Item item, Set<String> exports) {
+		if (item == null) return false;
+		ContentItem o = item.getContentItem();
+		if (o instanceof JavaFileContentManager) {
+			exports.add(((JavaFileContentManager)o).getPackageName(ContextVariableImpl.DEFAULT));
+			return true;
+		}
+		else return false;
+		
 	}
 
 	/*
@@ -57,6 +67,7 @@ public class GPDE_EI_CadseDefinition extends IPDEContributor {
 		imports.add("fr.imag.adele.cadse.core.ui");
 		imports.add("fr.imag.adele.cadse.core.ui.view");
 		imports.add("fr.imag.adele.cadse.core.util");
+		imports.add("fr.imag.adele.cadse.objectadapter");
 	}
 	
 	protected String getDefaultPackage(Item item) {

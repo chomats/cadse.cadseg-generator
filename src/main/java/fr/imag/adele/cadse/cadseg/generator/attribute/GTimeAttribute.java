@@ -2,7 +2,6 @@ package fr.imag.adele.cadse.cadseg.generator.attribute;
 
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.ItemType;
-import fr.imag.adele.cadse.core.attribute.TimeAttributeType;
 
 public class GTimeAttribute extends GAttribute {
 
