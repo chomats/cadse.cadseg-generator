@@ -24,7 +24,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import fede.workspace.eclipse.java.JavaIdentifier;
 import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
-import fr.imag.adele.cadse.as.generator.GIterPart;
+import fr.imag.adele.cadse.as.generator.ItemPartIterable;
 import fr.imag.adele.cadse.as.generator.GToken;
 import fr.imag.adele.cadse.as.generator.GenerateClass;
 import fr.imag.adele.cadse.cadseg.managers.content.ManagerJavaFileContentManager;
@@ -75,12 +75,12 @@ public class GenerateManager extends GenerateClass<GenManagerState> {
 	
 	public static final GToken MANAGER = new GToken("manager");
 	
-	static public class ManagerIter extends GIterPart {
+	static public class ManagerIter extends ItemPartIterable {
 
 		@Override
-		public void beginAll(Item currentItem, GGenFile gf, GToken kind,
-				GenContext context, GGenerator gGenerator) {
-			super.beginAll(currentItem, gf, kind, context, gGenerator);
+		public void beginAll(Item currentItem,
+				GenContext context) {
+			super.beginAll(currentItem, context);
 			Item itemtype = ManagerManager.getItemType(currentItem);
 			if (itemtype != null)
 				stack.add(itemtype);

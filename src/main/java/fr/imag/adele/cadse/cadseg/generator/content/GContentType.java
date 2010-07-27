@@ -45,7 +45,7 @@ public class GContentType extends GGenPartFile  {
 		String defaultClassName = defaultQualifiedClassName.getSimpleName();
 
 		
-		if (GCst.t_inner_class == kind) {
+		if (GCst.t_inner_class == kind.abs()) {
 			Item manager = owner.getPartParent();
 
 			Item itemtype = ManagerManager.getItemType(manager);
@@ -87,7 +87,7 @@ public class GContentType extends GGenPartFile  {
 				state.addImports("fr.imag.adele.cadse.core.CadseException");
 			}
 		}
-		if (GCst.t_method.equals(kind)) {
+		if (GCst.t_method == kind.abs()) {
 			boolean extendsClass = mustBeExtended() | ContentItemTypeManager.isExtendsClass(owner);
 			
 			Item manager = owner.getPartParent();
