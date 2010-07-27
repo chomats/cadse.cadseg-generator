@@ -22,9 +22,7 @@ package fr.imag.adele.cadse.cadseg.generator.gclass;
 import org.eclipse.jdt.core.ICompilationUnit;
 
 import fede.workspace.eclipse.java.JavaIdentifier;
-import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
-import fr.imag.adele.cadse.as.generator.ItemPartIterable;
 import fr.imag.adele.cadse.as.generator.GToken;
 import fr.imag.adele.cadse.as.generator.GenerateClass;
 import fr.imag.adele.cadse.cadseg.managers.content.ManagerJavaFileContentManager;
@@ -33,6 +31,8 @@ import fr.imag.adele.cadse.cadseg.managers.dataModel.ItemTypeManager;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.cadse.core.ItemType;
+import fr.imag.adele.cadse.core.iter.ItemPartIterable;
+import fr.imag.adele.cadse.core.var.ContextVariable;
 
 /**
  * The Class GenerateManager.
@@ -79,7 +79,7 @@ public class GenerateManager extends GenerateClass<GenManagerState> {
 
 		@Override
 		public void beginAll(Item currentItem,
-				GenContext context) {
+				ContextVariable context) {
 			super.beginAll(currentItem, context);
 			Item itemtype = ManagerManager.getItemType(currentItem);
 			if (itemtype != null)

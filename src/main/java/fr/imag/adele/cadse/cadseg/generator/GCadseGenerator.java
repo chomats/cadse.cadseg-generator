@@ -1,7 +1,5 @@
 package fr.imag.adele.cadse.cadseg.generator;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.apache.felix.ipojo.annotations.Component;
@@ -9,14 +7,10 @@ import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
-import fede.workspace.eclipse.composition.java.EclipsePluginContentManger;
 import fede.workspace.eclipse.composition.java.IPDEContributor;
 import fede.workspace.eclipse.content.ProjectContentManager;
-import fede.workspace.eclipse.java.osgi.OsgiManifest;
-import fede.workspace.tool.eclipse.MappingManager;
 import fr.imag.adele.cadse.as.generator.GCst;
 import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenPartFile;
@@ -71,10 +65,8 @@ import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.cadse.core.ItemType;
-import fr.imag.adele.cadse.core.impl.CadseCore;
 import fr.imag.adele.cadse.core.transaction.delta.ImmutableItemDelta;
 import fr.imag.adele.cadse.core.var.ContextVariableImpl;
-import fr.imag.adele.fede.workspace.si.view.View;
 
 @Component(name = "fr.imag.adele.cadse.cadseGenerator", immediate = true, architecture = true)
 @Provides(specifications = { IGenerator.class })
