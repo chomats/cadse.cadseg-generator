@@ -9,9 +9,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
 
+import fede.workspace.eclipse.composition.java.IPDEContributor;
 import fede.workspace.eclipse.content.ProjectContentManager;
 import fr.imag.adele.cadse.as.generator.GCst;
 import fr.imag.adele.cadse.as.generator.GGenFile;
+import fr.imag.adele.cadse.as.generator.GGenPartFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GRefer;
 import fr.imag.adele.cadse.as.generator.GReferIncomingLink;
@@ -31,6 +33,20 @@ import fr.imag.adele.cadse.cadseg.generator.attribute.GLTAttribute;
 import fr.imag.adele.cadse.cadseg.generator.attribute.GListAttribute;
 import fr.imag.adele.cadse.cadseg.generator.attribute.GLongAttribute;
 import fr.imag.adele.cadse.cadseg.generator.attribute.GStringAttribute;
+import fr.imag.adele.cadse.cadseg.generator.content.GContentType;
+import fr.imag.adele.cadse.cadseg.generator.content.GContentType_MF;
+import fr.imag.adele.cadse.cadseg.generator.content.GFileContent;
+import fr.imag.adele.cadse.cadseg.generator.content.GFolderContent;
+import fr.imag.adele.cadse.cadseg.generator.content.GJavaFileContent;
+import fr.imag.adele.cadse.cadseg.generator.content.GJavaFileContent_MF;
+import fr.imag.adele.cadse.cadseg.generator.content.GJavaJarFileContent;
+import fr.imag.adele.cadse.cadseg.generator.content.GJavaJarFileContent_MF;
+import fr.imag.adele.cadse.cadseg.generator.content.GPDEProjectContent;
+import fr.imag.adele.cadse.cadseg.generator.content.GPackageContent;
+import fr.imag.adele.cadse.cadseg.generator.content.GPackageContent_MF;
+import fr.imag.adele.cadse.cadseg.generator.content.GProjectContent;
+import fr.imag.adele.cadse.cadseg.generator.content.GProjectContent_MF;
+import fr.imag.adele.cadse.cadseg.generator.content.GSourceFolderContent;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GManagerSpecialMethod;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateCadseDefinitionModel;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateJavaFileCST;
@@ -197,9 +213,36 @@ public class GCadseGenerator extends GGenerator {
 		CadseGCST.CADSE_DEFINITION.addAdapter(new GPDE_EI_CadseDefinition());
 		
 		
+		GContentType gContentType;
+		// content
+		content(gContentType = new GContentType(), new GContentType_MF(gContentType), CadseGCST.CONTENT_ITEM);
+		content(new GFileContent(), null, CadseGCST.FILE_CONTENT_MODEL);
+		content(new GJavaFileContent(), new GJavaFileContent_MF(), CadseGCST.JAVA_FILE_CONTENT_MODEL);
+		content(new GFolderContent(), null, CadseGCST.FOLDER_CONTENT_MODEL);
+		content(new GPackageContent(), new GPackageContent_MF(), CadseGCST.PACKAGE_CONTENT_MODEL);
+		content(new GProjectContent(), new GProjectContent_MF(), CadseGCST.PROJECT_CONTENT_MODEL);
+		content(new GSourceFolderContent(), null, CadseGCST.SOURCE_FOLDER_CONTENT_MODEL);
+		content(new GPDEProjectContent(), null, CadseGCST.PDEPROJECT_CONTENT_MODEL);
+		content(new GJavaJarFileContent(), new GJavaJarFileContent_MF(), CadseGCST.JAVA_JAR_FILE_CONTENT_MODEL);
+		
 		
 	}
 	
+	private void content(GContentType gContentType, IPDEContributor mf, ItemType it) {
+		gContentType.setGenfile(MANAGER);
+		gContentType.matchedToken(MANAGER.relatif(GCst.t_method));
+		it.addAdapter(gContentType);
+		GGenPartFile[] contentSuper = it.getSuperType().adapts(GGenPartFile.class);
+		if (contentSuper != null)
+			for (GGenPartFile gpf : contentSuper) {
+				if (gpf instanceof GContentType) {
+					gContentType.override(gpf);
+				}
+			}
+		if (mf != null)
+			it.addAdapter(mf);
+	}
+
 	@Override
 	public UUID[] getRequireCadse() {
 		return new UUID[] { CadseGCST._CADSE_ID };

@@ -28,30 +28,30 @@ public class ValueAttribute
 
   public final String NL = nl == null ? (System.getProperties().getProperty("line.separator")) : nl;
   protected final String TEXT_1 = "";
-  protected final String TEXT_2 = NL + "\t/**" + NL + "\t\t@generated" + NL + "\t*/" + NL + "\tpublic static final ";
+  protected final String TEXT_2 = NL + "/**" + NL + "\t@generated" + NL + "*/" + NL + "public static final ";
   protected final String TEXT_3 = " ";
   protected final String TEXT_4 = "(Item ";
   protected final String TEXT_5 = ") {";
-  protected final String TEXT_6 = NL + "\t\treturn ";
+  protected final String TEXT_6 = NL + "\treturn ";
   protected final String TEXT_7 = ".getAttributeWithDefaultValue(";
   protected final String TEXT_8 = "_, ";
   protected final String TEXT_9 = ");";
-  protected final String TEXT_10 = NL + "\t\treturn ";
+  protected final String TEXT_10 = NL + "\treturn ";
   protected final String TEXT_11 = ".getAttributeWithDefaultValue(";
   protected final String TEXT_12 = "_, ";
   protected final String TEXT_13 = ");";
-  protected final String TEXT_14 = NL + "\t}" + NL + "" + NL + "\t/**" + NL + "\t\t@generated" + NL + "\t*/" + NL + "\tpublic static final void ";
+  protected final String TEXT_14 = NL + "}" + NL + "" + NL + "/**" + NL + "\t@generated" + NL + "*/" + NL + "public static final void ";
   protected final String TEXT_15 = "(Item ";
   protected final String TEXT_16 = ", ";
-  protected final String TEXT_17 = " value) {" + NL + "\t\ttry {";
-  protected final String TEXT_18 = NL + "\t\t\t";
+  protected final String TEXT_17 = " value) {" + NL + "\ttry {";
+  protected final String TEXT_18 = NL + "\t\t";
   protected final String TEXT_19 = ".setAttribute(";
   protected final String TEXT_20 = "_, value);";
-  protected final String TEXT_21 = NL + "\t\t\tObject setvalue = ";
-  protected final String TEXT_22 = ";" + NL + "\t\t\t";
+  protected final String TEXT_21 = NL + "\t\tObject setvalue = ";
+  protected final String TEXT_22 = ";" + NL + "\t\t";
   protected final String TEXT_23 = ".setAttribute(";
   protected final String TEXT_24 = "_, setvalue);";
-  protected final String TEXT_25 = NL + "\t\t} catch (Throwable t) {" + NL + "" + NL + "\t\t}" + NL + "\t}" + NL;
+  protected final String TEXT_25 = NL + "\t} catch (Throwable t) {" + NL + "" + NL + "\t}" + NL + "}" + NL;
   protected final String TEXT_26 = NL;
 
 /* (non-javadoc)
@@ -107,7 +107,7 @@ public class ValueAttribute
     stringBuffer.append(typeJava);
     stringBuffer.append(TEXT_17);
      String exp_to_string = gAttribute.exp_to_string();
-	if (exp_to_string == null || exp_to_string.trim().equals("value")) {
+if (exp_to_string == null || exp_to_string.trim().equals("value")) {
     stringBuffer.append(TEXT_18);
     stringBuffer.append(min_short_name);
     stringBuffer.append(TEXT_19);

@@ -25,31 +25,31 @@ skeleton="AttributeSkelton.skeleton"
 	 String defaultValue = gAttribute.getJavaTypeDefaultValue(attribute);
 
 	%>
-	/**
-		@generated
-	*/
-	public static final <%=typeJava%> <%=GenerateJavaIdentifier.cstGetAttribute(ContextVariableImpl.DEFAULT, attribute)%>(Item <%=min_short_name %>) {
+/**
+	@generated
+*/
+public static final <%=typeJava%> <%=GenerateJavaIdentifier.cstGetAttribute(ContextVariableImpl.DEFAULT, attribute)%>(Item <%=min_short_name %>) {
 <%  if (it == CadseGCST.BOOLEAN) { %>
-		return <%=min_short_name%>.getAttributeWithDefaultValue(<%=cstAttribute%>_, <%=defaultValue%>);
+	return <%=min_short_name%>.getAttributeWithDefaultValue(<%=cstAttribute%>_, <%=defaultValue%>);
 <% } else {%>
-		return <%=min_short_name%>.getAttributeWithDefaultValue(<%=cstAttribute%>_, <%=defaultValue%>);
+	return <%=min_short_name%>.getAttributeWithDefaultValue(<%=cstAttribute%>_, <%=defaultValue%>);
 <% } %>
-	}
+}
 
-	/**
-		@generated
-	*/
-	public static final void <%=GenerateJavaIdentifier.cstSetAttribute(ContextVariableImpl.DEFAULT, attribute)%>(Item <%=min_short_name %>, <%=typeJava%> value) {
-		try {
+/**
+	@generated
+*/
+public static final void <%=GenerateJavaIdentifier.cstSetAttribute(ContextVariableImpl.DEFAULT, attribute)%>(Item <%=min_short_name %>, <%=typeJava%> value) {
+	try {
 <% String exp_to_string = gAttribute.exp_to_string();
-	if (exp_to_string == null || exp_to_string.trim().equals("value")) {%>
-			<%=min_short_name%>.setAttribute(<%=cstAttribute%>_, value);
+if (exp_to_string == null || exp_to_string.trim().equals("value")) {%>
+		<%=min_short_name%>.setAttribute(<%=cstAttribute%>_, value);
 <% } else { %>
-			Object setvalue = <%=exp_to_string%>;
-			<%=min_short_name%>.setAttribute(<%=cstAttribute%>_, setvalue);
+		Object setvalue = <%=exp_to_string%>;
+		<%=min_short_name%>.setAttribute(<%=cstAttribute%>_, setvalue);
 <%}%>
-		} catch (Throwable t) {
+	} catch (Throwable t) {
 
-		}
 	}
+}
 

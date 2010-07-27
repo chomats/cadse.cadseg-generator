@@ -1,7 +1,9 @@
 package fr.imag.adele.cadse.cadseg.generator.content;
 
 
+import fede.workspace.eclipse.java.JavaIdentifier;
 import fede.workspace.eclipse.java.manager.JavaFileContentManager;
+import fr.imag.adele.cadse.as.generator.GCst;
 import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenPartFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
@@ -27,10 +29,12 @@ import fr.imag.adele.cadse.core.var.ContextVariable;
  */
 public class GContentType extends GGenPartFile  {
 	
-	public static final GToken INNER_CLASS = new GToken("inner-class");
-	public static final GToken METHODS = new GToken("methods");
+
+	
 	public static final GToken CREATECONTENT_ARGS = new GToken("createcontent-args");
 	public static final GToken CREATECONTENT_INIT = new GToken("createcontent-init");
+	public static final GToken COMPOSERS = new GToken("composers");
+	public static final GToken EXPORTERS = new GToken("exporters");;
 
 	@Override
 	public void generatePartFile(GResult r, Item owner, GGenFile gf,
@@ -41,7 +45,7 @@ public class GContentType extends GGenPartFile  {
 		String defaultClassName = defaultQualifiedClassName.getSimpleName();
 
 		
-		if (INNER_CLASS == kind) {
+		if (GCst.t_inner_class == kind) {
 			Item manager = owner.getPartParent();
 
 			Item itemtype = ManagerManager.getItemType(manager);
@@ -83,53 +87,53 @@ public class GContentType extends GGenPartFile  {
 				state.addImports("fr.imag.adele.cadse.core.CadseException");
 			}
 		}
-		if (METHODS.equals(kind)) {
-//			boolean extendsClass = mustBeExtended() | ContentItemTypeManager.isExtendsClass(owner);
-//			
-//			Item manager = owner.getPartParent();
-//			Item itemtype = ManagerManager.getItemType(manager);
-//
-//			String className = (extendsClass ? GenerateJavaIdentifier.getContentClassName(context, itemtype) : defaultClassName);
-//			String itemVar = JavaIdentifier.javaIdentifierFromString(itemtype.getName(), false, true, null);
-//			r.newline();
-//			r.newline().append("/**");
-//			r.newline().append("	@generated");
-//			r.newline().append("*/");
-//			r.newline().append("@Override");
-//			r.newline().append("public ContentItem createContentItem(UUID id, Item owerItem ").append(
-//					") throws CadseException {");
-//			/* 1 */r.begin();
-//			GenContext newcontext = new GenContext(context);
-//			newcontext.setAttribute("itemVar", itemVar);
-//			
-//			r.appendToken(CREATECONTENT_INIT, newcontext);
-//			generateCallInit(r, gf, newcontext);
-//			r.newline().append(className).append(" cm = new ").append(className).append("(");
-//			/* 2 */r.begin();
-//			r.newline().append("id,");
-//			g.generateParts(owner, r, type, CREATECONTENT_ARGS, gf, newcontext);
-//			/* 3 */r.begin();
-//			generateCallArguments(owner, r, gf, newcontext);
-//			r.decrementLength();
-//			/* 3 */r.end();
-//
-//			r.newline().append(");");
-//			/* 2 */r.end();
-//			r.newline().append("owerItem.setComposers(");
-//			/* 2 */r.begin();
-//			generateComposersParts(owner, r, type, "composers", gf, newcontext);
-//			r.decrementLength();
-//			/* 2 */r.end();
-//			r.newline().append(");");
-//			r.newline().append("owerItem.setExporters(");
-//			/* 2 */r.begin();
-//			generateExportersParts(owner, r, type, "exporters", imports, newcontext);
-//			r.decrementLength();
-//			/* 2 */r.end();
-//			r.newline().append(");");
-//			r.newline().append("return cm;");
-//			/* 1 */r.end();
-//			r.newline().append("}").newline();
+		if (GCst.t_method.equals(kind)) {
+			boolean extendsClass = mustBeExtended() | ContentItemTypeManager.isExtendsClass(owner);
+			
+			Item manager = owner.getPartParent();
+			Item itemtype = ManagerManager.getItemType(manager);
+
+			String className = (extendsClass ? GenerateJavaIdentifier.getContentClassName(context, itemtype) : defaultClassName);
+			String itemVar = JavaIdentifier.javaIdentifierFromString(itemtype.getName(), false, true, null);
+			r.newline();
+			r.newline().append("/**");
+			r.newline().append("	@generated");
+			r.newline().append("*/");
+			r.newline().append("@Override");
+			r.newline().append("public ContentItem createContentItem(UUID id, Item owerItem ").append(
+					") throws CadseException {");
+			/* 1 */r.begin();
+			GenContext newcontext = new GenContext(context);
+			newcontext.setAttribute("itemVar", itemVar);
+			
+			r.appendToken(CREATECONTENT_INIT, newcontext, state);
+			generateCallInit(r, gf, newcontext);
+			r.newline().append(className).append(" cm = new ").append(className).append("(");
+			/* 2 */r.begin();
+			r.newline().append("id,");
+			/* 3 */r.begin();
+			generateCallArguments(owner, r, gf, newcontext, state);
+			r.decrementLength();
+			/* 3 */r.end();
+
+			r.newline().append(");");
+			/* 2 */r.end();
+			r.newline().append("owerItem.setComposers(");
+			/* 2 */r.begin();
+			r.appendToken(COMPOSERS, newcontext, state);
+			
+			r.decrementLength();
+			/* 2 */r.end();
+			r.newline().append(");");
+			r.newline().append("owerItem.setExporters(");
+			/* 2 */r.begin();
+			r.appendToken(EXPORTERS, newcontext, state);
+			r.decrementLength();
+			/* 2 */r.end();
+			r.newline().append(");");
+			r.newline().append("return cm;");
+			/* 1 */r.end();
+			r.newline().append("}").newline();
 			state.addImports("fr.imag.adele.cadse.core.content.ContentItem");
 			state.addImports("java.util.UUID");
 			state.addImports("fr.imag.adele.cadse.core.Item");
@@ -149,6 +153,7 @@ public class GContentType extends GGenPartFile  {
 	public boolean mustBeExtended() {
 		return true;
 	}
+	
 	
 	/**
 	 * Recherche la class du contentmanager et le manager provenant d'un
