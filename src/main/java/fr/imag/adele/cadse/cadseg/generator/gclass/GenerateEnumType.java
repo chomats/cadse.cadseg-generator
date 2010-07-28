@@ -6,13 +6,14 @@ import java.util.List;
 import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GToken;
+import fr.imag.adele.cadse.as.generator.GenState;
 import fr.imag.adele.cadse.cadseg.generator.template.EnumSkeltonTemplate;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.EnumTypeManager;
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 
-public class GenerateEnumType extends GGenFile {
+public class GenerateEnumType extends GGenFile<GenState> {
 
 	public GenerateEnumType() {
 		_key = new GToken("enum-type");

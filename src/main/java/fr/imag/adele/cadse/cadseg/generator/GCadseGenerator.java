@@ -49,6 +49,7 @@ import fr.imag.adele.cadse.cadseg.generator.content.GProjectContent_MF;
 import fr.imag.adele.cadse.cadseg.generator.content.GSourceFolderContent;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GManagerSpecialMethod;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateCadseDefinitionModel;
+import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateEnumType;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateJavaFileCST;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateManager;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateView;
@@ -115,7 +116,7 @@ public class GCadseGenerator extends GGenerator {
 	public static final GenEnumMethods GEN_ENUM_METHODS = new GenEnumMethods().override(GEN_ATTRIBUTE_METHOD);
 	public static final GenLinkTypeMethod GEN_LINK_TYPE_METHOD = new GenLinkTypeMethod().override(GEN_ATTRIBUTE_METHOD);
 	
-	
+	public static final GenerateEnumType GENERATE_ENUM_TYPE = new GenerateEnumType();
 	
 	GRefer itemTypeSubType = new ItemTypeSubTypeRefer();
 	
@@ -148,18 +149,23 @@ public class GCadseGenerator extends GGenerator {
 	
 	@Override
 	public void load(IRuntimeGenerator runtimeGenerator) {
-		MANAGER.setGenerator(this);
-		CST.setGenerator(this);
 		CADSE_DEFINITION_MODEL.setGenerator(this);
+		CST.setGenerator(this);
+		GENERATE_ENUM_TYPE.setGenerator(this);
+		MANAGER.setGenerator(this);
 		VIEW.setGenerator(this);
 		
+		CST.addParticipant(LICENSE_PART);
 		MANAGER.addParticipant(MANAGER_SPECIAL_METHOD);
 		MANAGER.addParticipant(LICENSE_PART);
-		CST.addParticipant(LICENSE_PART);
 		VIEW.addParticipant(LICENSE_PART);
 		
+		CadseGCST.CADSE_DEFINITION.addAdapter(CST);
+		CadseGCST.CADSE_DEFINITION.addAdapter(CADSE_DEFINITION_MODEL);
+		CadseGCST.ENUM_TYPE.addAdapter(GENERATE_ENUM_TYPE);
 		CadseGCST.MANAGER.addAdapter(new GenerateManager.ManagerIter());
 		CadseGCST.MANAGER.addAdapter(MANAGER);
+		CadseGCST.VIEW.addAdapter(VIEW);
 		
 		//refer
 		CadseGCST.ITEM_TYPE.addAdapter(itemTypeSubType);
@@ -180,8 +186,8 @@ public class GCadseGenerator extends GGenerator {
 		new GReferIncomingLink(CadseGCST.ITEM_TYPE, CadseGCST.MANAGER_lt_ITEM_TYPE);
 
 		
-		CadseGCST.CADSE_DEFINITION.addAdapter(CST);
-		CadseGCST.CADSE_DEFINITION.addAdapter(CADSE_DEFINITION_MODEL);
+		
+		
 		GenerateManifestAndPlugin genMFandPlugin = new GenerateManifestAndPlugin();
 		genMFandPlugin.setGenerator(this);
 		CadseGCST.CADSE_DEFINITION.addAdapter(genMFandPlugin);
