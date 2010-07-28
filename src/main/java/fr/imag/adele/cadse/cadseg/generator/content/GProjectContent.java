@@ -21,15 +21,6 @@ import fr.imag.adele.cadse.core.content.ContentItem;
 			return new StringAttributeType[] { CadseGCST.PROJECT_CONTENT_MODEL_at_PROJECT_NAME_ };
 		}
 
-		
-//		@Override
-//		public GResult generatePartFile(Item owner, GGenFile gf, GToken kind,
-//			GenContext context, GGenerator gGenerator) {
-//			GResult r = super.generatePartFile(owner, gf, kind, context, gGenerator);
-//			gf.addImports("fede.workspace.eclipse.content.ProjectContentManager");
-//			return r;
-//		}
-
 	/*
 		 * (non-Javadoc)
 		 * 

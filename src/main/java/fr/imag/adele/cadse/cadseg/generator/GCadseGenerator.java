@@ -41,6 +41,8 @@ import fr.imag.adele.cadse.cadseg.generator.content.GJavaFileContent;
 import fr.imag.adele.cadse.cadseg.generator.content.GJavaFileContent_MF;
 import fr.imag.adele.cadse.cadseg.generator.content.GJavaJarFileContent;
 import fr.imag.adele.cadse.cadseg.generator.content.GJavaJarFileContent_MF;
+import fr.imag.adele.cadse.cadseg.generator.content.GJavaProjectContent;
+import fr.imag.adele.cadse.cadseg.generator.content.GJavaProjectContent_MF;
 import fr.imag.adele.cadse.cadseg.generator.content.GPDEProjectContent;
 import fr.imag.adele.cadse.cadseg.generator.content.GPackageContent;
 import fr.imag.adele.cadse.cadseg.generator.content.GPackageContent_MF;
@@ -224,18 +226,21 @@ public class GCadseGenerator extends GGenerator {
 		// content
 		content(new GContentType(), new GContentType_MF(), CadseGCST.CONTENT_ITEM_TYPE);
 		content(new GFileContent(), null, CadseGCST.FILE_CONTENT_MODEL);
-		content(new GJavaFileContent(), new GJavaFileContent_MF(), CadseGCST.JAVA_FILE_CONTENT_MODEL);
 		content(new GFolderContent(), null, CadseGCST.FOLDER_CONTENT_MODEL);
-		content(new GPackageContent(), new GPackageContent_MF(), CadseGCST.PACKAGE_CONTENT_MODEL);
-		content(new GProjectContent(), new GProjectContent_MF(), CadseGCST.PROJECT_CONTENT_MODEL);
-		content(new GSourceFolderContent(), null, CadseGCST.SOURCE_FOLDER_CONTENT_MODEL);
-		content(new GPDEProjectContent(), null, CadseGCST.PDEPROJECT_CONTENT_MODEL);
-		content(new GJavaJarFileContent(), new GJavaJarFileContent_MF(), CadseGCST.JAVA_JAR_FILE_CONTENT_MODEL);
 		
+		content(new GProjectContent(), new GProjectContent_MF(), CadseGCST.PROJECT_CONTENT_MODEL);
+		
+		content(new GSourceFolderContent(), null, CadseGCST.SOURCE_FOLDER_CONTENT_MODEL);
+		content(new GJavaFileContent(), new GJavaFileContent_MF(), CadseGCST.JAVA_FILE_CONTENT_MODEL);
+		content(new GJavaJarFileContent(), new GJavaJarFileContent_MF(), CadseGCST.JAVA_JAR_FILE_CONTENT_MODEL);
+		content(new GJavaProjectContent(), new GJavaProjectContent_MF(), CadseGCST.JAVA_PROJECT_CONTENT_MODEL);
+		content(new GPackageContent(), new GPackageContent_MF(), CadseGCST.PACKAGE_CONTENT_MODEL);
+		
+		content(new GPDEProjectContent(), null, CadseGCST.PDEPROJECT_CONTENT_MODEL);
 		
 	}
 	
-	private void content(GContentType gContentType, IPDEContributor mf, ItemType it) {
+	public void content(GContentType gContentType, IPDEContributor mf, ItemType it) {
 		gContentType.setGenfile(MANAGER);
 		gContentType.matchedToken(MANAGER.relatif(GCst.t_method),
 				MANAGER.relatif(GCst.t_inner_class));
