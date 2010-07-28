@@ -15,8 +15,10 @@ import fr.imag.adele.cadse.core.Item;
 
 public class GenerateEnumType extends GGenFile<GenState> {
 
+	public static final GToken FILE_ENUM_TYPE = new GToken("enum-type");
+
 	public GenerateEnumType() {
-		_key = new GToken("enum-type");
+		_key = FILE_ENUM_TYPE;
 	}
 	
 	@Override

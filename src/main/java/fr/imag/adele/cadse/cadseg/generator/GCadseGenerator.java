@@ -23,6 +23,7 @@ import fr.imag.adele.cadse.as.generator.GenState;
 import fr.imag.adele.cadse.as.generator.IGenerator;
 import fr.imag.adele.cadse.as.generator.IRuntimeGenerator;
 import fr.imag.adele.cadse.cadseg.contents.CadseDefinitionContent;
+import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
 import fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute;
 import fr.imag.adele.cadse.cadseg.generator.attribute.GBoolAttribute;
 import fr.imag.adele.cadse.cadseg.generator.attribute.GDateAttribute;
@@ -64,6 +65,7 @@ import fr.imag.adele.cadse.cadseg.generator.gclass.part.GenEnumMethods;
 import fr.imag.adele.cadse.cadseg.generator.gclass.part.GenLinkTypeMethod;
 import fr.imag.adele.cadse.cadseg.managers.CadseDefinitionManager;
 import fr.imag.adele.cadse.cadseg.managers.build.CompositeItemTypeManager;
+import fr.imag.adele.cadse.cadseg.managers.dataModel.EnumTypeManager;
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
@@ -139,6 +141,15 @@ public class GCadseGenerator extends GGenerator {
 			IProject p = getProject(GCadseGenerator.P_DMODEL, currentItem);
 			IFile f = p.getFile(new Path("model/cadse.xml"));
 			return f;
+		}
+		
+		if (fileToken == GenerateEnumType.FILE_ENUM_TYPE) {
+			EnumTypeManager etm = (EnumTypeManager) currentItem.getType().getItemManager();
+			String packageName = etm.getPackage(cxt, currentItem);
+			String className = etm.getClassname(cxt, currentItem);
+			
+			Item cadseDefinition = currentItem.getPartParent(CadseGCST.CADSE_DEFINITION);
+			return CadseDefinitionManager.getJavaFile(cadseDefinition, "enum-type", packageName, className);
 		}
 		
 		return super.getFile(currentItem, fileToken, cxt);
