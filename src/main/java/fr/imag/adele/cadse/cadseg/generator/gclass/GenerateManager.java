@@ -83,7 +83,7 @@ public class GenerateManager extends GenerateClass<GenManagerState> {
 			super.beginAll(currentItem, context);
 			Item itemtype = ManagerManager.getItemType(currentItem);
 			if (itemtype != null)
-				stack.add(itemtype);
+				_nexts.add(itemtype);
 		}
 	}
 

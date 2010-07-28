@@ -3,15 +3,13 @@ package fr.imag.adele.cadse.cadseg.generator.content;
 import java.util.Set;
 
 import fede.workspace.eclipse.composition.java.IPDEContributor;
+import fr.imag.adele.cadse.as.generator.GGenPartFile;
 import fr.imag.adele.cadse.core.Item;
+import fr.imag.adele.cadse.core.ItemFilter;
+import fr.imag.adele.cadse.core.impl.CadseCore;
 
 public class GContentType_MF extends IPDEContributor {
-	
-	private GContentType _c;
 
-	public GContentType_MF(GContentType c) {
-		_c = c;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -20,10 +18,24 @@ public class GContentType_MF extends IPDEContributor {
 	 */
 	@Override
 	public void computeImportsPackage(Item currentItem, Set<String> imports) {
-		Class<?> className = _c.getRuntimeClassName();
-		if (className != null) {
-			String packageName = className.getPackage().getName();
-			imports.add(packageName);
+		GContentType ct = (GContentType) CadseCore.adapt(currentItem, GGenPartFile.class, new ItemFilter<GGenPartFile>() {
+			@Override
+			public boolean accept(GGenPartFile item) {
+				return item instanceof GContentType;
+			}
+
+			@Override
+			public boolean stop() {
+				return false;
+			}
+		});
+		
+		if (ct != null) {
+			Class<?> className = ct.getRuntimeClassName();
+			if (className != null) {
+				String packageName = className.getPackage().getName();
+				imports.add(packageName);
+			}
 		}
 		imports.add("fr.imag.adele.cadse.core");
 		imports.add("org.eclipse.ltk.core.refactoring");

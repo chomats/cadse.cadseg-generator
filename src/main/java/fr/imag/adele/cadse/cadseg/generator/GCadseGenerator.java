@@ -215,9 +215,8 @@ public class GCadseGenerator extends GGenerator {
 		CadseGCST.CADSE_DEFINITION.addAdapter(new GPDE_EI_CadseDefinition());
 		
 		
-		GContentType gContentType;
 		// content
-		content(gContentType = new GContentType(), new GContentType_MF(gContentType), CadseGCST.CONTENT_ITEM);
+		content(new GContentType(), new GContentType_MF(), CadseGCST.CONTENT_ITEM_TYPE);
 		content(new GFileContent(), null, CadseGCST.FILE_CONTENT_MODEL);
 		content(new GJavaFileContent(), new GJavaFileContent_MF(), CadseGCST.JAVA_FILE_CONTENT_MODEL);
 		content(new GFolderContent(), null, CadseGCST.FOLDER_CONTENT_MODEL);
