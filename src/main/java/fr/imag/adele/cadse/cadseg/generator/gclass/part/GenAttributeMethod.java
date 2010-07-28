@@ -43,6 +43,14 @@ public class GenAttributeMethod extends GGenPartFile {
 				.addJavaImport(state.getImports());
 	}
 	
+	@Override
+	public boolean match(GGenFile gf, GToken t, Item currentItem) {
+		if (currentItem.getPartParent() != null &&
+			currentItem.getPartParent().isInstanceOf(CadseGCST.TYPE_DEFINITION))
+			return super.match(gf, t, currentItem);
+		return false;
+	}
+	
 	
 
 }

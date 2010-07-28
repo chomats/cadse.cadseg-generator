@@ -430,8 +430,8 @@ public class GenerateCadseDefinitionModel extends GGenFile<GenState> {
 					if (AttributeManager.isIsListAttribute(attribute)) {
 						ItemType cadseRootList = CadseGCST.LIST;
 						cvt.setTypeName(cadseRootList.getId().toString());
-						InitModelLoadAndWrite cadseListRootManager = (InitModelLoadAndWrite) cadseRootList
-								.getItemManager();
+						InitModelLoadAndWrite cadseListRootManager = cadseRootList
+								.adapt(InitModelLoadAndWrite.class);
 						ListAttributeType lAttribute = new ListAttributeType(null, ((AttributeType) attribute).getFlag(), attribute.getName(), 0, -1, (IAttributeType) attribute);
 						cadseListRootManager.writeAttributeDefinition(factory, cxt, cvt, lAttribute);
 					}

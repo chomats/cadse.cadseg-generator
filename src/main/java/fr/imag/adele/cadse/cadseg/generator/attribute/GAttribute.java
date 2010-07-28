@@ -178,7 +178,6 @@ public class GAttribute extends ObjectAdapter<GAttribute>  {
 		return null;
 	}
 
-
 	@Override
 	public Class<GAttribute> getClassAdapt() {
 		return GAttribute.class;

@@ -16,7 +16,7 @@ import fr.imag.adele.cadse.cadseg.managers.dataModel.EnumTypeManager;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 
-public class GenEnumMethods extends GGenPartFile {
+public class GenEnumMethods extends GenAttributeMethod {
 
 	@Override
 	public void generatePartFile(GResult r, Item currentItem, GGenFile gf,
