@@ -6,9 +6,11 @@ import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GResult;
 import fr.imag.adele.cadse.as.generator.GToken;
 import fr.imag.adele.cadse.as.generator.GenState;
+import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
 import fr.imag.adele.cadse.cadseg.generator.template.LinkAttributeMultiTemplate;
 import fr.imag.adele.cadse.cadseg.generator.template.LinkAttributeOneTemplate;
 import fr.imag.adele.cadse.cadseg.managers.attributes.LinkTypeManager;
+import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 
@@ -18,6 +20,9 @@ public class GenLinkTypeMethod extends GGenPartFile {
 	public void generatePartFile(GResult r, Item currentItem, GGenFile gf,
 			GToken kind, GenContext context, GGenerator gGenerator,
 			GenState state) {
+		Item cadseDefinition = currentItem.getPartParent(CadseGCST.CADSE_DEFINITION);
+		GenerateJavaIdentifier.addImportCST(context, cadseDefinition, state.getImports());
+		
 		Item source = currentItem;
 		int max = LinkTypeManager.getMax(source);
 		if (max == 1) {

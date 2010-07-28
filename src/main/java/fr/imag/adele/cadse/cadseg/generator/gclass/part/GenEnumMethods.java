@@ -8,11 +8,13 @@ import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GResult;
 import fr.imag.adele.cadse.as.generator.GToken;
 import fr.imag.adele.cadse.as.generator.GenState;
+import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
 import fr.imag.adele.cadse.cadseg.generator.template.EnumListOfValueAttribute;
 import fr.imag.adele.cadse.cadseg.generator.template.EnumValueAttribute;
 import fr.imag.adele.cadse.cadseg.managers.attributes.AttributeManager;
 import fr.imag.adele.cadse.cadseg.managers.attributes.EnumManager;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.EnumTypeManager;
+import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 
@@ -23,6 +25,8 @@ public class GenEnumMethods extends GenAttributeMethod {
 			GToken kind, GenContext context, GGenerator gGenerator,
 			GenState state) {
 
+		Item cadseDefinition = currentItem.getPartParent(CadseGCST.CADSE_DEFINITION);
+		GenerateJavaIdentifier.addImportCST(context, cadseDefinition, state.getImports());
 		Item enumType = EnumManager.getEnumType(currentItem);
 		IType enumQualifiedClass = EnumTypeManager.getEnumQualifiedClass(
 				context, enumType);
