@@ -116,7 +116,7 @@ public class GComposer extends GGenPartFile {
 				sb.newline().append("	// TODO Auto-generated method stub");
 				sb.newline().append("}");
 
-				generateOtherMethods(sb, imports, context);
+				generateOtherMethods(currentItem, sb, imports, context);
 
 				sb.end();
 
@@ -151,14 +151,14 @@ public class GComposer extends GGenPartFile {
 	 * Generate other methods in the composer class when the composer
 	 * extends the super class.
 	 * 
-	 * @param sb
+	 * @param currentItem
 	 *            A String builder to put generated code.
-	 * @param imports
+	 * @param sb
 	 *            The list of the import package
-	 * @param context
+	 * @param imports
 	 *            A context.
 	 */
-	protected void generateOtherMethods(GenStringBuilder sb, Set<String> imports, GenContext context) {
+	protected void generateOtherMethods(Item currentItem, GResult sb, Set<String> imports, GenContext context) {
 
 	}
 
