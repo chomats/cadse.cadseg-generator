@@ -3,11 +3,11 @@
   <parent>
     <artifactId>fr.imag.adele.cadse.parent.ipojo</artifactId>
     <groupId>fr.imag.adele.cadse</groupId>
-    <version>2.3.3-SNAPSHOT</version>
+    <version>2.3.2</version>
   </parent>
   <groupId>fr.imag.adele.cadse</groupId>
   <artifactId>cadseg.generator</artifactId>
-  <version>2.3.1-SNAPSHOT</version>
+  <version>2.3.1</version>
   <packaging>bundle</packaging>
   <name>fr.imag.adele.cadse.cadseg.generator</name>
   <build>
@@ -57,12 +57,12 @@
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
 			<artifactId>si.uiplatform.swt</artifactId>
-  			<version>2.3.0</version>
+  			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
 			<artifactId>si.java</artifactId>
-  			<version>2.3.0</version>
+  			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse</groupId>
@@ -72,27 +72,27 @@
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
 			<artifactId>si.view</artifactId>
-  			<version>2.3.0</version>
+  			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
 			<artifactId>as.cu</artifactId>
-  			<version>2.3.2</version>
+  			<version>2.3.4</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
 			<artifactId>Model.Workspace.CadseG</artifactId>
-			<version>2.3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>fr.imag.adele.cadse</groupId>
-			<artifactId>util.objectadapter</artifactId>
 			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
+			<artifactId>util.objectadapter</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.imag.adele.cadse</groupId>
 			<artifactId>as.generator</artifactId>
-			<version>2.3.0</version>
+			<version>2.3.1</version>
 		</dependency>
   </dependencies>
 </project>
