@@ -29,7 +29,7 @@ import fr.imag.adele.cadse.core.var.ContextVariable;
 /**
  * The Class MyContentItem.
  */
-public class GContentType extends GenerateClass<GenClassState>  {
+public class GContentType extends GenerateClass<ContentSate>  {
 	
 	public static final GToken CONTENT_FILE = new GToken("content-file");
 	
@@ -43,58 +43,80 @@ public class GContentType extends GenerateClass<GenClassState>  {
 	public static final GToken EXPORTERS = new GToken("exporters");;
 
 	@Override
+	protected ContentSate createState() {
+		return new ContentSate();
+	}
+	
+	@Override
+	protected void init(ContentSate state, Item currentItem, GGenerator g,
+			GenContext cxt) {
+		super.init(state, currentItem, g, cxt);
+		
+		ItemType it = currentItem.getType();
+		state.manager = currentItem.getPartParent();
+
+		state.itemtype = ManagerManager.getItemType(state.manager);
+		
+		state.defaultQualifiedClassName = this.getRuntimeClassName();
+		state.fClassName = GenerateJavaIdentifier.getContentClassName(cxt, state.itemtype);
+		
+		//state.extendsClassName = state.defaultQualifiedClassName.getSimpleName();
+
+
+		state.fExtendedClassName = state.defaultQualifiedClassName.getSimpleName();
+		state.fExtendedPackageName = state.defaultQualifiedClassName.getPackage().getName();
+		
+		boolean extendsClass = mustBeExtended() | ContentItemTypeManager.isExtendsClass(currentItem);
+		if (extendsClass) {
+			findSuperClassName(state, currentItem, cxt, state.itemtype);
+			//state.extendsClassName = state.fExtendedClassName; 
+			
+		}
+	}
+	
+	@Override
+	public boolean match(GToken kind) {
+		return GCst.t_constructor == kind.abs() || GCst.t_inner_class == kind.abs() || super.match(kind);
+	}
+	
+	@Override
 	public void generatePartFile(GResult r, Item owner, GGenFile gf,
 			GToken kind, GenContext context, GGenerator gGenerator,
 			GenState state) {
-		ItemType it = owner.getType();
-		Class<?> defaultQualifiedClassName = this.getRuntimeClassName();
-		String defaultClassName = defaultQualifiedClassName.getSimpleName();
-
 		
 		if (GCst.t_inner_class == kind.abs()) {
-			Item manager = owner.getPartParent();
-
-			Item itemtype = ManagerManager.getItemType(manager);
 			generateAllClassVariables(owner, r, gf, state);
-
-			generateComposersParts(owner, r, gf, kind, null, gGenerator, state);
+		}
+		if (GCst.t_constructor == kind.abs()) {
+			
+			//generateComposersParts(owner, r, gf, kind, null, gGenerator, state);
 
 			//boolean extendsClass = mustBeExtended() | ContentItemTypeManager.isExtendsClass(owner);
 			//if (extendsClass) {
-
-				String extendsClassName = defaultClassName;
-
-				extendsClassName = findSuperClassName(owner, context, extendsClassName, itemtype);
-				defaultClassName = GenerateJavaIdentifier.getContentClassName(context, itemtype);
-				r.newline();
-				r.newline().append("/**");
-				r.newline().append("	@generated");
-				r.newline().append("*/");
-				r.newline().append("public class ").append(defaultClassName).append(" extends ").append(
-						extendsClassName).append(" {");
-				r.begin();
-				r.newline();
-				r.newline().append("/**");
-				r.newline().append("	@generated");
-				r.newline().append("*/");
-				r.newline().append("public ").append(defaultClassName).append("(UUID id) {");
-				
-				r.decrementLength();
-				r.append(") throws CadseException {");
-				
-				/* 2 */r.begin();
-				r.newline().append("super(id,");
-				generateCallArguments(owner, r, gf, context, state);
-				r.decrementLength();
-				r.append(");");
-				r.append(CONTENT_CONSTRUCTOR);
-				r.end();
-				r.newline().append("}");
-				r.end();
-				r.newline();
-				r.newline().append("}");
-				r.newline();
-				state.addImports("fr.imag.adele.cadse.core.CadseException");
+			ContentSate stateContent = (ContentSate) state;
+		
+			r.newline();
+			r.newline().append("/**");
+			r.newline().append("	@generated");
+			r.newline().append("*/");
+			r.newline().append("public ").append(stateContent.fClassName).append("(UUID id) {");
+			
+			r.decrementLength();
+			r.append(") throws CadseException {");
+			
+			/* 2 */r.begin();
+			r.newline().append("super(id,");
+			generateCallArguments(owner, r, gf, context, state);
+			r.decrementLength();
+			r.append(");");
+			r.append(CONTENT_CONSTRUCTOR);
+			r.end();
+			r.newline().append("}");
+			r.end();
+			r.newline();
+			r.newline().append("}");
+			r.newline();
+			state.addImports("fr.imag.adele.cadse.core.CadseException");
 			//}
 		}
 //		if (GCst.t_method == kind.abs()) {
@@ -178,26 +200,33 @@ public class GContentType extends GenerateClass<GenClassState>  {
 	 * 
 	 * @return le nom de la class ou la valeur par default.
 	 */
-	private String findSuperClassName(Item owner, ContextVariable cxt, String extendsClassName, Item itemtype) {
+	private void findSuperClassName(GenClassState state, Item owner, ContextVariable cxt, Item itemtype) {
 		while (true) {
 			Item superitemtype = ItemTypeManager.getSuperType(itemtype);
 			if (superitemtype == null) {
 				break;
 			}
 			Item superItemManager = ItemTypeManager.getManager(superitemtype);
-			if (superItemManager == null)
-				break;
+			if (superItemManager == null) {
+				Class<? extends ContentItem> clCt = ((ItemType)superitemtype).getContentItemClass();
+				if (clCt == null) continue;
+				state.fExtendedClassName = clCt.getSimpleName();
+				state.fExtendedPackageName = clCt.getPackage().getName();
+				return;
+			}
 			Item supercontentItem = ManagerManager.getContentModel(superItemManager);
 			if (supercontentItem != null && supercontentItem.getType() == owner.getType()) {
 				if (ContentItemTypeManager.isExtendsClass(supercontentItem)) {
-					return ((JavaFileContentManager) superItemManager.getContentItem()).getClassName(cxt)
-							+ "."+GenerateJavaIdentifier.getContentClassName(cxt, superitemtype);
+					state.fExtendedClassName = GenerateJavaIdentifier.getContentClassName(cxt, superitemtype);
+					state.fExtendedPackageName = GenerateJavaIdentifier.getContentPackageName(cxt, superitemtype);
+
+					return;
 				}
 			}
 			itemtype = superitemtype;
 
 		}
-		return extendsClassName;
+		return ;
 	}
 
 	/**

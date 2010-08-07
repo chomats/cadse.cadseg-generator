@@ -65,6 +65,7 @@ import fr.imag.adele.cadse.cadseg.generator.gclass.part.GenEnumMethods;
 import fr.imag.adele.cadse.cadseg.generator.gclass.part.GenLinkTypeMethod;
 import fr.imag.adele.cadse.cadseg.managers.CadseDefinitionManager;
 import fr.imag.adele.cadse.cadseg.managers.build.CompositeItemTypeManager;
+import fr.imag.adele.cadse.cadseg.managers.content.ManagerManager;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.EnumTypeManager;
 import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.GenContext;
@@ -150,6 +151,16 @@ public class GCadseGenerator extends GGenerator {
 			
 			Item cadseDefinition = currentItem.getPartParent(CadseGCST.CADSE_DEFINITION);
 			return CadseDefinitionManager.getJavaFile(cadseDefinition, "enum-type", packageName, className);
+		}
+		
+		if (fileToken == GContentType.CONTENT_FILE) {
+			Item manager = currentItem.getPartParent();
+			Item type = ManagerManager.getItemType(manager);
+			String packageName = GenerateJavaIdentifier.getContentPackageName(cxt, type);
+			String className = GenerateJavaIdentifier.getContentClassName(cxt, type);
+			
+			Item cadseDefinition = currentItem.getPartParent(CadseGCST.CADSE_DEFINITION);
+			return CadseDefinitionManager.getJavaFile(cadseDefinition, "content", packageName, className);
 		}
 		
 		return super.getFile(currentItem, fileToken, cxt);
@@ -252,13 +263,10 @@ public class GCadseGenerator extends GGenerator {
 	}
 	
 	public void content(GContentType gContentType, IPDEContributor mf, ItemType it) {
-		gContentType.setGenfile(MANAGER);
-		gContentType.matchedToken(MANAGER.relatif(GCst.t_method),
-				MANAGER.relatif(GCst.t_inner_class));
 		it.addAdapter(gContentType);
-		GGenPartFile[] contentSuper = it.getSuperType().adapts(GGenPartFile.class);
+		GGenFile[] contentSuper = it.getSuperType().adapts(GGenFile.class);
 		if (contentSuper != null)
-			for (GGenPartFile gpf : contentSuper) {
+			for (GGenFile gpf : contentSuper) {
 				if (gpf instanceof GContentType) {
 					gContentType.override(gpf);
 				}
