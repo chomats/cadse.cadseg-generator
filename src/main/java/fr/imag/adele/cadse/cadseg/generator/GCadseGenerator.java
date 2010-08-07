@@ -73,6 +73,7 @@ import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.cadse.core.ItemType;
 import fr.imag.adele.cadse.core.transaction.delta.ImmutableItemDelta;
 import fr.imag.adele.cadse.core.var.ContextVariableImpl;
+import fr.imag.adele.fede.workspace.as.initmodel.InitModelLoadAndWrite;
 
 @Component(name = "fr.imag.adele.cadse.cadseGenerator", immediate = true, architecture = true)
 @Provides(specifications = { IGenerator.class })
@@ -109,6 +110,7 @@ public class GCadseGenerator extends GGenerator {
 	public static final GToken P_MODEL = new GToken( "project model");
 	public static final GToken P_DMODEL = new GToken( "project data model");
 	public static final GToken P_ECLIPSE = new GToken( "project eclipse");
+	public static final GToken INIT_METHOD = new GToken( "init-method");
 	
 	public static final LicenseGenPart	LICENSE_PART = new LicenseGenPart();
 	public static final GenerateManager MANAGER = new GenerateManager();
@@ -116,6 +118,7 @@ public class GCadseGenerator extends GGenerator {
 	public static final GenerateCadseDefinitionModel CADSE_DEFINITION_MODEL = new GenerateCadseDefinitionModel();
 	public static final GenerateJavaFileCST CST = new GenerateJavaFileCST();
 	public static final GenerateView	VIEW = new GenerateView();
+	public static final GGenInitClass INIT = new GGenInitClass();
 	
 	public static final GenAttributeMethod GEN_ATTRIBUTE_METHOD = new GenAttributeMethod();
 	public static final GenEnumMethods GEN_ENUM_METHODS = new GenEnumMethods().override(GEN_ATTRIBUTE_METHOD);
@@ -162,6 +165,11 @@ public class GCadseGenerator extends GGenerator {
 			Item cadseDefinition = currentItem.getPartParent(CadseGCST.CADSE_DEFINITION);
 			return CadseDefinitionManager.getJavaFile(cadseDefinition, "content", packageName, className);
 		}
+		if (fileToken == GGenInitClass.InitToken) {
+			String packageName = GenerateJavaIdentifier.getInitPackageName(cxt, currentItem);
+			String className =GenerateJavaIdentifier.getInitClassName(cxt, currentItem);
+			return CadseDefinitionManager.getJavaFile(currentItem, "init", packageName, className);
+		}
 		
 		return super.getFile(currentItem, fileToken, cxt);
 	}
@@ -178,14 +186,17 @@ public class GCadseGenerator extends GGenerator {
 		GENERATE_ENUM_TYPE.setGenerator(this);
 		MANAGER.setGenerator(this);
 		VIEW.setGenerator(this);
+		INIT.setGenerator(this);
 		
 		CST.addParticipant(LICENSE_PART);
 		MANAGER.addParticipant(MANAGER_SPECIAL_METHOD);
 		MANAGER.addParticipant(LICENSE_PART);
 		VIEW.addParticipant(LICENSE_PART);
+		INIT.addParticipant(LICENSE_PART);
 		
 		CadseGCST.CADSE_DEFINITION.addAdapter(CST);
 		CadseGCST.CADSE_DEFINITION.addAdapter(CADSE_DEFINITION_MODEL);
+		CadseGCST.CADSE_DEFINITION.addAdapter(INIT);
 		CadseGCST.ENUM_TYPE.addAdapter(GENERATE_ENUM_TYPE);
 		CadseGCST.MANAGER.addAdapter(new GenerateManager.ManagerIter());
 		CadseGCST.MANAGER.addAdapter(MANAGER);
@@ -264,6 +275,7 @@ public class GCadseGenerator extends GGenerator {
 	
 	public void content(GContentType gContentType, IPDEContributor mf, ItemType it) {
 		it.addAdapter(gContentType);
+		gContentType.addParticipant(LICENSE_PART);
 		GGenFile[] contentSuper = it.getSuperType().adapts(GGenFile.class);
 		if (contentSuper != null)
 			for (GGenFile gpf : contentSuper) {
