@@ -22,27 +22,27 @@ import fr.imag.adele.cadse.core.content.ContentItem;
 			return fede.workspace.eclipse.java.manager.JavaProjectContentManager.class;
 		}
 		
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see model.workspace.workspace.managers.content.ContentModelManager.MyContentItem#generateConstructorParameter(fr.imag.adele.cadse.core.GenStringBuilder)
-		 */
-		@Override
-		protected void generateConstructorParameter(GResult sb) {
-			super.generateConstructorParameter(sb);
-			sb.append("Variable sourceFolder,");
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see model.workspace.workspace.managers.content.ContentModelManager.MyContentItem#generateConstrustorArguments(fr.imag.adele.cadse.core.GenStringBuilder)
-		 */
-		@Override
-		protected void generateConstrustorArguments(GResult sb) {
-			super.generateConstrustorArguments(sb);
-			sb.append("sourceFolder,");
-		}
+//		/*
+//		 * (non-Javadoc)
+//		 * 
+//		 * @see model.workspace.workspace.managers.content.ContentModelManager.MyContentItem#generateConstructorParameter(fr.imag.adele.cadse.core.GenStringBuilder)
+//		 */
+//		@Override
+//		protected void generateConstructorParameter(GResult sb) {
+//			super.generateConstructorParameter(sb);
+//			sb.append("Variable sourceFolder,");
+//		}
+//
+//		/*
+//		 * (non-Javadoc)
+//		 * 
+//		 * @see model.workspace.workspace.managers.content.ContentModelManager.MyContentItem#generateConstrustorArguments(fr.imag.adele.cadse.core.GenStringBuilder)
+//		 */
+//		@Override
+//		protected void generateConstrustorArguments(GResult sb) {
+//			super.generateConstrustorArguments(sb);
+//			sb.append("sourceFolder,");
+//		}
 
 		@Override
 		protected void generateCallArguments(Item owner, GResult sb, GGenFile gf,

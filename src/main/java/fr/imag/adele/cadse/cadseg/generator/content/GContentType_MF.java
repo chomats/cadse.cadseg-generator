@@ -3,6 +3,7 @@ package fr.imag.adele.cadse.cadseg.generator.content;
 import java.util.Set;
 
 import fede.workspace.eclipse.composition.java.IPDEContributor;
+import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenPartFile;
 import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.cadse.core.ItemFilter;
@@ -18,9 +19,9 @@ public class GContentType_MF extends IPDEContributor {
 	 */
 	@Override
 	public void computeImportsPackage(Item currentItem, Set<String> imports) {
-		GContentType ct = (GContentType) CadseCore.adapt(currentItem, GGenPartFile.class, new ItemFilter<GGenPartFile>() {
+		GContentType ct = (GContentType) CadseCore.adapt(currentItem, GGenFile.class, new ItemFilter<GGenFile>() {
 			@Override
-			public boolean accept(GGenPartFile item) {
+			public boolean accept(GGenFile item) {
 				return item instanceof GContentType;
 			}
 
