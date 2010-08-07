@@ -78,26 +78,18 @@ public class GContentType extends GenerateClass<ContentSate>  {
 			GenContext cxt) {
 		super.init(state, currentItem, g, cxt);
 		
-		ItemType it = currentItem.getType();
 		state.manager = currentItem.getPartParent();
 
 		state.itemtype = ManagerManager.getItemType(state.manager);
 		
 		state.defaultQualifiedClassName = this.getRuntimeClassName();
 		state.fClassName = GenerateJavaIdentifier.getContentClassName(cxt, state.itemtype);
-		
-		//state.extendsClassName = state.defaultQualifiedClassName.getSimpleName();
-
+		state._packageName = GenerateJavaIdentifier.getContentPackageName(cxt, state.itemtype);
 
 		state.fExtendedClassName = state.defaultQualifiedClassName.getSimpleName();
 		state.fExtendedPackageName = state.defaultQualifiedClassName.getPackage().getName();
 		
-		boolean extendsClass = mustBeExtended() | ContentItemTypeManager.isExtendsClass(currentItem);
-		if (extendsClass) {
-			findSuperClassName(state, currentItem, cxt, state.itemtype);
-			//state.extendsClassName = state.fExtendedClassName; 
-			
-		}
+		findSuperClassName(state, currentItem, cxt, state.itemtype);
 	}
 	
 	@Override
