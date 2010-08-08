@@ -12,13 +12,18 @@ import fr.imag.adele.cadse.as.generator.GGenPartFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GResult;
 import fr.imag.adele.cadse.as.generator.GToken;
+import fr.imag.adele.cadse.as.generator.GenClassState;
 import fr.imag.adele.cadse.as.generator.GenState;
+import fr.imag.adele.cadse.as.generator.GenerateClass;
+import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
 import fr.imag.adele.cadse.cadseg.generator.GCadseGenerator;
+import fr.imag.adele.cadse.cadseg.generator.content.ContentSate;
 import fr.imag.adele.cadse.cadseg.generator.content.GContentType;
 import fr.imag.adele.cadse.cadseg.managers.build.ComposerManager;
 import fr.imag.adele.cadse.cadseg.managers.build.exporter.ExporterManager;
 import fr.imag.adele.cadse.cadseg.managers.content.ManagerManager;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.ItemTypeManager;
+import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.GenStringBuilder;
 import fr.imag.adele.cadse.core.Item;
@@ -26,10 +31,34 @@ import fr.imag.adele.cadse.core.Item;
 /**
  * The Class ContentManager.
  */
-public class GExporter extends GGenPartFile {
+public class GExporter extends GenerateClass<ContentSate> {
 	
+	public static final GToken EXPORTER_FILE = new GToken("exporter-file");
+
 	public GExporter() {
-		matchedToken(GCadseGenerator.MANAGER.relatif(GCst.t_inner_class), GContentType.EXPORTERS);
+		super(EXPORTER_FILE);
+	}
+	
+	@Override
+	protected void init(ContentSate state, Item currentItem, GGenerator g,
+			GenContext cxt) {
+		super.init(state, currentItem, g, cxt);
+		state.manager = currentItem.getPartParent(CadseGCST.MANAGER);
+
+		state.itemtype = ManagerManager.getItemType(state.manager);
+		ExporterManager cm = (ExporterManager) currentItem.getType().getItemManager();
+		
+		state.defaultQualifiedClassName = cm.getDefaultClassName();
+		state.fClassName = GenerateJavaIdentifier.getContentClassName(cxt, state.itemtype);
+		state._packageName = GenerateJavaIdentifier.getContentPackageName(cxt, state.itemtype);
+
+		state.fExtendedClassName = state.defaultQualifiedClassName.getSimpleName();
+		state.fExtendedPackageName = state.defaultQualifiedClassName.getPackage().getName();
+	}
+	
+	@Override
+	protected ContentSate createState() {
+		return new ContentSate();
 	}
 	
 	public static class GExporter_MF extends IPDEContributor {
@@ -41,9 +70,8 @@ public class GExporter extends GGenPartFile {
 		 */
 		public void computeImportsPackage(Item currentItem, Set<String> imports) {
 			ExporterManager cm = (ExporterManager) currentItem.getType().getItemManager();
-			String className = cm.getDefaultClassName();
-			String packageName = JavaIdentifier.packageName(className);
-			imports.add(packageName);
+			Class<?> className = cm.getDefaultClassName();
+			imports.add(className.getPackage().getName());
 			imports.add("fr.imag.adele.cadse.core");
 			imports.add("fr.imag.adele.cadse.core.build");
 			imports.add("fr.imag.adele.cadse.core.content");
@@ -58,64 +86,34 @@ public class GExporter extends GGenPartFile {
 		
 		ExporterManager cm = (ExporterManager) currentItem.getType().getItemManager();
 		Set<String> imports = state.getImports();
-		// /ItemType it = getItem().getType();
-		String defaultQualifiedClassName = cm.getDefaultClassName();
-		String defaultClassName = JavaIdentifier
-				.getlastclassName(defaultQualifiedClassName);
 
-		if (kind.abs() == GCst.t_inner_class) {
-			boolean extendsClass = cm.mustBeExtended()
-					|| ExporterManager.isExtendsClass(currentItem);
-
-			if (extendsClass) {
-
-				String extendsClassName = defaultClassName;
-				defaultClassName = JavaIdentifier.javaIdentifierFromString(
-						currentItem.getName(), true, false, "Exporter");
+		if (kind.abs() == GCst.t_constructor) {
+			
 
 				Item manager = currentItem.getPartParent();
 
 				Item itemtype = ManagerManager.getItemType(manager);
 
 				Item superitemtype = ItemTypeManager.getSuperType(itemtype);
-				if (superitemtype != null) {
-					Item superItemManager = ItemTypeManager
-							.getManager(superitemtype);
-					Item supercontentItem = null;
-					if (superItemManager != null)
-						supercontentItem = ManagerManager
-							.getContentModel(superItemManager);
-					if (supercontentItem != null) {
-						if (ExporterManager.isExtendsClass(supercontentItem)) {
-							JavaFileContentManager javaFileContentManager = (JavaFileContentManager) superItemManager
-									.getContentItem();
-							extendsClassName = javaFileContentManager
-									.getClassName(context)
-									+ ".MyContentItem";
-						}
-					}
-				}
-				sb.newline();
-				sb.appendGeneratedTag();
-				sb.newline().append("public class ").append(
-						defaultClassName).append(" extends ").append(
-						extendsClassName).append(" {");
-				sb.begin();
-				sb.newline();
+				
+				
 				sb.newline().append("/**");
 				sb.newline().append("	@generated");
 				sb.newline().append("*/");
-				sb.newline().append("public ").append(defaultClassName)
+				sb.newline().append("public ").append(((GenClassState)state).fClassName)
 						.append("(");
 				generateConstructorParameter(sb);
 				sb.decrementLength();
 				sb.append(") {");
 				sb.newline().append("	super(");
-				generateConstrustorArguments(sb);
+				generateConstrustorArguments(sb, currentItem);
 				sb.decrementLength();
 				sb.append(");");
 				sb.newline().append("}");
 				sb.end();
+				
+		}
+		if (kind.abs() == GCst.t_method) {
 				sb.newline().newline().append("@Override");
 				sb
 						.newline()
@@ -139,45 +137,24 @@ public class GExporter extends GGenPartFile {
 						.add("fr.imag.adele.cadse.core.build.IExporterTarget");
 
 				imports.add("fr.imag.adele.cadse.core.content.ContentItem");
-			}
-		}
-		if (kind.abs() == GContentType.EXPORTERS) {
-			boolean extendsClass = cm.mustBeExtended()
-					|| ExporterManager.isExtendsClass(currentItem);
-
-			if (extendsClass) {
-				defaultClassName = JavaIdentifier.javaIdentifierFromString(
-						currentItem.getName(), true, false, "Exporter");
-			}
-
-			sb.newline().append("new ").append(defaultClassName).append(
-					"(cm,");
-			generateCallArguments(sb, imports, null, currentItem);
-			sb.decrementLength();
-			sb.append("),");
-
-			imports.add("fr.imag.adele.cadse.core.content.ContentItem");
-			imports.add("fr.imag.adele.cadse.core.Item");
-			imports.add("fr.imag.adele.cadse.core.CadseException");
-			imports.add(defaultQualifiedClassName);
-			imports.add("fr.imag.adele.cadse.core.build.IExportedContent");
-			imports.add("fr.imag.adele.cadse.core.build.Exporter");
+		
+				imports.add("fr.imag.adele.cadse.core.content.ContentItem");
+				imports.add("fr.imag.adele.cadse.core.Item");
+				imports.add("fr.imag.adele.cadse.core.CadseException");
+				imports.add("fr.imag.adele.cadse.core.build.IExportedContent");
+				imports.add("fr.imag.adele.cadse.core.build.Exporter");
 		}
 	}
 
+
 	/**
-	 * Generate call arguments.
+	 * Generate construstor arguments.
 	 * 
 	 * @param sb
 	 *            the sb
-	 * @param imports
-	 *            the imports
-	 * @param context
-	 *            the context
-	 * @param currentItem 
 	 */
-	protected void generateCallArguments(GenStringBuilder sb,
-			Set<String> imports, GenContext context, Item currentItem) {
+	protected void generateConstrustorArguments(GenStringBuilder sb, Item currentItem) {
+		sb.append("contentItem,");
 		List<String> types = ExporterManager.getTypesAttribute(currentItem);
 		if (types != null) {
 			for (String exporterType : types) {
@@ -187,23 +164,13 @@ public class GExporter extends GGenPartFile {
 	}
 
 	/**
-	 * Generate construstor arguments.
-	 * 
-	 * @param sb
-	 *            the sb
-	 */
-	protected void generateConstrustorArguments(GenStringBuilder sb) {
-		sb.append("contentItem, exporterTypes,");
-	}
-
-	/**
 	 * Generate constructor parameter.
 	 * 
 	 * @param sb
 	 *            the sb
 	 */
 	protected void generateConstructorParameter(GenStringBuilder sb) {
-		sb.append("ContentItem contentItem, String... exporterTypes,");
+		sb.append("Item ownerItem,");
 	}
 
 }

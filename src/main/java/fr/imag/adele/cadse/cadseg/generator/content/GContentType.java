@@ -65,9 +65,7 @@ public class GContentType extends GenerateClass<ContentSate>  {
 	}
 
 	public static final GToken CONTENT_CONSTRUCTOR = new GToken("createcontent-init");
-	public static final GToken COMPOSERS = new GToken("composers");
-	public static final GToken EXPORTERS = new GToken("exporters");;
-
+	
 	@Override
 	protected ContentSate createState() {
 		return new ContentSate();

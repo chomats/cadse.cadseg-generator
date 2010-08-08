@@ -126,7 +126,7 @@ public class GenerateCadseDefinitionModel extends GGenFile<GenState> {
 	
 	@Override
 	public String generate(GGenerator g, Item currentItem, GenContext cxt) {
-		CCadse cadse = GenerateCadseDefinitionModel.generateCADSE(currentItem);
+		CCadse cadse = generateCADSE(currentItem);
 		StringWriter writer = new StringWriter();
 
 		try {
