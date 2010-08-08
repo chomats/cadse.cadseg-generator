@@ -41,6 +41,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaElement;
@@ -56,6 +57,7 @@ import fr.imag.adele.cadse.cadseg.IAttributeGenerator;
 import fr.imag.adele.cadse.cadseg.ItemShortNameComparator;
 import fr.imag.adele.cadse.cadseg.ext.actions.ActionExtItemTypeExt;
 import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
+import fr.imag.adele.cadse.cadseg.generator.GGenInitClass;
 import fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute;
 import fr.imag.adele.cadse.cadseg.managers.CadseDefinitionManager;
 import fr.imag.adele.cadse.cadseg.managers.actions.MenuAbstractManager;
@@ -126,7 +128,7 @@ public class GenerateCadseDefinitionModel extends GGenFile<GenState> {
 	
 	@Override
 	public String generate(GGenerator g, Item currentItem, GenContext cxt) {
-		CCadse cadse = generateCADSE(currentItem);
+		CCadse cadse = generateCADSE(currentItem, cxt);
 		StringWriter writer = new StringWriter();
 
 		try {
@@ -147,10 +149,11 @@ public class GenerateCadseDefinitionModel extends GGenFile<GenState> {
 	 * 
 	 * @param cadseDefinition
 	 *            the cadse definition
+	 * @param context 
 	 * 
 	 * @return the c cadse
 	 */
-	public static CCadse generateCADSE(Item cadseDefinition) {
+	public CCadse generateCADSE(Item cadseDefinition, GenContext context) {
 		intID =0;
 		ObjectFactory factory = new ObjectFactory();
 		ContextVariable cxt = new ContextVariableImpl();
@@ -162,6 +165,12 @@ public class GenerateCadseDefinitionModel extends GGenFile<GenState> {
 		cadse.setId(CadseDefinitionManager.getIdRuntime(cadseDefinition).toString());
 		cadse.setIdCadseDefinition(cadseDefinition.getId().toString());
 		cadse.setDescription(CadseDefinitionManager.getDescriptionAttribute(cadseDefinition));
+		
+		// init action
+		IFile f = getGenerator().getFile(cadseDefinition, GGenInitClass.InitToken, context);
+		if (f.exists()) {
+			cadse.getInitClasses().add(GenerateJavaIdentifier.getInitPackageName(context, cadseDefinition)+"."+GenerateJavaIdentifier.getInitClassName(context, cadseDefinition));
+		}
 		String displayNameAttribute = CadseDefinitionManager.getCadseNameAttribute(cadseDefinition);
 		if (displayNameAttribute != null && displayNameAttribute.length() > 0) {
 			cadse.setDisplayName(displayNameAttribute);
