@@ -75,10 +75,10 @@ public class GenerateCreationDialogController extends GenerateClass<GenCDState> 
 		super.init(state, currentItem, g, cxt);
 		GenCDState cdstate = (GenCDState) state;
 		cdstate._packageName = "";
-		cdstate.fClassName = "";
-		cdstate.fExtendedClassName = "CreationAction";
-		cdstate.fExtendedPackageName = "fr.imag.adele.cadse.core.impl.ui";
-		cdstate.isClass = true;
+		cdstate._className = "";
+		cdstate._extendedClassName = "CreationAction";
+		cdstate._extendedPackageName = "fr.imag.adele.cadse.core.impl.ui";
+		cdstate._isClass = true;
 //		cdstate.fAutomatic = automatic;
 //		cdstate.fGenerateShortName = generateShorName;
 //		cdstate.fItemType = itemtype;

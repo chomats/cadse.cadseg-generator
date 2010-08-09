@@ -54,10 +54,10 @@ public class GenerateExtItemType extends GenerateClass<GenClassState> {
 		GenClassState gcs = (GenClassState) state;
 		JavaFileContentManager cim = g.getJavaFileContentManager(EXT_MANAGER , currentItem);
 		gcs._packageName = cim.getPackageName(cxt);
-		gcs.isClass = true;
-		gcs.type = cim.getJavaType(cxt);
-		gcs.fClassName = cim.getClassName(cxt);
-		gcs.fCanOverwriteEtendsClass = false;
+		gcs._isClass = true;
+		gcs._type = cim.getJavaType(cxt);
+		gcs._className = cim.getClassName(cxt);
+		gcs._canOverwriteEtendsClass = false;
 		
 	}
 	

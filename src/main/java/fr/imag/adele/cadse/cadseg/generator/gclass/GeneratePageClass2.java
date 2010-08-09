@@ -104,8 +104,8 @@ public class GeneratePageClass2 extends GenerateClass<PageState> {
 		
 		GeneratePageClass2 ret;
 		
-		state.fExtendedPackageName = "fr.imag.adele.cadse.core.impl.ui";
-		state.fExtendedClassName = "PageImpl";
+		state._extendedPackageName = "fr.imag.adele.cadse.core.impl.ui";
+		state._extendedClassName = "PageImpl";
 
 		Item cadseDefinition = PageManager.getCadseDefinition(page);
 
@@ -122,8 +122,8 @@ public class GeneratePageClass2 extends GenerateClass<PageState> {
 //		}
 
 		IFile f = CadseDefinitionManager.getJavaFile(cadseDefinition, "page", state.getPackageName(), state.getClassName());
-		state.type = CadseDefinitionManager.getJavaType(cadseDefinition, f, state.getClassName());
-		state.isClass = true;
+		state._type = CadseDefinitionManager.getJavaType(cadseDefinition, f, state.getClassName());
+		state._isClass = true;
 		
 		state.id = page.getName();
 		state.page = page;

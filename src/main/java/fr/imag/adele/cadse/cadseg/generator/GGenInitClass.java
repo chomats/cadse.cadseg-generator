@@ -25,9 +25,9 @@ public class GGenInitClass extends GenerateClass<GenClassState>{
 			GenContext cxt) {
 		super.init(state, currentItem, g, cxt);
 		state._packageName = GenerateJavaIdentifier.getInitPackageName(cxt, currentItem);
-		state.fClassName =GenerateJavaIdentifier.getInitClassName(cxt, currentItem);
-		state.fImplementsPackageName = new String[] { "fr.imag.adele.cadse.core" };
-		state.fImplementsClassName = new String[] { "InitAction" };
+		state._className =GenerateJavaIdentifier.getInitClassName(cxt, currentItem);
+		state._implementsPackageName = new String[] { "fr.imag.adele.cadse.core" };
+		state._implementsClassName = new String[] { "InitAction" };
 	}
 	
 	@Override

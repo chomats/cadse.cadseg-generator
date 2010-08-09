@@ -35,7 +35,7 @@ import fr.imag.adele.cadse.cadseg.generator.attribute.GListAttribute;
 import fr.imag.adele.cadse.cadseg.generator.attribute.GLongAttribute;
 import fr.imag.adele.cadse.cadseg.generator.attribute.GStringAttribute;
 import fr.imag.adele.cadse.cadseg.generator.content.GContentType;
-import fr.imag.adele.cadse.cadseg.generator.content.GContentType.GContentInit;
+import fr.imag.adele.cadse.cadseg.generator.content.GContentTypeInit;
 import fr.imag.adele.cadse.cadseg.generator.content.GContentType_MF;
 import fr.imag.adele.cadse.cadseg.generator.content.GFileContent;
 import fr.imag.adele.cadse.cadseg.generator.content.GFolderContent;
@@ -128,7 +128,7 @@ public class GCadseGenerator extends GGenerator {
 	public static final GenerateEnumType GENERATE_ENUM_TYPE = new GenerateEnumType();
 	
 	GRefer itemTypeSubType = new ItemTypeSubTypeRefer();
-	public static final GContentInit INIT_CONTENT = new GContentInit();
+	public static final GContentTypeInit INIT_CONTENT = new GContentTypeInit();
 	
 	@Override
 	public IProject getProject(GToken t, Item owner) {

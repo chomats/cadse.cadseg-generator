@@ -119,9 +119,9 @@ public class GenerateManager extends GenerateClass<GenManagerState> {
 		}
 		cm.manager = manager;
 		cm.itemName = cm.itemtype.getName();
-		cm.fClassName = jf.getClassName(cxt);
+		cm._className = jf.getClassName(cxt);
 		cm._packageName = jf.getPackageName(cxt);
-		cm.type = cu.getType(cm.fClassName);
+		cm._type = cu.getType(cm._className);
 
 		ItemType superItem = (ItemType) ItemTypeManager
 				.getSuperType(cm.itemtype);
@@ -138,8 +138,8 @@ public class GenerateManager extends GenerateClass<GenManagerState> {
 		}
 		if (cm.superClassName != null) {
 			String[] packageAndName = JavaIdentifier.getPackageAndClassName(cm.superClassName);
-			cm.fExtendedPackageName = packageAndName[0];
-			cm.fExtendedClassName = packageAndName[1];
+			cm._extendedPackageName = packageAndName[0];
+			cm._extendedClassName = packageAndName[1];
 		}	
 		cm.cm = (ManagerJavaFileContentManager) jf;
 	}

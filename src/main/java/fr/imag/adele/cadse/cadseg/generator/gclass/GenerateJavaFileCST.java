@@ -63,8 +63,8 @@ public class GenerateJavaFileCST extends GenerateClass<GenClassState> {
 		super.init(state, cadseDefinition, g, cxt);
 		GenClassState gcs = (GenClassState) state;
 		gcs._packageName = GenerateJavaIdentifier.javaPackageNameFileCST_FromCadseDefinition(cxt, cadseDefinition);
-		gcs.fClassName = GenerateJavaIdentifier.javaClassNameFileCST_FromCadseDefinition(cxt, cadseDefinition);
-		gcs.isClass = true;
+		gcs._className = GenerateJavaIdentifier.javaClassNameFileCST_FromCadseDefinition(cxt, cadseDefinition);
+		gcs._isClass = true;
 	}
 
 	/*

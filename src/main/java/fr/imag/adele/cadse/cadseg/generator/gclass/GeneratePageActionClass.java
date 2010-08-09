@@ -56,17 +56,17 @@ public class GeneratePageActionClass extends GenerateClass<PageActionState> {
 		super.init(state, page, g, cxt);
 		
 		PageActionState pageState = (PageActionState) state;  
-		pageState.fClassName = GenerateJavaIdentifier.javaClassNamePageActionFromPage(cxt, page);
+		pageState._className = GenerateJavaIdentifier.javaClassNamePageActionFromPage(cxt, page);
 		pageState._packageName = GenerateJavaIdentifier.javaPackagePageFactoryFromPage(cxt, page);
 
-		pageState.fExtendedPackageName = "fr.imag.adele.cadse.core.impl.ui";
-		pageState.fExtendedClassName = "AbstractActionPage";
+		pageState._extendedPackageName = "fr.imag.adele.cadse.core.impl.ui";
+		pageState._extendedClassName = "AbstractActionPage";
 
 		Item cadseDefinition = PageManager.getCadseDefinition(page);
 
-		IFile f = CadseDefinitionManager.getJavaFile(cadseDefinition, PAGE_ACTION_CLASS.getName(), pageState._packageName, pageState.fClassName);
-		pageState.type = CadseDefinitionManager.getJavaType(cadseDefinition, f, pageState.fClassName);
-		pageState.isClass = true;
+		IFile f = CadseDefinitionManager.getJavaFile(cadseDefinition, PAGE_ACTION_CLASS.getName(), pageState._packageName, pageState._className);
+		pageState._type = CadseDefinitionManager.getJavaType(cadseDefinition, f, pageState._className);
+		pageState._isClass = true;
 	}
 
 	@Override

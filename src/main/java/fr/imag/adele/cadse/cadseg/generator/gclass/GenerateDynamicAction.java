@@ -28,9 +28,9 @@ public class GenerateDynamicAction extends GenerateClass<GenClassState> {
 		super.init(state, currentItem, g, cxt);
 		GenClassState gcs = (GenClassState) state;
 		
-		gcs.fExtendedClassName = super_cn;
-		gcs.fExtendedPackageName = super_pn;
-		gcs.isClass = true;
+		gcs._extendedClassName = super_cn;
+		gcs._extendedPackageName = super_pn;
+		gcs._isClass = true;
 		
 	}
 	

@@ -66,11 +66,11 @@ public class GComposer extends GenerateClass<ContentSate> {
 		ComposerManager cm = (ComposerManager) currentItem.getType().getItemManager();
 		
 		state.defaultQualifiedClassName = cm.getDefaultClassName();
-		state.fClassName = GenerateJavaIdentifier.getContentClassName(cxt, state.itemtype);
+		state._className = GenerateJavaIdentifier.getContentClassName(cxt, state.itemtype);
 		state._packageName = GenerateJavaIdentifier.getContentPackageName(cxt, state.itemtype);
 
-		state.fExtendedClassName = state.defaultQualifiedClassName.getSimpleName();
-		state.fExtendedPackageName = state.defaultQualifiedClassName.getPackage().getName();
+		state._extendedClassName = state.defaultQualifiedClassName.getSimpleName();
+		state._extendedPackageName = state.defaultQualifiedClassName.getPackage().getName();
 	}
 	
 	@Override
@@ -97,7 +97,7 @@ public class GComposer extends GenerateClass<ContentSate> {
 			sb.newline().append("/**");
 			sb.newline().append("	@generated");
 			sb.newline().append("*/");
-			sb.newline().append("public ").append(((ContentSate)state).fClassName).append(" (");
+			sb.newline().append("public ").append(((ContentSate)state)._className).append(" (");
 			generateConstructorParameter(sb);
 			sb.decrementLength();
 			sb.append(") {");
