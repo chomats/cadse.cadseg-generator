@@ -42,7 +42,9 @@ public class GGenInitClass extends GenerateClass<GenClassState>{
 		if (kind.abs() == GCst.t_method) {
 			g.newline().appendGeneratedTag();
 			g.newline().append("public void init() {");
+			g.begin();
 			g.appendToken(GCadseGenerator.INIT_METHOD, state);
+			g.end();
 			g.newline().append("}");
 		}
 	}
