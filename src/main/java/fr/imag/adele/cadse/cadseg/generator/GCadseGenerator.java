@@ -282,6 +282,7 @@ public class GCadseGenerator extends GGenerator {
 	public void content(GContentType gContentType, IPDEContributor mf, ItemType it) {
 		it.addAdapter(gContentType);
 		gContentType.addParticipant(LICENSE_PART);
+		gContentType.setGenerator(this);
 		GGenFile[] contentSuper = it.getSuperType().adapts(GGenFile.class);
 		if (contentSuper != null)
 			for (GGenFile gpf : contentSuper) {
