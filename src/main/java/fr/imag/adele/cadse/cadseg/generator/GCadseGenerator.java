@@ -35,6 +35,7 @@ import fr.imag.adele.cadse.cadseg.generator.attribute.GListAttribute;
 import fr.imag.adele.cadse.cadseg.generator.attribute.GLongAttribute;
 import fr.imag.adele.cadse.cadseg.generator.attribute.GStringAttribute;
 import fr.imag.adele.cadse.cadseg.generator.content.GContentType;
+import fr.imag.adele.cadse.cadseg.generator.content.GContentType.GContentInit;
 import fr.imag.adele.cadse.cadseg.generator.content.GContentType_MF;
 import fr.imag.adele.cadse.cadseg.generator.content.GFileContent;
 import fr.imag.adele.cadse.cadseg.generator.content.GFolderContent;
@@ -127,6 +128,7 @@ public class GCadseGenerator extends GGenerator {
 	public static final GenerateEnumType GENERATE_ENUM_TYPE = new GenerateEnumType();
 	
 	GRefer itemTypeSubType = new ItemTypeSubTypeRefer();
+	public static final GContentInit INIT_CONTENT = new GContentInit();
 	
 	@Override
 	public IProject getProject(GToken t, Item owner) {
@@ -255,6 +257,10 @@ public class GCadseGenerator extends GGenerator {
 		CadseGCST.ATTRIBUTE.addAdapter(new GPDEEI_Attribute());
 		CadseGCST.CADSE_DEFINITION.addAdapter(new GPDE_EI_CadseDefinition());
 		
+		
+		INIT_CONTENT.setGenfile(INIT);
+		INIT_CONTENT.matchedToken(GCadseGenerator.INIT_METHOD);
+		CadseGCST.CONTENT_ITEM_TYPE.addAdapter(INIT_CONTENT);
 		
 		// content
 		content(new GContentType(), new GContentType_MF(), CadseGCST.CONTENT_ITEM_TYPE);
