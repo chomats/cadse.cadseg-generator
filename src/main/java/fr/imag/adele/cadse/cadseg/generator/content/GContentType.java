@@ -49,7 +49,8 @@ public class GContentType extends GenerateClass<ContentSate>  {
 
 				
 				//CadseGCST.MENU_ACTION.setContentItemClass(MenuActionContent.class);
-				r.newline().append(GenerateJavaIdentifier.cstItemType(context, itemtype));
+				r.newline().append(
+						GenerateJavaIdentifier.cstQualifiedAttributeItemType(context, itemtype, cadseDefinition, state.getImports()));
 				r.append(".setContentItemClass(").append(cn).append(".class);");
 				state.getImports().add(GenerateJavaIdentifier.getContentPackageName(context, itemtype)+"."+cn);
 				GenerateJavaIdentifier.addImportCST(context, cadseDefinition, state.getImports());
