@@ -116,10 +116,7 @@ public class GContentType extends GenerateClass<ContentSate>  {
 			r.newline().append("/**");
 			r.newline().append("	@generated");
 			r.newline().append("*/");
-			r.newline().append("public ").append(stateContent.fClassName).append("(UUID id) {");
-			
-			r.decrementLength();
-			r.append(") throws CadseException {");
+			r.newline().append("public ").append(stateContent.fClassName).append("(UUID id) throws CadseException {");
 			
 			/* 2 */r.begin();
 			r.newline().append("super(id,");
@@ -128,9 +125,6 @@ public class GContentType extends GenerateClass<ContentSate>  {
 			r.append(");");
 			r.append(CONTENT_CONSTRUCTOR);
 			r.end();
-			r.newline().append("}");
-			r.end();
-			r.newline();
 			r.newline().append("}");
 			r.newline();
 			state.addImports("fr.imag.adele.cadse.core.CadseException");
@@ -223,6 +217,8 @@ public class GContentType extends GenerateClass<ContentSate>  {
 			if (superitemtype == null) {
 				break;
 			}
+			itemtype = superitemtype;
+			
 			Item superItemManager = ItemTypeManager.getManager(superitemtype);
 			if (superItemManager == null) {
 				Class<? extends ContentItem> clCt = ((ItemType)superitemtype).getContentItemClass();
@@ -240,7 +236,7 @@ public class GContentType extends GenerateClass<ContentSate>  {
 					return;
 				}
 			}
-			itemtype = superitemtype;
+			
 
 		}
 		return ;
