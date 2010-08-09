@@ -42,7 +42,10 @@ public class GenerateVariable {
 			GGenFile gf, GenState state) {
 		state.addImports("fr.imag.adele.cadse.core.var.ContextVariable");
 		state.addImports("fr.imag.adele.cadse.core.impl.var.VariableImpl");
-
+		state.addImports("fr.imag.adele.cadse.core.var.Variable");
+		state.addImports("fr.imag.adele.cadse.core.Item");
+		
+		
 		sb.newline().appendGeneratedTag();
 		sb.newline().append("static final class ").append(variableClassName).append(" extends VariableImpl {");
 		sb.begin();

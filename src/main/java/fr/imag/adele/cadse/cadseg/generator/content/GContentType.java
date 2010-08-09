@@ -123,11 +123,12 @@ public class GContentType extends GenerateClass<ContentSate>  {
 			generateCallArguments(owner, r, gf, context, state);
 			r.decrementLength();
 			r.append(");");
-			r.append(CONTENT_CONSTRUCTOR);
+			r.appendToken(CONTENT_CONSTRUCTOR, state);
 			r.end();
 			r.newline().append("}");
 			r.newline();
 			state.addImports("fr.imag.adele.cadse.core.CadseException");
+			state.addImports("java.util.UUID");
 			//}
 		}
 //		if (GCst.t_method == kind.abs()) {

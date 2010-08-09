@@ -97,6 +97,9 @@ public class GenerateManager extends GenerateClass<GenManagerState> {
 		GenManagerState cm = (GenManagerState) state;
 		ManagerJavaFileContentManager jf = (ManagerJavaFileContentManager) g.getJavaFileContentManager(null, manager);
 		Item cadseDefinition = ManagerManager._getCadseDefinition(manager);
+		if (jf == null) {
+			return;
+		}
 		if (jf.getPartParent() == null) {
 			// reconnect content...
 			jf.setParentContent(cadseDefinition.getContentItem());
