@@ -22,6 +22,7 @@ package fr.imag.adele.cadse.cadseg.generator.gclass;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
+import java.util.UUID;
 
 import fr.imag.adele.cadse.as.generator.GCst;
 import fr.imag.adele.cadse.as.generator.GGenFile;
@@ -38,6 +39,7 @@ import fr.imag.adele.cadse.cadseg.managers.CadseDefinitionManager;
 import fr.imag.adele.cadse.cadseg.managers.attributes.AttributeManager;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.ItemTypeManager;
 import fr.imag.adele.cadse.core.CadseGCST;
+import fr.imag.adele.cadse.core.CadseRuntime;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.cadse.core.var.ContextVariable;
@@ -78,7 +80,20 @@ public class GenerateJavaFileCST extends GenerateClass<GenClassState> {
 		imports.add("fr.imag.adele.cadse.core.ItemType");
 		imports.add("fr.imag.adele.cadse.core.ExtendedType");
 		imports.add("fr.imag.adele.cadse.core.LinkType");
-
+		imports.add("fr.imag.adele.cadse.core.CadseRuntime");
+		imports.add("java.util.UUID");
+		
+		UUID cadseIdRuntime = CadseDefinitionManager.getIdRuntime(cadseDefinition);
+		sb.newline().appendGeneratedTag();
+		sb.newline().append("public static final UUID _CADSE_ID = java.util.UUID(");
+		sb.append(cadseIdRuntime.getMostSignificantBits());
+		sb.append("L,");
+		sb.append(cadseIdRuntime.getLeastSignificantBits());
+		sb.append("L);");
+		
+		sb.newline().appendGeneratedTag();
+		sb.newline().append("public static CadseRuntime _CADSE;");
+		
 		for (Item itemType : itemTypes) {
 			sb.newline().appendGeneratedTag();
 			sb.newline().append("public static ");
