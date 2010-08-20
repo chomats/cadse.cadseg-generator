@@ -3,7 +3,7 @@ package fr.imag.adele.cadse.cadseg.generator.gclass;
 import java.util.Collection;
 
 import fr.imag.adele.cadse.as.generator.GenClassState;
-import fr.imag.adele.cadse.cadseg.managers.dataModel.PageManager.PageContentManager;
+import fr.imag.adele.cadse.cadseg.contents.PageContentManager;
 import fr.imag.adele.cadse.cadseg.managers.ui.FieldGenerateInfo;
 import fr.imag.adele.cadse.core.Item;
 

@@ -1,7 +1,7 @@
 package fr.imag.adele.cadse.cadseg.generator.gclass;
 
 import fr.imag.adele.cadse.as.generator.GenClassState;
-import fr.imag.adele.cadse.cadseg.managers.content.ManagerJavaFileContentManager;
+import fr.imag.adele.cadse.cadseg.contents.ManagerJavaFileContentManager;
 import fr.imag.adele.cadse.cadseg.managers.dataModel.ItemTypeManager;
 import fr.imag.adele.cadse.core.Item;
 
