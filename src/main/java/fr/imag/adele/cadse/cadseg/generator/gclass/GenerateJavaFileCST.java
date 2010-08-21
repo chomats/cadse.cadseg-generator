@@ -85,7 +85,7 @@ public class GenerateJavaFileCST extends GenerateClass<GenClassState> {
 		
 		UUID cadseIdRuntime = CadseDefinitionManager.getIdRuntime(cadseDefinition);
 		sb.newline().appendGeneratedTag();
-		sb.newline().append("public static final UUID _CADSE_ID = java.util.UUID(");
+		sb.newline().append("public static final UUID _CADSE_ID = new java.util.UUID(");
 		sb.append(cadseIdRuntime.getMostSignificantBits());
 		sb.append("L,");
 		sb.append(cadseIdRuntime.getLeastSignificantBits());
