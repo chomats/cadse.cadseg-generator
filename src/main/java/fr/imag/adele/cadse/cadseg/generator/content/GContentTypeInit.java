@@ -1,6 +1,5 @@
 package fr.imag.adele.cadse.cadseg.generator.content;
 
-import fr.imag.adele.cadse.as.generator.GCst;
 import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenPartFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;

@@ -183,12 +183,14 @@ public class GCadseGenerator extends GGenerator {
 	
 	@Override
 	public void load(IRuntimeGenerator runtimeGenerator) {
+		GenerateManifestAndPlugin genMFandPlugin = new GenerateManifestAndPlugin();
 		CADSE_DEFINITION_MODEL.setGenerator(this);
 		CST.setGenerator(this);
 		GENERATE_ENUM_TYPE.setGenerator(this);
 		MANAGER.setGenerator(this);
 		VIEW.setGenerator(this);
 		INIT.setGenerator(this);
+		genMFandPlugin.setGenerator(this);
 		
 		CST.addParticipant(LICENSE_PART);
 		MANAGER.addParticipant(MANAGER_SPECIAL_METHOD);
@@ -199,6 +201,7 @@ public class GCadseGenerator extends GGenerator {
 		CadseGCST.CADSE_DEFINITION.addAdapter(CST);
 		CadseGCST.CADSE_DEFINITION.addAdapter(CADSE_DEFINITION_MODEL);
 		CadseGCST.CADSE_DEFINITION.addAdapter(INIT);
+		CadseGCST.CADSE_DEFINITION.addAdapter(genMFandPlugin);
 		CadseGCST.ENUM_TYPE.addAdapter(GENERATE_ENUM_TYPE);
 		CadseGCST.MANAGER.addAdapter(new GenerateManager.ManagerIter());
 		CadseGCST.MANAGER.addAdapter(MANAGER);
@@ -211,7 +214,7 @@ public class GCadseGenerator extends GGenerator {
 		new GReferPart(CadseGCST.MENU_ACTION, CadseGCST.CADSE_DEFINITION);
 		new GRefer(CadseGCST.COMPOSITE_ITEM_TYPE) {
 			@Override
-			public Item refer(Item currentItem) {
+			protected Item refer(Item currentItem) {
 				return CompositeItemTypeManager.getItemType(currentItem);
 			}
 		};
@@ -223,13 +226,6 @@ public class GCadseGenerator extends GGenerator {
 		new GReferIncomingLink(CadseGCST.ITEM_TYPE, CadseGCST.MANAGER_lt_ITEM_TYPE);
 
 		
-		
-		
-		GenerateManifestAndPlugin genMFandPlugin = new GenerateManifestAndPlugin();
-		genMFandPlugin.setGenerator(this);
-		CadseGCST.CADSE_DEFINITION.addAdapter(genMFandPlugin);
-		
-		CadseGCST.VIEW.addAdapter(VIEW);
 		
 		CadseGCST.ATTRIBUTE.addAdapter(GEN_ATTRIBUTE_METHOD);
 		GEN_ATTRIBUTE_METHOD.matchedToken(MANAGER.relatif(GCst.t_method));
@@ -279,7 +275,7 @@ public class GCadseGenerator extends GGenerator {
 		
 	}
 	
-	public void content(GContentType gContentType, IPDEContributor mf, ItemType it) {
+	protected void content(GContentType gContentType, IPDEContributor mf, ItemType it) {
 		it.addAdapter(gContentType);
 		gContentType.addParticipant(LICENSE_PART);
 		gContentType.setGenerator(this);
