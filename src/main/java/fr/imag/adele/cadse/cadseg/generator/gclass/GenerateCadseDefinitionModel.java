@@ -38,9 +38,20 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
 
+import javax.xml.bind.Binder;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Marshaller.Listener;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -48,10 +59,16 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
+import org.w3c.dom.Comment;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import fede.workspace.eclipse.java.manager.JavaFileContentManager;
+import fr.imag.adele.cadse.as.generator.GCst;
 import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
+import fr.imag.adele.cadse.as.generator.GResult;
 import fr.imag.adele.cadse.as.generator.GToken;
 import fr.imag.adele.cadse.as.generator.GenState;
 import fr.imag.adele.cadse.cadseg.IAttributeGenerator;
@@ -59,6 +76,7 @@ import fr.imag.adele.cadse.cadseg.ItemShortNameComparator;
 import fr.imag.adele.cadse.cadseg.ext.actions.ActionExtItemTypeExt;
 import fr.imag.adele.cadse.cadseg.generate.GenerateJavaIdentifier;
 import fr.imag.adele.cadse.cadseg.generator.GGenInitClass;
+import fr.imag.adele.cadse.cadseg.generator.LicenseGenPart;
 import fr.imag.adele.cadse.cadseg.generator.attribute.GAttribute;
 import fr.imag.adele.cadse.cadseg.managers.CadseDefinitionManager;
 import fr.imag.adele.cadse.cadseg.managers.actions.MenuAbstractManager;
@@ -128,23 +146,68 @@ public class GenerateCadseDefinitionModel extends GGenFile<GenState> {
 	}
 	
 	@Override
-	public String generate(GGenerator g, Item currentItem, GenContext cxt) {
-		CCadse cadse = generateCADSE(currentItem, cxt);
-		StringWriter writer = new StringWriter();
+	public String generate(GGenerator g, Item currentItem, GenContext cxt) {		GenState state = createState();
+		init(state, currentItem, g, cxt);
+		final CCadse cadse = generateCADSE(currentItem, cxt);
+		final StringWriter writer = new StringWriter();
 
 		try {
 			JAXBContext jc = JAXBContext.newInstance("fr.imag.adele.fede.workspace.as.initmodel.jaxb", this.getClass()
 					.getClassLoader());
-			Marshaller m = jc.createMarshaller();
-			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			m.marshal(cadse, writer);
+			// use dom to insert license if need !!!
+			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			final DocumentBuilder builder = factory.newDocumentBuilder();
+			final Document doc = builder.getDOMImplementation().createDocument(null, null, null);
+
+			final Binder<Node> binder = jc.createBinder();
+			binder.marshal(cadse, doc);
+			final String license = getLicense(g, currentItem, cxt, state);
+			if (license != null) {
+				final Comment comment = doc.createComment(license);
+				NodeList childNodes = doc.getChildNodes();
+				Node refChild = null;
+				for (int i = 0; i < childNodes.getLength(); i++) {
+					Node n = childNodes.item(i);
+					if (n.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
+						continue;
+					}
+					//Currently it's always the first element.
+					refChild = n;
+					break;
+				}
+				doc.insertBefore(comment, refChild );
+			}
+			
+
+			final DOMSource domSource = new DOMSource(doc);
+			// use System.out for testing
+			final StreamResult streamResult = new StreamResult(writer);
+			final TransformerFactory tf = TransformerFactory.newInstance();
+			final Transformer serializer = tf.newTransformer();
+			serializer.setOutputProperty(OutputKeys.INDENT, "yes");
+			serializer.transform(domSource, streamResult);
 			return writer.toString();
 		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
+	
+	
+	private String getLicense(GGenerator g, Item currentItem, GenContext cxt, GenState state) {
+		LicenseGenPart lgp = new LicenseGenPart(LicenseGenPart.xml);
+		GResult r = new GResult(g, currentItem, this, GCst.t_license, cxt);
+		lgp.generatePartFile(r, currentItem, this, GCst.t_license, cxt, g, state);
+		return r.length() == 0 ? null : r.toString();
+	}
+
 	/**
 	 * Generate cadse.
 	 * 

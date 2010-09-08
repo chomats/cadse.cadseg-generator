@@ -33,8 +33,18 @@ import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 
 public class LicenseGenPart extends GGenPartFile {
+	public static final int java = 1;
+	public static final int xml = 2;
+	
+	int type = java;
+	
 	public LicenseGenPart() {
 		matchedToken(GCst.t_license);
+	}
+	
+	public LicenseGenPart(int type) {
+		matchedToken(GCst.t_license);
+		this.type = type;
 	}
 	
 	protected String getLicense(Item cadseDefinition) {
@@ -50,7 +60,26 @@ public class LicenseGenPart extends GGenPartFile {
 			GToken kind, GenContext context, GGenerator gGenerator, GenState state) {
 		Item cadseDefinition = currentItem.getPartParent(CadseGCST.CADSE_DEFINITION);
 		String l = getLicense(cadseDefinition );
-		if (l != null)
-			r.append(l);
+		if (l != null) {
+			String[] lines = l.split("\n");
+			if (type == java) {
+				r.append("/*");
+				
+				for (String aLine : lines) {
+					r.newline().append(" * ").append(aLine);
+				}
+				r.newline().append(" */");
+				r.newline();
+			} else {
+				if (type == xml) {
+					for (String aLine : lines) {
+						r.newline().append(" ").append(aLine);
+					}
+					r.newline();
+				}
+			}
+			
+		}
+			
 	}
 }
