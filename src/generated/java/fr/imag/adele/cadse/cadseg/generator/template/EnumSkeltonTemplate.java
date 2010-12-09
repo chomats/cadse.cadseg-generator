@@ -1,3 +1,4 @@
+
 package fr.imag.adele.cadse.cadseg.generator.template;
 
 import java.util.List;

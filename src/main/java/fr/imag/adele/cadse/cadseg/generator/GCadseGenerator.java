@@ -74,6 +74,7 @@ import fr.imag.adele.cadse.cadseg.generator.content.GSourceFolderContent;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GManagerSpecialMethod;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateCadseDefinitionModel;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateEnumType;
+import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateExtItemType;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateJavaFileCST;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateManager;
 import fr.imag.adele.cadse.cadseg.generator.gclass.GenerateView;
@@ -92,6 +93,7 @@ import fr.imag.adele.cadse.core.CadseGCST;
 import fr.imag.adele.cadse.core.GenContext;
 import fr.imag.adele.cadse.core.Item;
 import fr.imag.adele.cadse.core.ItemType;
+import fr.imag.adele.cadse.core.iter.ItemPartIterable;
 import fr.imag.adele.cadse.core.transaction.delta.ImmutableItemDelta;
 import fr.imag.adele.cadse.core.var.ContextVariableImpl;
 import fr.imag.adele.fede.workspace.as.initmodel.InitModelLoadAndWrite;
@@ -135,6 +137,7 @@ public class GCadseGenerator extends GGenerator {
 	
 	public static final LicenseGenPart	LICENSE_PART = new LicenseGenPart();
 	public static final GenerateManager MANAGER = new GenerateManager();
+	public static final GenerateExtItemType EXT_TYPE = new GenerateExtItemType();
 	public static final GManagerSpecialMethod MANAGER_SPECIAL_METHOD = new GManagerSpecialMethod(MANAGER.relatif(GCst.t_method));
 	public static final GenerateCadseDefinitionModel CADSE_DEFINITION_MODEL = new GenerateCadseDefinitionModel();
 	public static final GenerateJavaFileCST CST = new GenerateJavaFileCST();
@@ -208,6 +211,7 @@ public class GCadseGenerator extends GGenerator {
 		CST.setGenerator(this);
 		GENERATE_ENUM_TYPE.setGenerator(this);
 		MANAGER.setGenerator(this);
+		EXT_TYPE.setGenerator(this);
 		VIEW.setGenerator(this);
 		INIT.setGenerator(this);
 		genMFandPlugin.setGenerator(this);
@@ -225,6 +229,8 @@ public class GCadseGenerator extends GGenerator {
 		CadseGCST.ENUM_TYPE.addAdapter(GENERATE_ENUM_TYPE);
 		CadseGCST.MANAGER.addAdapter(new GenerateManager.ManagerIter());
 		CadseGCST.MANAGER.addAdapter(MANAGER);
+		CadseGCST.EXT_ITEM_TYPE.addAdapter(new ItemPartIterable());
+		CadseGCST.EXT_ITEM_TYPE.addAdapter(EXT_TYPE);
 		CadseGCST.VIEW.addAdapter(VIEW);
 		
 		//refer
@@ -248,11 +254,11 @@ public class GCadseGenerator extends GGenerator {
 		
 		
 		CadseGCST.ATTRIBUTE.addAdapter(GEN_ATTRIBUTE_METHOD);
-		GEN_ATTRIBUTE_METHOD.matchedToken(MANAGER.relatif(GCst.t_method));
+		GEN_ATTRIBUTE_METHOD.matchedToken(MANAGER.relatif(GCst.t_method), EXT_TYPE.relatif(GCst.t_method));
 		CadseGCST.ENUM.addAdapter(GEN_ENUM_METHODS);
-		GEN_ENUM_METHODS.matchedToken(MANAGER.relatif(GCst.t_method));
+		GEN_ENUM_METHODS.matchedToken(MANAGER.relatif(GCst.t_method), EXT_TYPE.relatif(GCst.t_method));
 		CadseGCST.LINK_TYPE.addAdapter(GEN_LINK_TYPE_METHOD);
-		GEN_LINK_TYPE_METHOD.matchedToken(MANAGER.relatif(GCst.t_method));
+		GEN_LINK_TYPE_METHOD.matchedToken(MANAGER.relatif(GCst.t_method), EXT_TYPE.relatif(GCst.t_method));
 		
 		// GAttribute adapter
 		

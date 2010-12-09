@@ -1,3 +1,4 @@
+
 package fr.imag.adele.cadse.cadseg.generator.template;
 
 import fr.imag.adele.cadse.core.Item;
